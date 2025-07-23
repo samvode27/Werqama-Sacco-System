@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios'; // ✅ use your configured Axios instance
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post('/api/auth/register', formData);
+            const { data } = await api.post('/auth/register', formData); // ✅ use api
             toast.success('Registration successful!');
             localStorage.setItem('userInfo', JSON.stringify(data));
 
