@@ -1,0 +1,141 @@
+/* AdminMembershipApprovalPage.css */
+
+.container {
+  max-width: 1100px;
+}
+
+h2 {
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+  background: linear-gradient(90deg, #4e73df 0%, #224abe 100%);
+  color: white;
+}
+
+.status-approved {
+  background-color: #28a745;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 0.85rem;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: #212529;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 0.85rem;
+}
+
+.status-rejected {
+  background-color: #dc3545;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 0.85rem;
+}
+
+.btn-info {
+  background: #1abc9c;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-info:hover {
+  background: #16a085;
+}
+
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+}
+
+.modal-header {
+  border-bottom: none;
+  justify-content: center;
+}
+
+.modal-title {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #34495e;
+}
+
+.modal-body {
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+textarea.form-control {
+  border-radius: 8px;
+  border: 1.5px solid #ced4da;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+textarea.form-control:focus {
+  border-color: #1abc9c;
+  box-shadow: 0 0 8px #1abc9caa;
+  outline: none;
+}
+
+.modal-footer {
+  border-top: none;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c0392b;
+}
+
+.btn-success {
+  background-color: #27ae60;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #1e8449;
+}
+
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+img {
+  max-height: 200px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}

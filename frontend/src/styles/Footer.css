@@ -1,0 +1,119 @@
+/* src/styles/Footer.css */
+
+.footer-section {
+  background: rgba(6, 24, 38, 0.95);
+  backdrop-filter: blur(10px);
+  padding-top: 60px;
+  padding-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  color: #f8f9fa;
+}
+
+.footer-wave {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.footer-wave svg {
+  display: block;
+  width: 100%;
+  height: 100px;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+  color: #adb5bd;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-socials a {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8f9fa;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.footer-socials a:hover {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  transform: translateY(-3px);
+}
+
+.footer-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 30px 0;
+}
+
+/* Newsletter Styles */
+.newsletter-input {
+  border-radius: 50px;
+  border: none;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.newsletter-input::placeholder {
+  color: #ccc;
+}
+
+.newsletter-button {
+  border-radius: 50px;
+  font-weight: 600;
+}
+
+.gradient-button {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  border: none;
+  color: #fff;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-button:hover {
+  background: linear-gradient(135deg, #6610f2, #0d6efd);
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .footer-section {
+    text-align: center;
+  }
+}

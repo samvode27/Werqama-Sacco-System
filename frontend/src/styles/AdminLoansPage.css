@@ -1,0 +1,68 @@
+/* src/styles/AdminLoansPage.css */
+
+.dashboard-container {
+  padding: 2rem;
+  background-color: #f9f9fc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.loan-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.card-analytics {
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.filter-bar .form-control,
+.filter-bar .form-select {
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.loan-table {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+}
+
+.loan-table thead {
+  background-color: #343a40;
+  color: white;
+}
+
+.loan-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+.loan-table td,
+.loan-table th {
+  vertical-align: middle !important;
+  padding: 0.8rem;
+  font-size: 0.9rem;
+}
+
+.loan-table .badge {
+  font-size: 0.8rem;
+  padding: 0.45em 0.75em;
+  border-radius: 12px;
+}
+
+.timeline-text {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.notes-list {
+  list-style-type: disc;
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  color: #333;
+}

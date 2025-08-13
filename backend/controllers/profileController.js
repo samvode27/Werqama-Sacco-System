@@ -2,17 +2,11 @@ import User from '../models/User.js';
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcryptjs';
 
-// @desc Get user profile
-// @route GET /api/profile
-// @access Private
 export const getProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id).select('-password');
     res.json(user);
 });
 
-// @desc Update user profile (name, phone, notification preferences)
-// @route PUT /api/profile
-// @access Private
 export const updateProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
 
@@ -40,7 +34,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
         throw new Error('User not found');
     }
 });
-
 
 export const changePassword = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);

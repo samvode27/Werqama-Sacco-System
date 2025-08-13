@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import NavigationBar from '../components/Navbar';
 import api from '../api/axios';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 
@@ -27,7 +26,6 @@ const ContactPage = () => {
 
     return (
         <>
-            <NavigationBar />
             <Container className="mt-4" style={{ maxWidth: '600px' }}>
                 <h2>Contact Us</h2>
                 {success && <Alert variant="success">{success}</Alert>}

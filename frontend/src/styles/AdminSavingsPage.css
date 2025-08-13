@@ -1,0 +1,22 @@
+
+
+
+.chart-card {
+  border-radius: 1rem;
+  background: linear-gradient(to right, #f9f9f9, #ffffff);
+  transition: transform 0.2s ease-in-out;
+}
+
+.chart-card:hover {
+  transform: scale(1.01);
+}
+
+.charts-row h6 {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.canvasjs-chart-canvas {
+  border-radius: 10px;
+}

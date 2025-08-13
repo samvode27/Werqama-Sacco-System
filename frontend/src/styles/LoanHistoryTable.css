@@ -1,0 +1,30 @@
+/* src/styles/LoanHistoryTable.css */
+.loan-history-table {
+  margin-top: 50px;
+}
+
+.table-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.status-badge.approved {
+  background-color: #28a745;
+}
+.status-badge.rejected {
+  background-color: #dc3545;
+}
+.status-badge.pending {
+  background-color: #ffc107;
+  color: black;
+}

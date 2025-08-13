@@ -19,6 +19,26 @@ const savingSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending',
+    },
+    adminNotes: [
+        {
+            status: String, // approved/rejected
+            note: String,
+            date: {
+                type: Date,
+                default: Date.now,
+            },
+            admin: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        },
+    ],
+    receipt: String, // filename or URL
 });
 
 const Saving = mongoose.model('Saving', savingSchema);

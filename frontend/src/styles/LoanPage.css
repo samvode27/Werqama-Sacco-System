@@ -1,0 +1,35 @@
+/* src/styles/LoanPage.css */
+
+.loan-hero {
+    background: #f8f9fa;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.loan-title {
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.loan-subtitle {
+    color: #555;
+}
+
+.loan-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.loan-card {
+    background: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.loan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}

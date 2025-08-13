@@ -1,0 +1,28 @@
+.hero-section {
+    background: url('https://source.unsplash.com/1600x600/?ethiopia,community') center center/cover no-repeat;
+    height: 80vh;
+    position: relative;
+}
+
+.hero-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.section-title {
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.why-us-section {
+    background: linear-gradient(45deg, #0f9d58, #4285f4);
+}
+
+.membership-section {
+    background-color: #f8f9fa;
+}
+
+.contact-section {
+    background: linear-gradient(45deg, #4285f4, #0f9d58);
+}

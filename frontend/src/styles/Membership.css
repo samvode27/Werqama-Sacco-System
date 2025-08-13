@@ -1,0 +1,105 @@
+/* src/styles/Membership.css */
+
+.membership-section {
+  background: linear-gradient(135deg, #06172d, #0d2238);
+  position: relative;
+  color: #fff;
+  margin-bottom: -75px;
+  margin-top: -75px;
+}
+
+.wave-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.section-title {
+  font-size: 2rem;
+}
+
+.section-subtitle {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #ddd;
+  margin-top: -20px;
+  margin-bottom: 80px;
+}
+
+
+.membership-card {
+  background: #ffffff; /* clean white */
+  border-radius: 1rem;
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.membership-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+
+.membership-icon svg {
+  color: #fcfdfe;
+  background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
+  padding: 0.75rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+  width: 64px;
+  height: 64px;
+}
+
+.membership-card h5 {
+  font-weight: 700;
+  color: #2f0a0f;
+  margin-top: 1rem;
+}
+
+.membership-card p {
+  color: #100f0f;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.gradient-button {
+  background: linear-gradient(135deg, #0d6efd, #6f42c1);
+  border: none;
+  color: #fff;
+  border-radius: 9999px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gradient-button:hover {
+  background: linear-gradient(135deg, #6f42c1, #0d6efd);
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #0d6efd, #6f42c1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .membership-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+}

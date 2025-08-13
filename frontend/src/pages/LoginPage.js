@@ -1,72 +1,92 @@
+// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
-import NavigationBar from '../components/Navbar';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { useAuth } from '../contexts/AuthContext';
+import { Container, Form, Button, Alert, Card } from 'react-bootstrap';
+import '../styles/Auth.css';
 
 const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    const { setToken, setUser } = useAuth();
-    const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        try {
-            const res = await api.post('/auth/login', { email, password });
-            console.log('Login response:', res.data);
+    try {
+      const res = await api.post('/auth/login', { email, password });
+      const { token, user } = res.data;
 
-            setToken(res.data.token);
-            setUser({
-                _id: res.data._id,
-                name: res.data.name,
-                email: res.data.email,
-                role: res.data.role,
-            });
+      login(user, token);
 
-            navigate('/');
-        } catch (err) {
-            console.error('Login error:', err.response?.data || err);
-            setError(err.response?.data?.message || 'Login failed');
-        }
-    };
+      if (user.role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        // both 'member' and 'user' go to member dashboard
+        navigate('/member-dashboard');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <>
-            <NavigationBar />
-            <Container className="mt-4" style={{ maxWidth: '400px' }}>
-                <h2>Login</h2>
-                {error && <Alert variant="danger">{error}</Alert>}
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="email" className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="password" className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
-                    <Button type="submit" variant="primary" block>
-                        Login
-                    </Button>
-                </Form>
-            </Container>
-        </>
-    );
+  return (
+    <Container className="login-page-container d-flex align-items-center justify-content-center vh-100">
+      <Card className="p-4 shadow login-card" style={{ maxWidth: '400px', width: '100%' }}>
+        <h2 className="text-center mb-4">Login</h2>
+
+        {error && <Alert variant="danger">{error}</Alert>}
+
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter email"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+            />
+          </Form.Group>
+
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-100"
+            disabled={loading}
+          >
+            {loading ? 'Logging in...' : 'Login'}
+          </Button>
+        </Form>
+
+        <div className="mt-3 text-center">
+          <a href="/forgot-password">Forgot Password?</a>
+        </div>
+        <div className="mt-3 text-center">
+          <a href="/register">Register</a>
+        </div>
+      </Card>
+    </Container>
+  );
 };
 
 export default LoginPage;

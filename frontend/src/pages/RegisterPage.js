@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import api from '../api/axios'; // ✅ use your configured Axios instance
+import api from '../api/axios';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import '../styles/Auth.css';
+import PageTransitionWrapper from '../components/PageTransitionWrapper';
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -11,6 +13,12 @@ function RegisterPage() {
         password: '',
         phone: '',
     });
+    const [errors, setErrors] = useState({});
+
+    const validatePassword = (password) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,79 +26,87 @@ function RegisterPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const { data } = await api.post('/auth/register', formData); // ✅ use api
-            toast.success('Registration successful!');
-            localStorage.setItem('userInfo', JSON.stringify(data));
+        const newErrors = {};
 
-            if (data.role === 'admin') {
-                navigate('/admin-dashboard');
-            } else {
-                navigate('/member-dashboard');
-            }
+        if (!formData.name) newErrors.name = 'Name is required';
+        if (!formData.email) newErrors.email = 'Email is required';
+        if (!validatePassword(formData.password)) {
+            newErrors.password =
+                'Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.';
+        }
+
+        setErrors(newErrors);
+        if (Object.keys(newErrors).length > 0) return;
+
+        try {
+            const { data } = await api.post('/auth/register', formData);
+            toast.success('Registration successful! Please log in.');
+            navigate('/login');
         } catch (error) {
             toast.error(error.response?.data?.message || 'Registration failed.');
         }
     };
 
     return (
-        <div className="container mt-5" style={{ maxWidth: '400px' }}>
-            <h2 className="mb-4 text-center">Register</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="form-control"
-                        required
-                    />
+        <PageTransitionWrapper>
+            <div className="auth-wrapper">
+                <div className="auth-container">
+                    <h2>Create Account</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Full Name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className="form-control"
+                                required
+                            />
+                            {errors.name && <small className="text-danger">{errors.name}</small>}
+                        </div>
+                        <div className="mb-3">
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email Address"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="form-control"
+                                required
+                            />
+                            {errors.email && <small className="text-danger">{errors.email}</small>}
+                        </div>
+                        <div className="mb-3">
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="form-control"
+                                required
+                            />
+                            {errors.password && <small className="text-danger">{errors.password}</small>}
+                        </div>
+                        <div className="mb-3">
+                            <input
+                                type="text"
+                                name="phone"
+                                placeholder="Phone (optional)"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                className="form-control"
+                            />
+                        </div>
+                        <button type="submit" className="btn btn-primary w-100">Register</button>
+                    </form>
+                    <p className="mt-3 text-center">
+                        Already have an account? <Link to="/login">Login</Link>
+                    </p>
                 </div>
-                <div className="mb-3">
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="form-control"
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        className="form-control"
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <input
-                        type="text"
-                        name="phone"
-                        placeholder="Phone (optional)"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="form-control"
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary w-100">
-                    Register
-                </button>
-            </form>
-            <p className="mt-3 text-center">
-                Already have an account?{' '}
-                <a href="/login" className="text-decoration-none">
-                    Login
-                </a>
-            </p>
-        </div>
+            </div>
+        </PageTransitionWrapper>
     );
 }
 

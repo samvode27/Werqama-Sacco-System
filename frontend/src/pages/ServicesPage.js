@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import NavigationBar from '../components/Navbar';
 import api from '../api/axios';
 import { Container, Card, Row, Col } from 'react-bootstrap';
 
@@ -16,7 +15,6 @@ const ServicesPage = () => {
 
     return (
         <>
-            <NavigationBar />
             <Container className="mt-4">
                 <h2>Services</h2>
                 <Row>

@@ -7,10 +7,13 @@ const userSchema = mongoose.Schema(
     email: { type: String, required: true, unique: true },
     phone: { type: String },
     password: { type: String, required: true },
-    role: { type: String, enum: ['admin', 'member'], default: 'member' },
+    role: { type: String, enum: ['admin', 'member', 'user'], default: 'user' },
+    resetToken: String,
+    resetTokenExpires: Date,
   },
   { timestamps: true }
 );
+
 
 // Password match method
 userSchema.methods.matchPassword = async function (enteredPassword) {

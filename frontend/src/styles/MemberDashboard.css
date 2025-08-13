@@ -1,0 +1,5 @@
+.disabled-card {
+  opacity: 0.6;
+  pointer-events: none; /* prevents hover and click */
+  cursor: not-allowed !important;
+}

@@ -1,0 +1,91 @@
+/* src/styles/NewsEvents.css */
+
+.news-events-section {
+  color: #212529;
+  margin: 50px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.section-subtitle {
+  color: #6c757d;
+}
+
+.news-card {
+  position: relative;
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.news-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.news-card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+}
+
+.news-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.news-card:hover .news-card-img {
+  transform: scale(1.1);
+}
+
+.news-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3));
+  transition: background 0.5s ease;
+}
+
+.news-card:hover .news-card-overlay {
+  background: linear-gradient(180deg, rgba(0,0,0,0) 20%, rgba(0,0,0,0.5));
+}
+
+.gradient-button {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  border: none;
+  color: #fff;
+  border-radius: 50px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-button:hover {
+  background: linear-gradient(135deg, #6610f2, #0d6efd);
+  transform: scale(1.05);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.news-modal .modal-content {
+  border-radius: 1rem;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+  }
+}

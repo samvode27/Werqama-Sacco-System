@@ -1,0 +1,68 @@
+/* src/styles/Auth.css */
+
+/* Layout */
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d6efd, #6f42c1);
+  padding: 1rem;
+}
+
+.auth-container {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.5s ease;
+}
+
+.auth-container h2 {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #0a1a2f;
+}
+
+.auth-container .form-control {
+  border-radius: 0.5rem;
+}
+
+.auth-container button {
+  background: linear-gradient(135deg, #0d6efd, #6f42c1);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+  width: 100%;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.auth-container button:hover {
+  background: linear-gradient(135deg, #6f42c1, #0d6efd);
+  transform: scale(1.02);
+}
+
+.auth-container a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.auth-container a:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

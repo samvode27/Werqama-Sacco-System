@@ -13,10 +13,14 @@ import newsRoutes from './routes/news.js';
 import serviceRoutes from './routes/services.js';
 import contactRoutes from './routes/contacts.js';
 import savingRoutes from './routes/savings.js';
-import loanRoutes from './routes/loans.js';
+import loanRoutes from './routes/loanApplicationRoutes.js';
 import dashboardRoutes from './routes/dashboard.js';
 import profileRoutes from './routes/profile.js';
 import paymentRoutes from './routes/payment.js';
+import formSubmissionRoutes from './routes/formSubmissionRoutes.js';
+import membershipRoutes from './routes/membershipRoutes.js';
+import loanApplicationRoutes from './routes/loanApplicationRoutes.js';
+
 
 // Initialize environment
 dotenv.config();
@@ -28,10 +32,19 @@ const app = express();
 
 // Middleware
 
+const allowedOrigins = [
+  'https://werqama-sacco-3guv.vercel.app', // ✅ your Vercel frontend
+  'http://localhost:3000' // ✅ for local development
+];
+
 app.use(cors({
-    origin: 'http://localhost:3000', // frontend origin
-    credentials: true,               // allow cookies/credentials
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // ✅ Added PATCH here
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+app.options('*', cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,7 +54,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+app.use('/uploads', express.static('uploads'));
+app.use('/public', express.static('public'));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -54,6 +70,10 @@ app.use('/api/loans', loanRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/form-submissions', formSubmissionRoutes);
+app.use('/api/memberships', membershipRoutes);
+app.use('/api/loan-applications', loanApplicationRoutes);
+
 
 app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
@@ -72,7 +92,7 @@ app.get('/', (req, res) => {
 app.use(errorHandler);
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () =>{
     console.log(`Server running on port ${PORT}`);

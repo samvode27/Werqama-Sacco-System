@@ -1,65 +1,79 @@
-import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { LanguageContext } from '../contexts/LanguageContext';
-import { useAuth } from '../contexts/AuthContext';
+// src/components/Navbar.js
 
-const NavigationBar = () => {
-    const { user, setUser, setToken } = useAuth();
-    const { toggleLanguage, language } = useContext(LanguageContext);
-    const navigate = useNavigate();
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import '../styles/Landing.css';
 
-    const handleLogout = () => {
-        setUser(null);
-        setToken('');
-        localStorage.removeItem('token');
-        navigate('/login');
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+      const sections = document.querySelectorAll('section');
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+      setActiveSection(current);
     };
 
-    return (
-        <Navbar bg="light" expand="lg">
-            <Container>
-                <Navbar.Brand as={Link} to="/">WERQAMA SACCO</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
-                        <Nav.Link as={Link} to="/">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/news">News</Nav.Link>
-                        <Nav.Link as={Link} to="/services">Services</Nav.Link>
-                        <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
-                        <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-                        {user?.role === 'admin' && (
-                            <>
-                                <Nav.Link as={Link} to="/create-news">Create News</Nav.Link>
-                                <Nav.Link as={Link} to="/admin-dashboard">Admin Dashboard</Nav.Link>
-                            </>
-                        )}
-                        {user?.role === 'member' && (
-                            <Nav.Link as={Link} to="/member-dashboard">Member Dashboard</Nav.Link>
-                        )}
-                    </Nav>
-                    <Nav>
-                        {user ? (
-                            <Button variant="outline-danger" onClick={handleLogout}>Logout</Button>
-                        ) : (
-                            <>
-                                <Button variant="outline-primary" as={Link} to="/login" className="me-2">Login</Button>
-                                <Button variant="primary" as={Link} to="/register">Register</Button>
-                            </>
-                        )}
-                    </Nav>
-                    <Button
-                      variant="outline-secondary"
-                      className="ms-2"
-                      onClick={toggleLanguage}
-                    >
-                        {language === 'en' ? 'አማ' : 'EN'}
-                    </Button>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    );
-};
+  return (
+    <nav
+      className={`navbar navbar-expand-lg fixed-top ${
+        scrolled ? 'navbar-scrolled' : 'navbar-transparent'
+      } shadow-sm rounded-bottom`}
+    >
+      <div className="container">
+        <Link className="navbar-brand fw-bold text-primary" to="/">
+          WERQAMA SACCO
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul className="navbar-nav">
+            {[
+              { name: 'Home', href: '/' },
+              { name: 'About', href: '#about' },
+              { name: 'Why Us', href: '#why-us' },
+              { name: 'Services', href: '#services' },
+              { name: 'Membership', href: '#membership' },
+              { name: 'News', href: '#news' },
+              { name: 'Contact', href: '#contact' },
+            ].map(link => (
+              <li className="nav-item mx-2" key={link.name}>
+                <a
+                  href={link.href}
+                  className={`nav-link position-relative ${
+                    activeSection === link.href.substring(1) ? 'active-link' : ''
+                  }`}
+                >
+                  {link.name}
+                </a>
+              </li>
+            ))}
+            <li className="nav-item ms-3">
+              <Link className="btn btn-primary mr-2" to="/login">Login</Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+}
 
-export default NavigationBar;
+export default Navbar;

@@ -1,0 +1,71 @@
+.admin-dashboard {
+    padding: 2rem;
+    background: linear-gradient(to bottom, #f7f9fc, #e3e9f7);
+    min-height: 100vh;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: #333;
+}
+
+.hero-section h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.hero-section p {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.dashboard-card {
+    background: #fff;
+    border-radius: 1.2rem;
+    padding: 1.8rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    color: #333;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    background: #f9fcff;
+}
+
+.icon-box {
+    font-size: 2.2rem;
+    color: #4b7bec;
+    margin-bottom: 0.8rem;
+}
+
+.dashboard-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.dashboard-card p {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .dashboard-card {
+        padding: 1.5rem;
+    }
+}

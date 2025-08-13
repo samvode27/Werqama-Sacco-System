@@ -1,61 +1,75 @@
-// src/pages/SavingsPage.js
 import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
-import { Container, Form, Button, Table } from 'react-bootstrap';
+import { Container, Form, Button, Card, Spinner, Row, Col, Alert } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NavigationBar from '../components/Navbar';
 import '../styles/SavingsPage.css';
+import { useAuth } from '../contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
+import moment from 'moment';
 
 const SavingsPage = () => {
     const [amount, setAmount] = useState('');
+    const [manualAmount, setManualAmount] = useState('');
+    const [receiptFile, setReceiptFile] = useState(null);
     const [savings, setSavings] = useState([]);
+    const [loading, setLoading] = useState(true);
     const location = useLocation();
+    // const { user, token } = useAuth();
+    const [receipt, setReceipt] = useState(null);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     const fetchSavingsHistory = async () => {
+        if (!user || !token) return;
+
         try {
-            const res = await api.get('/savings/mine');
-            setSavings(res.data);
+            setLoading(true);
+            const { data } = await api.get(`/savings/member/${user._id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setSavings(data);
         } catch (err) {
-            console.error(err);
+            console.error('Savings fetch error:', err);
+            setError('Failed to load savings history.');
+        } finally {
+            setLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchSavingsHistory();
-    }, []);
+    const { user, token, loading: authLoading } = useAuth();
 
     useEffect(() => {
-        console.log('Redirected back with:', location.search);
+        if (!authLoading && user && token) {
+            fetchSavingsHistory();
+        }
+    }, [authLoading, user, token]);
+
+    useEffect(() => {
         const params = new URLSearchParams(location.search);
         const txRefParam = params.get('tx_ref');
 
         if (params.get('status') === 'success' && txRefParam) {
             toast.success('Payment completed successfully!');
-
             let retries = 0;
             const maxRetries = 6;
 
             const interval = setInterval(async () => {
                 retries++;
-                console.log('Polling for updated savings... Attempt', retries);
-
                 try {
                     const res = await api.get('/savings/mine');
                     setSavings(res.data);
-
                     if (res.data.some(s => s.tx_ref === txRefParam)) {
-                        console.log('New payment found, stopping polling.');
                         clearInterval(interval);
                         toast.success('Payment recorded and visible in history!');
                     } else if (retries >= maxRetries) {
-                        console.log('Max polling attempts reached, stopping.');
                         clearInterval(interval);
                         toast.info('Payment may take more time to appear.');
                     }
                 } catch (error) {
-                    console.error('Error during polling:', error);
                     if (retries >= maxRetries) {
                         clearInterval(interval);
                         toast.error('Error fetching payment history.');
@@ -68,7 +82,6 @@ const SavingsPage = () => {
             toast.error('Payment failed. Please try again.');
         }
     }, [location]);
-
 
     const handlePayWithChapa = async () => {
         if (!amount || isNaN(amount) || Number(amount) <= 0) {
@@ -85,53 +98,174 @@ const SavingsPage = () => {
         }
     };
 
+    const handleManualSubmit = async (e) => {
+        e.preventDefault();
+        if (!manualAmount || !receipt) {
+            setError('Please provide an amount and receipt.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('amount', manualAmount);
+        formData.append('receipt', receipt);
+
+        try {
+            setSubmitting(true);
+            await api.post('/savings/manual', formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            setMessage('Manual saving submitted successfully!');
+            setManualAmount('');
+            setReceipt(null);
+            fetchSavingsHistory();
+        } catch (err) {
+            setError('Failed to submit manual saving.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return (
         <>
-            <NavigationBar />
             <ToastContainer />
+            <div className="savings-hero text-center">
+                <h3 className="gradient-text">Monthly Savings Payment</h3>
+                <h6 className="subtitle">Pay your SACCO monthly savings easily and view your payment history below.</h6>
+            </div>
+
             <Container className="savings-container">
-                <h2 className="mb-4">Monthly Savings Payment</h2>
-                <Form className="mb-4">
-                    <Form.Group className="mb-3">
-                        <Form.Label>Enter Amount (ETB)</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Enter amount to save"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Button variant="success" onClick={handlePayWithChapa}>
-                        Pay with Chapa
-                    </Button>
-                </Form>
-                <h4>My Savings History</h4>
-                {savings.length === 0 ? (
-                    <p>No savings records yet.</p>
-                ) : (
-                    <Table striped bordered hover responsive>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Amount (ETB)</th>
-                                <th>Method</th>
-                                <th>Reference</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {savings.map((saving, index) => (
-                                <tr key={saving._id}>
-                                    <td>{index + 1}</td>
-                                    <td>{saving.amount}</td>
-                                    <td>{saving.method}</td>
-                                    <td>{saving.tx_ref}</td>
-                                    <td>{new Date(saving.date).toLocaleString()}</td>
+                <Row>
+                    {/* Chapa Section */}
+                    <Col md={6}>
+                        <div className="payment-card mb-4">
+                            <h5>Pay with Chapa</h5>
+                            <Form>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Amount (ETB)</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter amount to save"
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Button variant="primary" onClick={handlePayWithChapa}>
+                                    Pay with Chapa
+                                </Button>
+                            </Form>
+                        </div>
+                    </Col>
+
+                    {/* Manual Section */}
+                    <Col md={6}>
+                        <Card className="p-4 mb-4 shadow-sm">
+                            <h5>Manual Bank Deposit</h5>
+                            <Form onSubmit={handleManualSubmit}>
+                                <Row className="mb-3">
+                                    <Col md={6}>
+                                        <Form.Group controlId="manualAmount">
+                                            <Form.Label>Amount (ETB)</Form.Label>
+                                            <Form.Control
+                                                type="number"
+                                                placeholder="Enter amount to save"
+                                                value={manualAmount}
+                                                onChange={(e) => setManualAmount(e.target.value)}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md={6}>
+                                        <Form.Group controlId="receipt">
+                                            <Form.Label>Upload Receipt</Form.Label>
+                                            <Form.Control
+                                                type="file"
+                                                accept="image/*,application/pdf"
+                                                onChange={(e) => setReceipt(e.target.files[0])}
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Button type="submit" variant="primary" disabled={submitting}>
+                                    {submitting ? 'Submitting...' : 'Submit Manual Saving'}
+                                </Button>
+                            </Form>
+                        </Card>
+                    </Col>
+                </Row>
+
+                {message && <Alert variant="success">{message}</Alert>}
+                {error && <Alert variant="danger">{error}</Alert>}
+
+                <Card className="p-3 shadow-sm mt-4">
+                    <h5>Savings History</h5>
+
+                    {loading ? (
+                        <div className="text-center my-3">
+                            <Spinner animation="border" />
+                        </div>
+                    ) : error ? (
+                        <div className="text-danger text-center my-2">{error}</div>
+                    ) : (
+                        <table className="table table-hover mt-3">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Method</th>
+                                    <th>Receipt</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                )}
+                            </thead>
+                            <tbody>
+                                {savings.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="text-center">
+                                            No savings yet.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    savings.map((s) => (
+                                        <tr key={s._id}>
+                                            <td>{moment(s.date).format('YYYY-MM-DD')}</td>
+                                            <td>{s.amount.toFixed(2)}</td>
+                                            <td>
+                                                <span
+                                                    className={`badge bg-${s.status === 'approved'
+                                                            ? 'success'
+                                                            : s.status === 'pending'
+                                                                ? 'warning'
+                                                                : 'danger'
+                                                        }`}
+                                                >
+                                                    {s.status}
+                                                </span>
+                                            </td>
+                                            <td>{s.method}</td>
+                                            <td>
+                                                {s.receipt ? (
+                                                    <a
+                                                        href={`${import.meta.env.VITE_BACKEND_URL}/uploads/${s.receipt}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        View
+                                                    </a>
+                                                ) : (
+                                                    'N/A'
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    )}
+                </Card>
+
             </Container>
         </>
     );

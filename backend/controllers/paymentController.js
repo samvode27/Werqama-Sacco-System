@@ -2,7 +2,9 @@ import axios from 'axios';
 import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 import Saving from '../models/Saving.js';
+import { sendEmail } from '../utils/emailSender.js';
 
+// Initialize Chapa Payment
 export const initializeChapaPayment = asyncHandler(async (req, res) => {
     const { amount } = req.body;
     const user = await User.findById(req.user._id);
@@ -29,7 +31,7 @@ export const initializeChapaPayment = asyncHandler(async (req, res) => {
         return_url: `${process.env.FRONTEND_URL}/savings?status=success&tx_ref=${tx_ref}`,
         callback_url: `${process.env.BASE_URL}/api/payment/chapa/webhook`,
         customization: {
-            title: 'WERQAMA SACCO', // under 16 characters
+            title: 'WERQAMA SACCO',
             description: 'Monthly Savings',
         },
     };
@@ -55,9 +57,7 @@ export const initializeChapaPayment = asyncHandler(async (req, res) => {
     }
 });
 
-
-// Placeholder webhook handler for payment confirmation
-
+// Chapa Webhook Handler with Email Notification
 export const chapaWebhook = asyncHandler(async (req, res) => {
     console.log('Webhook received:', JSON.stringify(req.body, null, 2));
 
@@ -81,13 +81,30 @@ export const chapaWebhook = asyncHandler(async (req, res) => {
 
         await saving.save();
         console.log('Saving recorded from webhook:', saving);
+
+        // Send Email Notification
+        const subject = 'WERQAMA SACCO: Payment Received';
+        const html = `
+            <p>Dear ${user.name || 'Member'},</p>
+            <p>We have successfully received your payment of <strong>ETB ${amount}</strong> via Chapa.</p>
+            <p>
+                Reference: <strong>${tx_ref}</strong><br>
+                Date: ${new Date().toLocaleString()}
+            </p>
+            <p>Thank you for saving with WERQAMA SACCO.</p>
+            <p>Best regards,<br/>WERQAMA SACCO Team</p>
+        `;
+
+        try {
+            await sendEmail(user.email, subject, html);
+            console.log(`📧 Payment confirmation email sent to ${user.email}`);
+        } catch (error) {
+            console.error('❌ Failed to send payment confirmation email:', error);
+        }
+
         res.sendStatus(200);
     } else {
         console.log('Webhook received non-success status:', req.body.status);
         res.sendStatus(400);
     }
 });
-
-
-
-

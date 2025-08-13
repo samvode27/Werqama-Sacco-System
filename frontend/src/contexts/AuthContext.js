@@ -1,43 +1,31 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../api/axios';
+// src/contexts/AuthContext.js
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('token') || '');
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            if (token) {
-                try {
-                    const res = await api.get('/auth/me'); // create this endpoint if missing
-                    setUser(res.data);
-                } catch (err) {
-                    console.error('Failed to fetch user', err);
-                    setToken('');
-                    setUser(null);
-                }
-            }
-            setLoading(false);
-        };
-        fetchUser();
-    }, [token]);
+  const login = (userData, token) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  };
 
-    useEffect(() => {
-        if (token) {
-            localStorage.setItem('token', token);
-        } else {
-            localStorage.removeItem('token');
-        }
-    }, [token]);
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+  };
 
-    return (
-        <AuthContext.Provider value={{ user, setUser, token, setToken, loading }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);

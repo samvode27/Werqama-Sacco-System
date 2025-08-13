@@ -1,0 +1,28 @@
+.loan-form-section {
+  margin-top: 4rem;
+}
+
+.form-heading {
+  font-weight: bold;
+  color: #004080;
+}
+
+.glass-form {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e0e0e0;
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+}
+
+.glass-form label {
+  font-weight: 500;
+}
+
+.glass-form input, .glass-form select {
+  border-radius: 8px;
+}
+
+.glass-form button {
+  border-radius: 8px;
+  font-weight: 600;
+}
