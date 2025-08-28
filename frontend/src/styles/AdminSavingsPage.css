@@ -1,22 +1,40 @@
-
-
-
-.chart-card {
-  border-radius: 1rem;
-  background: linear-gradient(to right, #f9f9f9, #ffffff);
-  transition: transform 0.2s ease-in-out;
-}
-
-.chart-card:hover {
-  transform: scale(1.01);
-}
-
-.charts-row h6 {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #333;
-}
-
-.canvasjs-chart-canvas {
+.filter-bar {
+  background-color: #f8f9fa;
+  padding: 10px 15px;
   border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
+
+.filter-bar .form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.filter-bar .form-control,
+.filter-bar .form-select,
+.filter-bar .btn {
+  height: 38px;
+  font-size: 0.85rem;
+}
+
+.admin-savings-table th,
+.admin-savings-table td {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+.admin-savings-table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.admin-savings-table a {
+    color: #007bff;
+}
+
+.admin-savings-table .btn-sm {
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+

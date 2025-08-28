@@ -12,16 +12,17 @@ const AdminMembershipApprovalPage = () => {
   const [loading, setLoading] = useState(false);
   const [adminNotes, setAdminNotes] = useState('');
 
+  // Fetch only pending applications
   const fetchApplications = async () => {
     try {
-      const { data } = await api.get('/memberships');
+      const { data } = await api.get('/memberships/pending');
       setApplications(data);
     } catch {
-      toast.error('Failed to fetch applications');
+      toast.error('Failed to fetch pending applications');
     }
   };
 
-  // Only allow approve/reject if admin notes length >= 5 characters (adjust as needed)
+  // Only allow approve/reject if admin notes length >= 5 characters
   const isActionAllowed = adminNotes.trim().length >= 5;
 
   const handleDecision = async (status) => {
@@ -34,14 +35,14 @@ const AdminMembershipApprovalPage = () => {
 
     try {
       setLoading(true);
-      await api.put(`/memberships/${status === 'approved' ? 'approve' : 'reject'}/${selectedApp._id}`, {
-        status,
-        adminNotes,
-      });
+      await api.put(
+        `/memberships/${status === 'approved' ? 'approve' : 'reject'}/${selectedApp._id}`,
+        { adminNotes }
+      );
       toast.success(`Application ${status}`);
       setShowModal(false);
       setAdminNotes('');
-      fetchApplications();
+      fetchApplications(); // refresh list
     } catch {
       toast.error('Action failed');
     } finally {
@@ -55,7 +56,8 @@ const AdminMembershipApprovalPage = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">🧾 Membership Applications</h2>
+      <h2 className="mb-4">🧾 Pending Membership Applications</h2>
+
       <Table striped bordered hover responsive className="shadow-sm">
         <thead>
           <tr>
@@ -74,7 +76,7 @@ const AdminMembershipApprovalPage = () => {
               <td>
                 <span className={`status-${app.status}`}>{app.status}</span>
               </td>
-              <td>{moment(app.createdAt).fromNow()}</td>
+              <td>{moment(app.submittedAt || app.createdAt).fromNow()}</td>
               <td>
                 <Button
                   size="sm"

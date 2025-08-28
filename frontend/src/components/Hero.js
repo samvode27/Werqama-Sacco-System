@@ -4,9 +4,8 @@ import React, { useEffect } from 'react';
 import { Container, Row, Col, Carousel } from 'react-bootstrap';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import '../styles/Landing.css';
 import { Link } from 'react-router-dom';
-
+import '../styles/Hero.css'
 function Hero() {
   useEffect(() => {
     AOS.init({
@@ -16,49 +15,38 @@ function Hero() {
   }, []);
 
   return (
-    <section
-      className="hero position-relative d-flex align-items-center justify-content-center"
-      style={{ height: '80vh', overflow: 'visible', marginTop: '30px', backgroundColor: '#0a1a2f' }}
-    >
-      {/* Main Content */}
-      <Container className="text-center text-white position-relative pb-5" >
+    <section className="hero">
+      <Container className="text-center text-white position-relative pb-5">
         <Row className="align-items-center">
           <Col md={6} className="mb-4 mb-md-0" data-aos="fade-right">
-            <h1 className="display-4 fw-bold gradient-text text-start" style={{ fontSize: '48px' }}>
+            <h1 className="display-4 fw-bold gradient-text text-start">
               Empowering Your Financial Future
             </h1>
-            <p className="lead mt-3 text-start" style={{ color: 'white', fontFamily: 'arial', fontSize: '16px' }}>
-              Join WERQAMA SACCO to save, grow, and secure your financial future with trusted services, flexible loans, and community support.
+            <p className="lead mt-3 text-start">
+              Join WERQAMA SACCO to save, grow, and secure your financial future with trusted services,
+              flexible loans, and community support.
             </p>
+
+            <div className="mt-4 text-start">
+              <Link to="/register" className="cta-btn">
+                Get Started
+              </Link>
+            </div>
           </Col>
           <Col md={6} data-aos="fade-left">
-            <div className="glass-card p-0 rounded-4 shadow-lg">
+            <div className=" p-0 rounded-4">
               <Carousel fade controls={false} indicators={false} interval={3500}>
                 <Carousel.Item>
-                  <img
-                    style={{ width: '100%', height: '400px', objectFit: 'cover' }}
-                    className="d-block rounded-4"
-                    src={require('../assets/saving.jpeg')}
-                    alt="Saving"
-                  />
+                  <img src={require('../assets/news1.jpg')} alt="Saving" style={{ height: '100%', width: '400px' }} />
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img
-                    style={{ width: '100%', height: '400px', objectFit: 'cover', zIndex: -1 }}
-                    className="d-block rounded-4"
-                    src={require('../assets/finance.webp')}
-                    alt="Finance"
-                  />
+                  <img src={require('../assets/finance.webp')} alt="Finance" style={{ height: '500px', width: '400px' }} />
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img
-                    style={{ width: '100%', height: '400px', objectFit: 'cover', zIndex: -1 }}
-                    className="d-block rounded-4"
-                    src={require('../assets/teamworking.jpeg')}
-                    alt="Teamwork"
-                  />
+                  <img src={require('../assets/teamworking.jpeg')} alt="Teamwork" style={{ height: '500px', width: '400px' }} />
                 </Carousel.Item>
               </Carousel>
+
             </div>
           </Col>
         </Row>

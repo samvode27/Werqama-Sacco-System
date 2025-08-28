@@ -30,7 +30,6 @@ const sendLoanStatusEmail = async (to, status) => {
       subject,
       html,
     });
-    console.log(`✅ Email sent to ${to} for loan ${status}`);
   } catch (error) {
     console.error(`❌ Failed to send email to ${to}:`, error.message);
   }

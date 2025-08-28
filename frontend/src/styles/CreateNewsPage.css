@@ -34,10 +34,36 @@
 }
 
 .news-card-img {
-  height: 180px;
-  object-fit: cover;
-  border-bottom: 1px solid #ddd;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
 }
+
+.news-card:hover .news-card-img {
+    transform: scale(1.05);
+}
+
+.hover-scale {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.preview-img {
+    max-height: 250px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.news-view-modal img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
 
 .card-footer {
   font-size: 0.85rem;

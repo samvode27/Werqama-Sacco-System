@@ -1,12 +1,12 @@
 // src/components/Membership.js
-
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { FaUserPlus, FaMoneyCheckAlt, FaUniversity } from 'react-icons/fa';
+import { Container, Row, Col } from 'react-bootstrap';
+import { FaUserPlus, FaMoneyCheckAlt, FaUniversity, FaHandHoldingUsd, FaWallet, } from 'react-icons/fa';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/Membership.css';
 import { Link } from 'react-router-dom';
+
 
 function Membership() {
   const [members, setMembers] = useState(0);
@@ -35,80 +35,94 @@ function Membership() {
 
   const items = [
     {
-      icon: <FaUserPlus size={48} />,
-      title: `${members}+ Members`,
-      description: "Join our growing community and secure your financial future together.",
+      icon: <FaUserPlus />,
+      title: `${members}+ Active Members`,
+      description: 'Be part of a growing family securing financial freedom.',
     },
     {
-      icon: <FaMoneyCheckAlt size={48} />,
-      title: `${loans}+ Loans`,
-      description: "Access affordable loans to grow your business or personal goals.",
+      icon: <FaMoneyCheckAlt />,
+      title: `${loans}+ Loans Disbursed`,
+      description: 'Supporting businesses & personal goals affordably.',
     },
     {
-      icon: <FaUniversity size={48} />,
-      title: "Bank Details",
+      icon: <FaUniversity />,
+      title: 'Bank Details',
       description: (
         <>
-          <strong>WERQAMA SACCO</strong><br />
-          CBE: 1000123456789<br />
-          Awash: 0101010101
+          <strong>WERQAMA SACCO</strong>
+          <br /> CBE: 1000123456789
+          <br /> Awash: 0101010101
         </>
       ),
     },
   ];
 
+  const steps = [
+    { num: 1, text: 'Register Online or at Branch' },
+    { num: 2, text: 'Deposit via Bank or Chapa' },
+    { num: 3, text: 'Activate Your Membership' },
+    { num: 4, text: 'Enjoy Loans & Benefits' },
+  ];
+
   return (
-    <section className="membership-section py-5 position-relative overflow-hidden" id="membership">
-      {/* Wave Background SVG */}
-      <div className="wave-background">
-        <svg viewBox="0 0 1440 320">
+    <section className="membership-section position-relative" id="membership">
+      {/* Top Wave */}
+      <div className="top-wave">
+        <svg viewBox="0 0 1240 210">
           <path
-            fill="#ffffff"
-            fillOpacity="0.1"
-            d="M0,64L48,69.3C96,75,192,85,288,117.3C384,149,480,203,576,208C672,213,768,171,864,160C960,149,1056,171,1152,186.7C1248,203,1344,213,1392,218.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            fill="#0d6efd"
+            fillOpacity="1"
+            d="M0,128L48,117.3C96,107,192,85,288,74.7C384,64,480,64,576,80C672,96,768,128,864,138.7C960,149,1056,139,1152,144C1248,149,1344,171,1392,181.3L1440,192L1440,0L0,0Z"
           ></path>
         </svg>
       </div>
 
-      <Container>
-        <div className="text-center mb-5" data-aos="fade-up">
-          <h2 className="section-title gradient-text fw-bold">Become a Member of WERQAMA SACCO</h2>
-          <p className="section-subtitle">
-            Join by depositing via Chapa or our partner banks and start your financial growth journey.
+      <Container className="py-5">
+        {/* Heading */}
+        <div className="text-center mb-5" data-aos="fade-down">
+          <h2 className="section-title fw-bold text-white">
+            Join WERQAMA SACCO Today
+          </h2>
+          <p className="section-subtitle text-light">
+            Unlock access to loans, savings, and a supportive community.
           </p>
         </div>
+
+        {/* Stats Cards */}
         <Row className="g-4 justify-content-center mb-5">
           {items.map((item, idx) => (
-            <Col key={idx} md={6} lg={4} data-aos="fade-up" data-aos-delay={idx * 150}>
-              <Card className="membership-card h-100 text-center p-4 shadow-lg">
-                <div className="membership-icon mb-3">{item.icon}</div>
-                <h5 className="fw-bold mb-2">{item.title}</h5>
+            <Col key={idx} md={6} lg={4} data-aos="zoom-in" data-aos-delay={idx * 200}>
+              <div className="glass-card h-100 text-center p-4">
+                <div className="glass-icon">{item.icon}</div>
+                <h5 className="fw-bold mt-3">{item.title}</h5>
                 <p className="small">{item.description}</p>
-              </Card>
+              </div>
             </Col>
           ))}
         </Row>
-        <div
-          className="d-flex justify-content-center mt-5"
-          data-aos="zoom-in"
-        >
-          <Link
-            to="/become-member"
-            className="btn btn-gradient px-4 py-3 fw-semibold shadow-lg"
-            style={{
-              borderRadius: '50px',
-              fontSize: '1rem',
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'scale(1.05)';
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(13, 110, 253, 0.6)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
+
+        {/* Steps Timeline */}
+        <div className="timeline mb-5" data-aos="fade-up">
+          {[
+            { icon: <FaUserPlus />, title: "Register", text: "Sign up easily to become a SACCO member." },
+            { icon: <FaWallet />, title: "Deposit", text: "Start saving with flexible contributions." },
+            { icon: <FaHandHoldingUsd />, title: "Apply Loan", text: "Request affordable loans for growth." },
+            { icon: <FaUniversity />, title: "Grow Together", text: "Enjoy financial support and benefits." },
+          ].map((step, idx) => (
+            <div className="timeline-step" key={idx} data-aos="zoom-in" data-aos-delay={idx * 200}>
+              <div className="circle">{step.icon}</div>
+              <div className="step-content">
+                <h6 className="step-title">{step.title}</h6>
+                <p className="step-text">{step.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+
+        {/* CTA */}
+        <div className="d-flex justify-content-center mt-1" data-aos="fade-up">
+          <Link to="/login" className="btn px-3 py-2">
             Apply for Membership
           </Link>
         </div>

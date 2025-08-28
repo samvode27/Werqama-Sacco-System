@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import Saving from '../models/Saving.js';
-import Loan from '../models/Loan.js';
+import Loan from '../models/LoanApplication.js';
 
 export const getAdminDashboardStats = async (req, res) => {
     try {

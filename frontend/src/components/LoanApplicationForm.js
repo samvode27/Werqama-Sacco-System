@@ -43,6 +43,39 @@ const LoanApplicationForm = () => {
     }
   };
 
+  // ✅ validation function
+  const isFormValid = () => {
+    const {
+      fullName, email, age, gender, maritalStatus, phone,
+      loanAmount, loanDurationMonths, monthlyIncome, loanPurpose,
+      guaranteeType, agreementAccepted,
+      address, witness, guarantor
+    } = formData;
+
+    return (
+      fullName &&
+      email &&
+      age &&
+      gender &&
+      maritalStatus &&
+      phone &&
+      address.city &&
+      address.subCity &&
+      address.district &&
+      loanAmount &&
+      loanDurationMonths &&
+      monthlyIncome &&
+      loanPurpose &&
+      witness.fullName &&
+      witness.phone &&
+      guaranteeType &&
+      guarantor.fullName &&
+      guarantor.institution &&
+      guarantor.jobRole &&
+      agreementAccepted
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -74,6 +107,7 @@ const LoanApplicationForm = () => {
 
       <Form onSubmit={handleSubmit}>
         <Row className="g-3">
+          {/* all form inputs (same as before) */}
           <Col md={6}><Form.Control name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} required /></Col>
           <Col md={6}><Form.Control name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} required /></Col>
           <Col md={4}><Form.Control name="age" type="number" placeholder="Age" value={formData.age} onChange={handleChange} required /></Col>
@@ -88,7 +122,7 @@ const LoanApplicationForm = () => {
           <Col md={4}>
             <Form.Select name="maritalStatus" value={formData.maritalStatus} onChange={handleChange} required >
               <option value="">Marital Status</option>
-              <option>Maried</option>
+              <option>Married</option>
               <option>Single</option>
               <option>Other</option>
             </Form.Select>
@@ -134,7 +168,11 @@ const LoanApplicationForm = () => {
             <Form.Check type="checkbox" name="agreementAccepted" checked={formData.agreementAccepted} onChange={handleChange} label="I agree to the loan guidelines of WERQAMA SACCO." required />
           </Col>
           <Col xs={12} className="text-center">
-            <Button type="submit" className="btn-apply" disabled={loading}>
+            <Button
+              type="submit"
+              className="btn-apply"
+              disabled={loading || !isFormValid()}  // ✅ disables until valid
+            >
               {loading ? 'Submitting...' : 'Submit Application'}
             </Button>
           </Col>

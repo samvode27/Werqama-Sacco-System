@@ -1,18 +1,32 @@
 import express from 'express';
+import multer from 'multer';
 import {
-    getProfile,
-    updateProfile,
-    changePassword,
-    uploadProfilePicture
+  getProfile,
+  updateProfile,
+  uploadProfilePicture,
+  removeProfilePicture,
+  changePassword,
 } from '../controllers/profileController.js';
-import { protect } from '../middleware/auth.js';
-import { uploadProfilePic } from '../middleware/uploadProfilePic.js';
+import { protect } from '../middleware/auth.js'; // your JWT auth middleware
 
 const router = express.Router();
 
+// Multer setup
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'uploads/profilePictures');
+  },
+  filename(req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+
 router.get('/', protect, getProfile);
 router.put('/', protect, updateProfile);
+router.post('/picture', protect, upload.single('profilePicture'), uploadProfilePicture);
+router.delete('/picture', protect, removeProfilePicture);
 router.put('/password', protect, changePassword);
-router.post('/picture', protect, uploadProfilePic.single('profilePicture'), uploadProfilePicture);
 
 export default router;

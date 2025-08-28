@@ -1,82 +1,189 @@
-/* SavingsPage.css */
-
+/* ===== HERO SECTION ===== */
 .savings-hero {
-    padding: 3rem 1rem 1rem;
-    background: linear-gradient(90deg, #1070c5, #373e88);
-    color: white;
-    border-radius: 0 0 20px 20px;
+  margin: 2rem 0;
 }
 
 .gradient-text {
-    font-weight: bold;
-    background: linear-gradient(90deg, #124e5f, #92fe9d);
-  
-    -webkit-text-fill-color: transparent;
+  background: linear-gradient(90deg, #007bff, #00c6ff);
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
 .subtitle {
-    font-size: 1rem;
-    opacity: 0.9;
+  color: #6c757d;
+  font-size: 0.95rem;
 }
 
-.savings-container {
-    margin-top: 2rem;
+.export-btn {
+  display: inline-block;
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(#5f4efe);
+  box-shadow: 0 3px 10px rgba(13, 202, 240, 0.25);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
 
-.payment-card {
-    background-color: #f7f9fc;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+.export-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  background: linear-gradient(#3823f6);
 }
 
-.payment-card h5 {
+.export-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(13, 202, 240, 0.25);
+}
+
+/* ======= CARD STYLING ======= */
+.savings-card {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease-in-out;
+}
+
+h5{
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #004085;
+}
+
+.savings-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* ======= FORM INPUTS ======= */
+.savings-card .form-control {
+  border-radius: 0.6rem;
+  border: 1px solid #dee2e6;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.savings-card .form-control:focus {
+  border-color: #0dcaf0;
+  box-shadow: 0 0 0 0.15rem rgba(13, 202, 240, 0.25);
+}
+
+/* ======= BUTTONS ======= */
+.btn {
+  padding: 0.8rem 1rem;
+  display: inline-block;
+  width: 100%;
+  border: none;
+  border-radius: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(#5f4efe);
+  box-shadow: 0 3px 10px rgba(13, 202, 240, 0.25);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(0, 123, 255, 0.35);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ======= RESPONSIVE ======= */
+@media (max-width: 768px) {
+  .savings-card {
     margin-bottom: 1rem;
-    font-weight: 600;
-    color: #003566;
+  }
 }
 
-.payment-card .form-control {
-    border-radius: 10px;
-    box-shadow: none;
-    border: 1px solid #dcdcdc;
+
+/* ===== TABLE ===== */
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
 }
 
-.card h5 {
-    font-weight: 600;
-    color: #003566;
+.table thead th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  padding: 0.75rem;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  border-top: 1px solid #f1f3f5;
+  padding: 0.75rem;
 }
 
 .table-hover tbody tr:hover {
-    background-color: #f1f4f9;
+  background-color: #f9fcff;
+  transition: background-color 0.2s;
 }
 
+/* Badges for status */
 .badge {
-    padding: 0.4em 0.6em;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-transform: capitalize;
+  font-size: 0.75rem;
+  padding: 0.4em 0.6em;
+  border-radius: 0.5rem;
 }
 
-/* Custom file input button */
-input[type="file"] {
-    border: 1px solid #dcdcdc;
-    padding: 0.3rem;
-    border-radius: 8px;
+/* ===== RECEIPT MODAL ===== */
+.modal-body img {
+  border-radius: 0.75rem;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Responsive tweaks */
+button{
+    border: none;
+    color: #007bff;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .savings-card {
+    margin-bottom: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
-    .savings-hero {
-        padding: 2rem 1rem 1rem;
-    }
+  .table-responsive {
+    border: 1px solid #dee2e6;
+    border-radius: 0.6rem;
+    overflow-x: auto;
+  }
+  .table {
+    font-size: 0.85rem;
+  }
+  .savings-history .row > * {
+    margin-bottom: 0.5rem;
+  }
+}
 
-    .payment-card, .card {
-        padding: 1rem;
-    }
-
-    .table {
-        font-size: 0.9rem;
-    }
+@media (max-width: 576px) {
+  .savings-hero h3 {
+    font-size: 1.4rem;
+  }
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  .savings-card h5,
+  .savings-history h5 {
+    font-size: 1rem;
+  }
 }

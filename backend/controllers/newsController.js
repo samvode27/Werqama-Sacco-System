@@ -3,9 +3,6 @@ import fs from 'fs';
 import path from 'path';
 
 export const createNews = async (req, res) => {
-    console.log('REQ.BODY:', req.body);
-    console.log('REQ.FILE:', req.file);
-
     try {
         const { title, content } = req.body;
         const imagePath = req.file?.path?.replace(/\\/g, '/');
@@ -40,7 +37,6 @@ const deleteImage = (imagePath) => {
     }
 };
 
-// controllers/newsController.js
 export const updateNews = async (req, res) => {
   try {
     const news = await News.findById(req.params.id);

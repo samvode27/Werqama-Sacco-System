@@ -1,10 +1,8 @@
 import express from 'express';
-import { createContact, getContacts } from '../controllers/contactController.js';
-import { protect, adminOnly } from '../middleware/auth.js';
+import { sendContactMessage } from '../controllers/contactController.js';
 
 const router = express.Router();
 
-router.post('/', createContact);
-router.get('/', protect, adminOnly, getContacts);
+router.post('/', sendContactMessage);
 
 export default router;

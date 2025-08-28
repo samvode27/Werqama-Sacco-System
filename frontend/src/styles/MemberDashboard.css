@@ -1,5 +1,157 @@
-.disabled-card {
+/* ------------------------------
+   Navbar
+------------------------------ */
+.glass-navbar {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.logout-btn {
+  font-weight: 500;
+  color: #dc3545 !important;
+  transition: all 0.3s ease;
+}
+.logout-btn:hover {
+  color: #a71d2a !important;
+}
+
+/* ------------------------------
+   Dashboard Wrapper
+------------------------------ */
+.member-dashboard-wrapper {
+  background: #f9fafb;
+  min-height: 100vh;
+  padding-top: 5rem;
+}
+
+.dashboard-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+.gradient-text {
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  color: #6c757d;
+  font-size: 1rem;
+}
+
+/* ------------------------------
+   Membership Status Badge
+------------------------------ */
+.status-container {
+  text-align: center;
+}
+
+/* ------------------------------
+   Highlight Cards
+------------------------------ */
+.highlight-card {
+  border: none;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.highlight-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+.highlight-card .icon {
+  margin-bottom: 0.75rem;
+}
+
+/* ------------------------------
+   Quick Actions
+------------------------------ */
+.quick-actions h5 {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Main button styling */
+.quick-btn {
+  width: 100%;
+  height: 180px; /* 👈 taller buttons */
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+}
+
+/* Hover effect */
+.quick-btn:hover {
+  background: #007bff;
+  color: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Icon styling */
+.quick-btn .quick-icon svg {
+  font-size: 2.5rem; /* 👈 bigger icon */
+}
+
+/* Title text */
+.quick-btn .quick-title {
+  font-size: 1.2rem; /* 👈 bigger label */
+  margin-top: 0.5rem;
+}
+
+/* Disabled */
+.disabled-btn {
   opacity: 0.6;
-  pointer-events: none; /* prevents hover and click */
   cursor: not-allowed !important;
+  background: #f1f1f1 !important;
+  color: #999 !important;
+  border: 1px solid #ddd !important;
+  box-shadow: none !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 576px) {
+  .quick-btn {
+    height: 150px;
+  }
+  .quick-btn .quick-icon svg {
+    font-size: 2rem;
+  }
+  .quick-btn .quick-title {
+    font-size: 1rem;
+  }
+}
+
+/* ------------------------------
+   Responsive Design
+------------------------------ */
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 1.8rem;
+  }
+  .highlight-card {
+    padding: 1.2rem;
+  }
+  .quick-btn {
+    padding: 1rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-title {
+    font-size: 1.5rem;
+  }
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  .quick-btn span {
+    font-size: 0.85rem;
+  }
 }

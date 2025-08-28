@@ -1,91 +1,119 @@
 // src/pages/LoginPage.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
-import { useAuth } from '../contexts/AuthContext';
-import { Container, Form, Button, Alert, Card } from 'react-bootstrap';
-import '../styles/Auth.css';
+import React, { useState } from "react";
+import { Form, Button, Card } from "react-bootstrap"; // removed Container
+import { useDispatch, useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { saccoLogin } from "../redux/apiCalls";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import "../styles/Auth.css";
+import Logo from "../assets/logo.jpg";
 
 const LoginPage = () => {
-  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { isFetching } = useSelector((state) => state.user);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+const handleLogin = async (e) => {
+  e.preventDefault();
+  if (!email || !password) {
+    toast.error("Please enter both email and password");
+    return;
+  }
 
-    try {
-      const res = await api.post('/auth/login', { email, password });
-      const { token, user } = res.data;
+  try {
+    const { token, user } = await saccoLogin(dispatch, { email, password });
+    if (!user) return;
 
-      login(user, token);
-
-      if (user.role === 'admin') {
-        navigate('/admin-dashboard');
-      } else {
-        // both 'member' and 'user' go to member dashboard
-        navigate('/member-dashboard');
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+    if (!user.isVerified) {
+      toast.error("Your account is not verified. Please check your email.");
+      return;
     }
-  };
+
+    // ✅ Redirect logic
+    if (user.role === "admin") {
+      navigate("/admin-dashboard");
+    } else if (user.role === "member") {
+      navigate("/member-dashboard");
+    } else if (user.role === "user") {
+      navigate("/membership-form");
+    } else {
+      navigate("/");
+    }
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Login failed");
+  }
+};
 
   return (
-    <Container className="login-page-container d-flex align-items-center justify-content-center vh-100">
-      <Card className="p-4 shadow login-card" style={{ maxWidth: '400px', width: '100%' }}>
-        <h2 className="text-center mb-4">Login</h2>
+    <>
+      <ToastContainer position="top-center" autoClose={3000} theme="colored" />
+      <div className="login-wrapper">
+        <Card className="auth-card">
+          {/* Logo */}
+          <div className="logo-container">
+            <img src={Logo} alt="Werqama Sacco Logo" className="auth-logo" />
+            <h4 className="brand-title">WERQAMA SACCOS Ltd.</h4>
+          </div>
 
-        {error && <Alert variant="danger">{error}</Alert>}
+          <h3 className="text-center mb-4">Login</h3>
+          <Form onSubmit={handleLogin}>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="email">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter email"
-            />
-          </Form.Group>
+            <Form.Group className="mb-3">
+              <div className="password-container">
+                <Form.Control
+                  type={passwordVisible ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <span
+                  className="password-toggle"
+                  onClick={() => setPasswordVisible(!passwordVisible)}
+                >
+                  {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+            </Form.Group>
 
-          <Form.Group className="mb-3" controlId="password">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-            />
-          </Form.Group>
+            <p className="text-end mb-1">
+              <Link to="/forgot-password" className="link-text">
+                Forgot Password?
+              </Link>
+            </p>
 
-          <Button
-            type="submit"
-            variant="primary"
-            className="w-100"
-            disabled={loading}
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </Button>
-        </Form>
+            <Button
+              type="submit"
+              className="btn btn-primary w-100"
+              disabled={isFetching}
+            >
+              {isFetching ? "Logging in..." : "Login"}
+            </Button>
 
-        <div className="mt-3 text-center">
-          <a href="/forgot-password">Forgot Password?</a>
-        </div>
-        <div className="mt-3 text-center">
-          <a href="/register">Register</a>
-        </div>
-      </Card>
-    </Container>
+            <p className="mt-3 text-center">
+              Don’t have an account?{" "}
+              <Link to="/register" className="link-text">
+                Register
+              </Link>
+            </p>
+          </Form>
+        </Card>
+      </div>
+    </>
   );
 };
 

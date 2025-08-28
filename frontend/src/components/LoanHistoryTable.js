@@ -1,26 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import { Table, Spinner, Alert, Button, Modal, Badge } from 'react-bootstrap';
-import { useAuth } from '../contexts/AuthContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/LoanHistoryTable.css';
+import { useSelector } from 'react-redux';
 
 const LoanHistoryTable = () => {
-  const { token } = useAuth();
+  const { currentUser } = useSelector((state) => state.user);
+
   const [loans, setLoans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedTimeline, setSelectedTimeline] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [membershipStatus, setMembershipStatus] = useState(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
 
   useEffect(() => {
     AOS.init({ duration: 800 });
 
     const fetchLoans = async () => {
+      if (!currentUser) return;
+
       try {
         const { data } = await api.get('/loans/my-loans', {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${currentUser}` }
         });
         setLoans(data);
       } catch (err) {
@@ -29,8 +34,26 @@ const LoanHistoryTable = () => {
         setLoading(false);
       }
     };
+
     fetchLoans();
-  }, [token]);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const fetchStatus = async () => {
+      try {
+        const res = await api.get('/memberships/check');
+        setMembershipStatus(res.data.status);
+      } catch (err) {
+        setError('Could not fetch membership status.');
+      } finally {
+        setLoadingStatus(false);
+      }
+    };
+
+    fetchStatus();
+  }, [currentUser]);
 
   const openTimelineModal = (timeline) => {
     setSelectedTimeline(timeline);
@@ -44,8 +67,6 @@ const LoanHistoryTable = () => {
 
   return (
     <div className="loan-history-table" data-aos="fade-up">
-      <h3 className="table-title text-center mb-3">📜 My Loan History</h3>
-
       {loading ? (
         <div className="text-center"><Spinner animation="border" variant="primary" /></div>
       ) : error ? (

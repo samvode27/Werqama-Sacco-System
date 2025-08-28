@@ -69,7 +69,7 @@ const CreateNewsPage = () => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
-        if (image) formData.append('image', image);
+        if (image) formData.append('newsImage', image);
 
         try {
             if (editingNews) {
@@ -105,75 +105,107 @@ const CreateNewsPage = () => {
     return (
         <Container className="news-container mt-4">
             <ToastContainer />
-            <h2 className="mb-3">{editingNews ? '✏️ Edit News' : '📰 Create News'}</h2>
+            <h2 className="mb-4 text-center text-primary fw-bold">
+                {editingNews ? '✏️ Edit News' : '📰 Create News'}
+            </h2>
 
-            <Form onSubmit={handleSubmit} encType="multipart/form-data" className="news-form mb-5">
-                <Form.Group>
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter news title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
-                </Form.Group>
+            {/* Create/Edit Form */}
+            <Card className="p-4 shadow-sm mb-5 bg-white rounded-4 border-0">
+                <Form onSubmit={handleSubmit} encType="multipart/form-data" className="news-form">
+                    <Row className="g-3">
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label className="fw-semibold">Title</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter news title"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    required
+                                    className="shadow-sm"
+                                />
+                            </Form.Group>
+                        </Col>
 
-                <Form.Group>
-                    <Form.Label>Content</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={4}
-                        placeholder="Write the news content..."
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        required
-                    />
-                </Form.Group>
+                        <Col md={6}>
+                            <Form.Group>
+                                <Form.Label className="fw-semibold">Image (optional)</Form.Label>
+                                <Form.Control
+                                    type="file"
+                                    name="newsImage"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="shadow-sm"
+                                />
+                                {preview && (
+                                    <Image
+                                        src={preview}
+                                        className="preview-img mt-2 rounded-3 shadow-sm"
+                                        fluid
+                                    />
+                                )}
+                            </Form.Group>
+                        </Col>
 
-                <Form.Group>
-                    <Form.Label>Image (optional)</Form.Label>
-                    <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
-                    {preview && <Image src={preview} className="preview-img mt-2" fluid />}
-                </Form.Group>
+                        <Col md={12}>
+                            <Form.Group>
+                                <Form.Label className="fw-semibold">Content</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={4}
+                                    placeholder="Write the news content..."
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    required
+                                    className="shadow-sm"
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
 
-                <div className="mt-3">
-                    <Button type="submit" variant="primary">
-                        {editingNews ? 'Update News' : 'Create News'}
-                    </Button>
-                    {editingNews && (
-                        <Button variant="secondary" className="ms-2" onClick={resetForm}>
-                            Cancel
+                    <div className="mt-4 d-flex gap-2 flex-wrap">
+                        <Button type="submit" variant="primary" className="fw-semibold px-4 py-2 shadow-sm">
+                            {editingNews ? 'Update News' : 'Create News'}
                         </Button>
-                    )}
-                </div>
-            </Form>
+                        {editingNews && (
+                            <Button
+                                variant="secondary"
+                                onClick={resetForm}
+                                className="fw-semibold px-4 py-2 shadow-sm"
+                            >
+                                Cancel
+                            </Button>
+                        )}
+                    </div>
+                </Form>
+            </Card>
 
-            <h3 className="mb-3">📚 All News</h3>
-            
-            <Row className="mb-3">
+            {/* Filter */}
+            <Row className="mb-3 g-3 align-items-center">
                 <Col md={6}>
                     <Form.Control
                         type="text"
                         placeholder="Search by title..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
+                        className="shadow-sm"
                     />
                 </Col>
-
                 <Col md={6}>
                     <Form.Control
                         type="date"
                         value={filterDate}
                         onChange={(e) => setFilterDate(e.target.value)}
+                        className="shadow-sm"
                     />
                 </Col>
             </Row>
 
-            <Row>
+            {/* News Cards */}
+            <Row className="g-4">
                 {filteredNews.map((n) => (
-                    <Col key={n._id} md={4} className="mb-4">
-                        <Card className="news-card h-100 shadow-sm">
+                    <Col key={n._id} md={4} sm={6}>
+                        <Card className="news-card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-scale">
                             {n.image && (
                                 <Card.Img
                                     variant="top"
@@ -182,45 +214,55 @@ const CreateNewsPage = () => {
                                 />
                             )}
                             <Card.Body>
-                                <Card.Title>{n.title}</Card.Title>
-                                <Card.Text>{n.content.slice(0, 100)}...</Card.Text>
-                                <Button
-                                    variant="info"
-                                    size="sm"
-                                    onClick={() => {
-                                        setModalContent(n);
-                                        setShowModal(true);
-                                    }}
-                                >
-                                    View
-                                </Button>{' '}
-                                <Button variant="warning" size="sm" onClick={() => handleEdit(n)}>
-                                    Edit
-                                </Button>{' '}
-                                <Button variant="danger" size="sm" onClick={() => handleDelete(n._id)}>
-                                    Delete
-                                </Button>
+                                <Card.Title className="fw-bold">{n.title}</Card.Title>
+                                <Card.Text className="text-muted">{n.content.slice(0, 120)}...</Card.Text>
+                                <div className="d-flex gap-2 flex-wrap">
+                                    <Button
+                                        variant="info"
+                                        size="sm"
+                                        onClick={() => {
+                                            setModalContent(n);
+                                            setShowModal(true);
+                                        }}
+                                    >
+                                        View
+                                    </Button>
+                                    <Button variant="warning" size="sm" onClick={() => handleEdit(n)}>
+                                        Edit
+                                    </Button>
+                                    <Button variant="danger" size="sm" onClick={() => handleDelete(n._id)}>
+                                        Delete
+                                    </Button>
+                                </div>
                             </Card.Body>
-                            <Card.Footer className="text-muted small">
-                                {new Date(n.createdAt).toLocaleDateString()}
+                            <Card.Footer className="text-muted small d-flex justify-content-between">
+                                <span>{new Date(n.createdAt).toLocaleDateString()}</span>
+                                <span className="fw-semibold text-secondary">{n.title.length} chars</span>
                             </Card.Footer>
                         </Card>
                     </Col>
                 ))}
             </Row>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+            {/* Modal for Viewing News */}
+            <Modal
+                show={showModal}
+                onHide={() => setShowModal(false)}
+                size="lg"
+                centered
+                className="news-view-modal"
+            >
                 <Modal.Header closeButton>
-                    <Modal.Title>{modalContent?.title}</Modal.Title>
+                    <Modal.Title className="fw-bold">{modalContent?.title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>{modalContent?.content}</p>
+                    <p className="lead">{modalContent?.content}</p>
                     {modalContent?.image && (
                         <Image
                             src={`${process.env.REACT_APP_API_URL}/${modalContent.image}`}
                             alt="News"
                             fluid
-                            className="mt-2"
+                            className="mt-3 rounded-4 shadow-sm"
                         />
                     )}
                 </Modal.Body>

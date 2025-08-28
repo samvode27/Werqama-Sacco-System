@@ -74,9 +74,9 @@ function NewsEvents() {
                   <Card.Body className="d-flex flex-column">
                     <h5 className="fw-bold">{item.title}</h5>
                     <p className="text-muted small">{item.content?.substring(0, 60)}...</p>
-                    <Button variant="primary" size="sm" className="mt-auto gradient-button">
+                    <button variant="primary" size="sm" className="mt-auto button">
                       Read More
-                    </Button>
+                    </button>
                   </Card.Body>
                 </Card>
               </Col>

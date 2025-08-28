@@ -17,9 +17,9 @@ import loanRoutes from './routes/loanApplicationRoutes.js';
 import dashboardRoutes from './routes/dashboard.js';
 import profileRoutes from './routes/profile.js';
 import paymentRoutes from './routes/payment.js';
-import formSubmissionRoutes from './routes/formSubmissionRoutes.js';
 import membershipRoutes from './routes/membershipRoutes.js';
 import loanApplicationRoutes from './routes/loanApplicationRoutes.js';
+import newsletterRoutes from "./routes/newsletterRoutes.js";
 
 
 // Initialize environment
@@ -55,9 +55,16 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
-app.use('/uploads', express.static('uploads'));
-app.use('/public', express.static('public'));
+// Serve uploaded receipts
+app.use("/uploads/receipts", express.static(path.join(__dirname, "uploads/receipts")));
+
+app.use("/uploads/news", express.static(path.join(__dirname, "uploads/news")));
+
+app.use("/uploads/idDocuments", express.static(path.join(__dirname, "uploads/idDocuments")));
+
+app.use('/uploads/profilePictures', express.static(path.join(process.cwd(), 'uploads/profilePictures')));
+
+
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -69,10 +76,10 @@ app.use('/api/savings', savingRoutes);
 app.use('/api/loans', loanRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/profile', profileRoutes);
-app.use('/api/payment', paymentRoutes);
-app.use('/api/form-submissions', formSubmissionRoutes);
+app.use('/api/payment', paymentRoutes); 
 app.use('/api/memberships', membershipRoutes);
 app.use('/api/loan-applications', loanApplicationRoutes);
+app.use("/api/newsletter", newsletterRoutes);
 
 
 app.use((err, req, res, next) => {

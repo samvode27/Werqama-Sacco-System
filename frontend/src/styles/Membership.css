@@ -1,105 +1,299 @@
-/* src/styles/Membership.css */
-
 .membership-section {
-  background: linear-gradient(135deg, #06172d, #0d2238);
+  background: linear-gradient(#041a3e);
+  color: #fff;
   position: relative;
-  color: #fff;
-  margin-bottom: -75px;
-  margin-top: -75px;
+  overflow: hidden;
+  padding-bottom: 20px;
 }
 
-.wave-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  z-index: 0;
-  opacity: 0.3;
-}
-
+/* Gradient heading */
 .section-title {
-  font-size: 2rem;
-}
-
-.section-subtitle {
-  max-width: 600px;
-  margin: 0 auto;
-  color: #ddd;
-  margin-top: -20px;
-  margin-bottom: 80px;
-}
-
-
-.membership-card {
-  background: #ffffff; /* clean white */
-  border-radius: 1rem;
-  border: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.membership-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-}
-
-
-.membership-icon svg {
-  color: #fcfdfe;
-  background: linear-gradient(135deg, #0d6efd 0%, #6f42c1 100%);
-  padding: 0.75rem;
-  border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
-  width: 64px;
-  height: 64px;
-}
-
-.membership-card h5 {
-  font-weight: 700;
-  color: #2f0a0f;
-  margin-top: 1rem;
-}
-
-.membership-card p {
-  color: #100f0f;
-  font-size: 0.95rem;
-  margin-top: 0.5rem;
-}
-
-.gradient-button {
-  background: linear-gradient(135deg, #0d6efd, #6f42c1);
-  border: none;
-  color: #fff;
-  border-radius: 9999px;
-  padding: 0.75rem 2rem;
-  font-weight: 600;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.gradient-button:hover {
-  background: linear-gradient(135deg, #6f42c1, #0d6efd);
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, #0d6efd, #6f42c1);
-  -webkit-background-clip: text;
+  background: linear-gradient(90deg, #ffffff, #d1e8ff);
   background-clip: text;
+  -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
+.top-wave{
+  margin-bottom: -180px;
+}
+/* Decorative blobs */
+.membership-section::before,
+.membership-section::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 12s infinite ease-in-out;
+}
 
-@media (max-width: 768px) {
-  .membership-card {
-    padding: 1.5rem 1rem;
+.membership-section::before {
+  width: 300px;
+  height: 300px;
+  background: #ffffff33;
+  top: 10%;
+  left: -10%;
+}
+
+.membership-section::after {
+  width: 250px;
+  height: 250px;
+  background: #ffffff55;
+  bottom: 15%;
+  right: -8%;
+  animation-delay: 4s;
+}
+
+.btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #353be5, #3f51b5);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(53, 59, 229, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: linear-gradient(90deg, #2c32c7, #2a3ca5);
+  box-shadow: 0 8px 20px rgba(53, 59, 229, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-20px) translateX(10px); }
+}
+
+/* Glassmorphism cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.4s ease;
+  color: #fff;
+  min-height: 220px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.glass-card h5{
+  font-size: 19px;
+}
+
+.glass-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  background: #0b40e0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Glow line on hover */
+.glass-card::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 22px;
+  background: linear-gradient(45deg, #ffffff55, transparent, #ffffff55);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.glass-card:hover::after {
+  opacity: 1;
+}
+
+/* Icons */
+.glass-icon {
+  font-size: 30px;
+  background: linear-gradient(135deg, #ffffff, #e8f4ff);
+  color: #0d6efd;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+  transition: all 0.4s ease;
+}
+
+.glass-card:hover .glass-icon {
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.5);
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.timeline-step {
+  text-align: center;
+  color: #fff;
+  max-width: 160px;
+  position: relative;
+}
+
+.timeline-step .circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff, #d1e8ff);
+  color: #0d6efd;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.timeline-step .circle:hover {
+  transform: scale(1.1) rotate(10deg);
+}
+
+/* Button */
+.btn-light {
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.btn-light:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5);
+}
+
+/* Timeline container */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center everything on small screens */
+  position: relative;
+  padding-left: 0;
+}
+
+/* Vertical line (mobile view) */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #007bff, #00d4ff);
+  border-radius: 2px;
+}
+
+/* Each step */
+.timeline-step {
+  display: flex;
+  flex-direction: column; /* stack icon + text */
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+/* Circle with icons */
+.timeline-step .circle {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #007bff, #00d4ff);
+  color: white;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.timeline-step:hover .circle {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7);
+}
+
+/* Step content */
+.step-content {
+  max-width: 250px;
+  text-align: center; /* center text under icon */
+}
+
+.step-title {
+  font-weight: 600;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+.step-text {
+  font-size: 0.9rem;
+  color: #bcbbbb;
+}
+
+/* Responsive - horizontal on tablets/desktops */
+@media (min-width: 768px) {
+  .timeline {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .timeline::before {
+    top: 30px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    width: 100%;
+    transform: none;
+    background: linear-gradient(90deg, #007bff, #00d4ff);
+  }
+
+  .timeline-step {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+    text-align: center;
+    flex: 1;
+  }
+
+  .timeline-step .circle {
+    margin-bottom: 15px;
+  }
+
+  .step-content {
+    max-width: 220px;
   }
 }
 
-
+/* Responsive */
 @media (max-width: 768px) {
-  .section-title {
-    font-size: 2rem;
+  .glass-card {
+    padding: 1.5rem;
+  }
+  .timeline {
+    flex-direction: column;
+    align-items: center;
   }
 }

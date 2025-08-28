@@ -1,0 +1,93 @@
+/* Hero Section */
+.hero {
+  height: 100vh;
+  background: linear-gradient(135deg, #0a1a2f 0%, #112b4a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+  width: 100%; /* full width */
+}
+
+/* Gradient heading text */
+.gradient-text {
+  background: linear-gradient(90deg, #3f51b5, #2196f3, #00bcd4);
+  background-clip: text;           /* ✅ standard property */
+  -webkit-background-clip: text;   /* ✅ for Safari/Chrome */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Paragraph */
+.hero p {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+
+/* CTA Button */
+.cta-btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #353be5, #3f51b5);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.9rem 3rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(53, 59, 229, 0.4);
+  transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+  background: linear-gradient(90deg, #2c32c7, #2a3ca5);
+  box-shadow: 0 8px 20px rgba(53, 59, 229, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Blob divider */
+.blob-divider svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero {
+    height: auto;
+    padding: 6rem 1rem 4rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .hero p {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .glass-card {
+    height: 400px;   /* ⬇️ smaller for tablet/mobile */
+  }
+
+  .glass-card img {
+    height: 100%;
+  }
+
+  .cta-btn {
+    margin: 0 auto;
+  }
+}
+
+/* Global smooth scroll */
+html {
+  scroll-behavior: smooth;
+}

@@ -1,76 +1,84 @@
-// src/components/Navbar.js
-
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import '../styles/Landing.css';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { FaBars, FaTimes } from "react-icons/fa";
+import "../styles/Navbar.css";
+import Logo from "../assets/logo.jpg"; // your logo
 
 function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection, setActiveSection] = useState("hero");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const currentUser = useSelector((state) => state.user?.currentUser);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      const sections = document.querySelectorAll('section');
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
+      const sections = document.querySelectorAll("section");
+      let current = "hero";
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 120;
         if (window.scrollY >= sectionTop) {
-          current = section.getAttribute('id');
+          current = section.getAttribute("id");
         }
       });
       setActiveSection(current);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
+
   return (
-    <nav
-      className={`navbar navbar-expand-lg fixed-top ${
-        scrolled ? 'navbar-scrolled' : 'navbar-transparent'
-      } shadow-sm rounded-bottom`}
-    >
-      <div className="container">
-        <Link className="navbar-brand fw-bold text-primary" to="/">
-          WERQAMA SACCO
+    <nav className="navbar">
+      <div className="nav-container">
+        {/* Logo + Brand */}
+        <Link className="nav-brand" to="/">
+          <div className="logo-wrapper">
+            <img src={Logo} alt="Logo" className="nav-logo" />
+            <span className="logo-ring"></span>
+          </div>
+          <span className="brand-text">
+            WERQAMA <span>SACCO</span>
+          </span>
         </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
-          <ul className="navbar-nav">
-            {[
-              { name: 'Home', href: '/' },
-              { name: 'About', href: '#about' },
-              { name: 'Why Us', href: '#why-us' },
-              { name: 'Services', href: '#services' },
-              { name: 'Membership', href: '#membership' },
-              { name: 'News', href: '#news' },
-              { name: 'Contact', href: '#contact' },
-            ].map(link => (
-              <li className="nav-item mx-2" key={link.name}>
-                <a
-                  href={link.href}
-                  className={`nav-link position-relative ${
-                    activeSection === link.href.substring(1) ? 'active-link' : ''
-                  }`}
-                >
-                  {link.name}
-                </a>
-              </li>
-            ))}
-            <li className="nav-item ms-3">
-              <Link className="btn btn-primary mr-2" to="/login">Login</Link>
-            </li>
-          </ul>
+
+        {/* Hamburger */}
+        <div className="menu-toggle" onClick={toggleMenu}>
+          {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </div>
+
+        {/* Nav Links */}
+        <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
+          {[
+            { name: "Home", href: "#hero" },
+            { name: "About", href: "#about" },
+            { name: "Why Us", href: "#whyus" },
+            { name: "Services", href: "#services" },
+            { name: "Membership", href: "#membership" },
+            { name: "News", href: "#news" },
+            { name: "Contact", href: "#contact" },
+          ].map((link) => (
+            <li key={link.name}>
+              <a
+                href={link.href}
+                className={
+                  activeSection === link.href.substring(1) ? "active" : ""
+                }
+                onClick={closeMenu}
+              >
+                {link.name}
+              </a>
+            </li>
+          ))}
+
+          <li>
+            <Link to="/login" className="login-btn">
+              login
+            </Link>
+          </li>
+        </ul>
       </div>
     </nav>
   );

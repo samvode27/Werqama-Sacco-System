@@ -92,22 +92,33 @@ const AdminLoansPage = () => {
 
     const chartData = {
         labels: statuses.map(s => s.charAt(0).toUpperCase() + s.slice(1)),
-        datasets: ['count', 'amount'].map((type) => ({
-            label: type === 'count' ? 'Loan Count' : 'Total Amount (ETB)',
-            data: statuses.map(status =>
-                type === 'count'
-                    ? loans.filter(l => l.status === status).length
-                    : loans.filter(l => l.status === status).reduce((sum, l) => sum + parseFloat(l.amount || 0), 0)
-            ),
-            backgroundColor:
-                type === 'count'
-                    ? 'rgba(91, 192, 222, 0.6)'
-                    : 'rgba(92, 184, 92, 0.6)',
-            borderColor: type === 'count' ? '#5bc0de' : '#5cb85c',
-            borderWidth: 1,
-            borderRadius: 10,
-            yAxisID: type === 'count' ? 'y1' : 'y2',
-        }))
+        datasets: [
+            {
+                label: 'Loan Count',
+                data: statuses.map(status =>
+                    loans.filter(l => l.status === status).length
+                ),
+                backgroundColor: 'rgba(91, 192, 222, 0.6)',  // Blue
+                borderColor: '#5bc0de',
+                borderWidth: 1,
+                borderRadius: 10,
+                yAxisID: 'y1',
+                type: 'bar'
+            },
+            {
+                label: 'Total Amount (ETB)',
+                data: statuses.map(status =>
+                    loans.filter(l => l.status === status)
+                        .reduce((sum, l) => sum + parseFloat(l.loanAmount || 0), 0)
+                ),
+                backgroundColor: 'rgba(92, 184, 92, 0.6)',  // Green
+                borderColor: '#5cb85c',
+                borderWidth: 1,
+                borderRadius: 10,
+                yAxisID: 'y2',
+                type: 'bar'
+            }
+        ]
     };
 
     const chartOptions = {
@@ -124,7 +135,9 @@ const AdminLoansPage = () => {
                     label: (ctx) => {
                         const label = ctx.dataset.label;
                         const val = ctx.raw;
-                        return label.includes('Amount') ? `${label}: ETB ${val.toLocaleString()}` : `${label}: ${val}`;
+                        return label.includes('Amount')
+                            ? `${label}: ETB ${val.toLocaleString()}`
+                            : `${label}: ${val}`;
                     }
                 }
             }
@@ -141,17 +154,31 @@ const AdminLoansPage = () => {
                 position: 'right',
                 title: { display: true, text: 'Total Amount (ETB)' },
                 grid: { drawOnChartArea: false },
-                suggestedMax: 100000
+                min: 0,
+                max: 5000000,   // maximum value on amount axis
+                ticks: {
+                    stepSize: 100000, // interval
+                    callback: function (value) {
+                        if (value >= 1000000) {
+                            return `ETB ${(value / 1000000).toFixed(1)}M`;
+                        } else if (value >= 1000) {
+                            return `ETB ${(value / 1000).toFixed(0)}K`;
+                        }
+                        return `ETB ${value}`;
+                    }
+                }
             }
         }
     };
 
     const handleDecision = async (decision) => {
         try {
-            await axios.put(`/loans/${selectedLoan._id}/status`, {
-                status: decision,
-                note: adminNote,
-            });
+            const endpoint =
+                decision === 'approved'
+                    ? `/loans/${selectedLoan._id}/approve`
+                    : `/loans/${selectedLoan._id}/reject`;
+
+            await axios.put(endpoint, { note: adminNote });
 
             alert(`Loan ${decision} successfully`);
             setShowModal(false); // Close modal after action
@@ -191,7 +218,7 @@ const AdminLoansPage = () => {
             </Card>
 
             <Row className="mb-3 g-3 filter-bar">
-                <Col md={3}>
+                <Col md={4}>
                     <Form.Control
                         type="text"
                         placeholder="🔍 Search member name..."
@@ -199,23 +226,13 @@ const AdminLoansPage = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </Col>
-                <Col md={3}>
+                <Col md={4}>
                     <Form.Select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
                         <option value="">All Statuses</option>
                         {statuses.map(status => <option key={status} value={status}>{status}</option>)}
                     </Form.Select>
                 </Col>
-                <Col md={3}>
-                    <Form.Select value={loanTypeFilter} onChange={e => setLoanTypeFilter(e.target.value)}>
-                        <option value="">All Types</option>
-                        <option value="emergency">Emergency</option>
-                        <option value="education">Education</option>
-                        <option value="business">Business</option>
-                        <option value="personal">Personal</option>
-                        {/* Add your actual types */}
-                    </Form.Select>
-                </Col>
-                <Col md={3}>
+                <Col md={4}>
                     <Button
                         variant="secondary"
                         onClick={() => {
@@ -277,8 +294,8 @@ const AdminLoansPage = () => {
                 <Modal.Body>
                     {selectedLoan ? (
                         <>
-                            <p><strong>Amount:</strong> {selectedLoan.amount}</p>
-                            <p><strong>Type:</strong> {selectedLoan.loanType}</p>
+                            <p><strong>Amount:</strong> {selectedLoan.loanAmount}</p>
+                            {/* <td>ETB {loan.loanAmount?.toLocaleString() || 'N/A'}</td> */}
                             <p><strong>Duration:</strong> {selectedLoan.duration} months</p>
                             <p><strong>Status:</strong> <Badge bg={statusColor(selectedLoan.status)}>{selectedLoan.status}</Badge></p>
 

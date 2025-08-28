@@ -1,100 +1,213 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
-import generateToken from '../utils/generateToken.js';
-import jwt from 'jsonwebtoken';
 import { sendEmail } from '../utils/emailSender.js';
 import crypto from 'crypto';
 import { isStrongPassword } from '../utils/passwordValidator.js';
 import MembershipApplication from '../models/MembershipApplication.js';
 
 export const register = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-  const userExists = await User.findOne({ email });
-  if (userExists) {
-    res.status(400);
-    throw new Error('User already exists');
-  }
+    if (!isStrongPassword(password)) {
+      res.status(400);
+      throw new Error(
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character."
+      );
+    }
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    role: 'user', // 👈 ensure this is set
-  });
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      res.status(400);
+      throw new Error("User already exists");
+    }
 
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id),
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const user = await User.create({
+      name,
+      email,
+      password,
+      role: "user",
+      otpCode: otp,
+      otpExpires: Date.now() + 5 * 60 * 1000,
     });
-  } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+
+    // Send OTP email
+    const message = `
+    <p>Hello ${name},</p>
+    <p>Your verification code is:</p>
+    <h2>${otp}</h2>
+    <p>This code will expire in 5 minutes.</p>
+  `;
+    await sendEmail(user.email, "Verify your SACCO account", message);
+
+    res.status(201).json({
+      message: "Registration successful. Please check your email for the OTP to verify your account.",
+    });
+  } catch (error) {
+    res.status(res.statusCode === 200 ? 500 : res.statusCode).json({ message: error.message });
   }
 });
 
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-export const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+    // 🔍 Find user and include password
+    const user = await User.findOne({ email }).select("+password");
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    if (!user.isVerified) {
+      return res.status(403).json({ message: "Please verify your account via OTP before login." });
+    }
+
+    // 🔑 Check membership status
+    let membershipStatus = "unknown";
+    const membership = await MembershipApplication.findOne({ member: user._id });
+    if (membership) {
+      membershipStatus = membership.status; // "pending" | "approved" | "rejected"
+    }
+
+    // 🔑 Generate token
+    const token = user.getSignedJwtToken();
+
+    // ✅ Respond with user and membership status
+    res.json({
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isVerified: user.isVerified,
+        membershipStatus, // 👈 frontend uses this
+      },
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error. Please try again." });
+  }
+};
+
+export const verifyOtp = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
 
   const user = await User.findOne({ email });
-
-  if (!user || !(await user.matchPassword(password))) {
-    return res.status(401).json({ message: 'Invalid email or password' });
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
   }
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '7d',
-  });
+  if (!user.otpCode || !user.otpExpires) {
+    res.status(400);
+    throw new Error("No OTP found. Please register again.");
+  }
 
-  res.json({
-    token,
-    user: {
-      _id: user._id,
-      name: user.name,
-      role: user.role,
-      email: user.email,
-    },
-  });
+  if (user.otpExpires < Date.now()) {
+    res.status(400);
+    throw new Error("OTP expired. Please request a new one.");
+  }
 
+  if (user.otpCode !== otp) {
+    res.status(400);
+    throw new Error("Invalid OTP code.");
+  }
+
+  // Mark as verified
+  user.isVerified = true;
+  user.otpCode = undefined;
+  user.otpExpires = undefined;
+  await user.save();
+
+  // reset resend counters
+  user.otpResendCount = 0;
+  user.otpResendWindow = undefined;
+
+  res.json({ message: "Account verified successfully. You can now log in." });
 });
 
-export const forgotPassword = async (req, res) => {
+export const resendOtp = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.json({ message: "If this account exists, a new OTP has been sent." });
+  }
+
+  if (user.isVerified) {
+    return res.status(400).json({ message: "Account already verified." });
+  }
+
+  // ✅ Rate limit: max 3 resends per hour
+  const now = Date.now();
+  if (!user.otpResendWindow || user.otpResendWindow < now) {
+    // reset window
+    user.otpResendWindow = now + 60 * 60 * 1000; // 1 hour
+    user.otpResendCount = 0;
+  }
+
+  if (user.otpResendCount >= 3) {
+    return res.status(429).json({ message: "Too many OTP requests. Please try again after 1 hour." });
+  }
+
+  // Generate new OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  user.otpCode = otp;
+  user.otpExpires = Date.now() + 5 * 60 * 1000; // 10 min
+  user.otpResendCount += 1;
+  await user.save();
+
+  // Send OTP email
+  const message = `
+    <p>Hello ${user.name},</p>
+    <p>Your new verification code is:</p>
+    <h2>${otp}</h2>
+    <p>This code will expire in 5 minutes.</p>
+  `;
+  await sendEmail(user.email, "Resend Verification Code", message);
+
+  res.json({ message: "If this account exists, a new OTP has been sent." });
+});
+
+export const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) return res.status(404).json({ message: 'User not found' });
 
-  const resetToken = crypto.randomBytes(20).toString('hex');
-  user.resetToken = resetToken;
-  user.resetTokenExpires = Date.now() + 3600000; // 1 hour
+  // Generate 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Save OTP and expiration (10 min)
+  user.resetToken = otp;
+  user.resetTokenExpires = Date.now() + 5 * 60 * 1000;
   await user.save();
 
-  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
   const message = `
     <p>Hello ${user.name},</p>
-    <p>You requested a password reset. Click below:</p>
-    <a href="${resetUrl}">${resetUrl}</a>
-    <p>If you did not request this, please ignore.</p>
+    <p>Your password reset code is:</p>
+    <h2>${otp}</h2>
+    <p>This code will expire in 5 minutes.</p>
   `;
-  await sendEmail(user.email, 'Password Reset', message);
-  res.json({ message: 'Password reset link sent to email.' });
-};
 
-export const resetPassword = async (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
+  await sendEmail(user.email, 'Password Reset Code', message);
+  res.json({ message: 'Password reset code sent to email.' });
+});
 
-  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { email, code, password } = req.body;
+
   const user = await User.findOne({
-    resetPasswordToken: hashedToken,
-    resetPasswordExpire: { $gt: Date.now() },
+    email,
+    resetToken: code,
+    resetTokenExpires: { $gt: Date.now() },
   });
 
-  if (!user) return res.status(400).json({ message: 'Invalid or expired token' });
+  if (!user) return res.status(400).json({ message: 'Invalid or expired code' });
 
   if (!isStrongPassword(password)) {
     return res.status(400).json({
@@ -103,13 +216,14 @@ export const resetPassword = async (req, res) => {
     });
   }
 
+  // Update password and remove OTP
   user.password = password;
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpire = undefined;
+  user.resetToken = undefined;
+  user.resetTokenExpires = undefined;
   await user.save();
 
   res.json({ message: 'Password reset successful. Please login.' });
-};
+});
 
 export const getMe = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select('-password');

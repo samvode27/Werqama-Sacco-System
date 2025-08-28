@@ -8,7 +8,7 @@ import {
   getMemberLoanHistory
 } from '../controllers/loanApplicationController.js';
 
-import { protect, adminOnly, memberOnly } from '../middleware/auth.js';
+import { protect, authorizeRoles, memberOnly } from '../middleware/auth.js';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -25,10 +25,10 @@ const upload = multer({ storage });
 // Routes
 router.post('/apply', protect, memberOnly, upload.array('documents'), applyLoan);
 router.get('/my-loans', protect, memberOnly, getMyLoans);
-router.get('/all', protect, adminOnly, getAllLoans);
-router.put('/:id/approve', protect, adminOnly, approveLoan);
-router.put('/:id/reject', protect, adminOnly, rejectLoan);
-router.get('/member/:email', protect, adminOnly, getMemberLoanHistory);
+router.get('/all', protect, authorizeRoles('admin'), getAllLoans);
+router.put('/:id/approve', protect, authorizeRoles('admin'), approveLoan);
+router.put('/:id/reject', protect, authorizeRoles('admin'), rejectLoan);
+router.get('/member/:email', protect, authorizeRoles('admin'), getMemberLoanHistory);
 
 // Serve uploaded documents
 const __filename = fileURLToPath(import.meta.url);

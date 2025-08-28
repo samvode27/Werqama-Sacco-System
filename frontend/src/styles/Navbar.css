@@ -1,12 +1,136 @@
-
-.custom-navbar {
-    background-color: #007b5e;
+.navbar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  border-bottom-left-radius: 100px;
 }
 
-.custom-navbar .navbar-brand, .custom-navbar .nav-link, .custom-navbar .btn {
-    color: white !important;
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.7rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.custom-navbar .btn {
-    border-color: white;
+/* Logo + Brand */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.6rem;
+}
+
+.nav-logo {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+.nav-logo:hover {
+  transform: rotate(10deg) scale(1.05);
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a237e;
+}
+.brand-text span {
+  color: #353be5;
+}
+
+/* Hamburger */
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+  color: #1a237e;
+}
+
+/* Nav Links */
+.nav-links {
+  list-style: none;
+  margin-top: 15px;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-links li a {
+  position: relative;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* underline effect */
+.nav-links li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #353be5;
+  transition: width 0.3s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #353be5;
+}
+
+.nav-links li a:hover::after,
+.nav-links li a.active::after {
+  width: 100%;
+}
+
+/* Login Button */
+.login-btn {
+  background: #353be5;
+  color: #fff !important;
+  padding: 0.5rem 1.2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(53, 59, 229, 0.4);
+}
+
+.login-btn:hover {
+  background: #2c32c9;
+  transform: translateY(-2px);
+}
+
+/* ---------------- MOBILE ---------------- */
+@media (max-width: 992px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 70px;
+    left: -100%;
+    width: 100%;
+    flex-direction: column;
+    background: #ffffff;
+    padding: 2rem 0;
+    text-align: center;
+    gap: 1.5rem;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-links.active {
+    left: 0;
+  }
 }

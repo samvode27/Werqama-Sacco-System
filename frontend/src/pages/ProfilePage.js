@@ -1,5 +1,4 @@
-// src/pages/ProfilePage.js
-
+// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { Container, Form, Button, Row, Col, Image, Card } from 'react-bootstrap';
@@ -14,18 +13,20 @@ const ProfilePage = () => {
     const [preview, setPreview] = useState(null);
     const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '' });
 
+    // Fetch profile on mount
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const res = await api.get('/profile');
                 setProfile(res.data);
             } catch (err) {
-                console.error(err);
+                toast.error(err.response?.data?.message || 'Failed to fetch profile');
             }
         };
         fetchProfile();
     }, []);
 
+    // Profile update handler
     const handleProfileUpdate = async (e) => {
         e.preventDefault();
         try {
@@ -39,35 +40,47 @@ const ProfilePage = () => {
         }
     };
 
+    // Profile picture upload
     const handlePictureUpload = async (e) => {
         e.preventDefault();
         if (!file) {
             toast.error('Please select an image first.');
             return;
         }
+
         const formData = new FormData();
         formData.append('profilePicture', file);
+
         try {
-            await api.post('/profile/picture', formData, {
+            const res = await api.post('/profile/picture', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-            toast.success('Profile picture updated!');
-            window.location.reload();
+            toast.success(res.data.message);
+
+            // Update profile picture immediately (live preview)
+            setProfile({ ...profile, profilePicture: res.data.profilePicture });
+            setPreview(null);
+            setFile(null);
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error uploading picture.');
         }
     };
 
+    // Remove profile picture
     const handleRemovePicture = async () => {
         try {
-            await api.delete('/profile/picture');
-            toast.success('Profile picture removed.');
-            window.location.reload();
+            const res = await api.delete('/profile/picture');
+            toast.success(res.data.message);
+
+            setProfile({ ...profile, profilePicture: '' });
+            setPreview(null);
+            setFile(null);
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error removing picture.');
         }
     };
 
+    // Password change
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         if (!passwords.currentPassword || !passwords.newPassword) {
@@ -79,23 +92,28 @@ const ProfilePage = () => {
             return;
         }
         try {
-            await api.put('/profile/password', passwords);
-            toast.success('Password changed successfully!');
+            const res = await api.put('/profile/password', passwords);
+            toast.success(res.data.message);
             setPasswords({ currentPassword: '', newPassword: '' });
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error changing password.');
         }
     };
 
+    // File change preview
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
-        if (selectedFile) {
-            setPreview(URL.createObjectURL(selectedFile));
-        } else {
-            setPreview(null);
-        }
+        if (selectedFile) setPreview(URL.createObjectURL(selectedFile));
+        else setPreview(null);
     };
+
+    // Build profile image URL (backend)
+    const profileImageUrl = preview
+        ? preview
+        : profile.profilePicture
+            ? `${process.env.REACT_APP_API_URL}/uploads/profilePictures/${profile.profilePicture}`
+            : `${process.env.REACT_APP_API_URL}/uploads/profilePictures/default-profile.png`;
 
     return (
         <>
@@ -106,18 +124,15 @@ const ProfilePage = () => {
                     <Col md={4} className="mb-4">
                         <Card className="profile-card text-center p-3">
                             <Image
-                                src={preview || (profile.profilePicture ? `http://localhost:5000/${profile.profilePicture}` : '/default-profile.png')}
+                                src={profileImageUrl}
                                 roundedCircle
                                 fluid
                                 className="profile-picture mb-3"
                             />
+
                             <Form onSubmit={handlePictureUpload}>
                                 <Form.Group>
-                                    <Form.Control
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                    />
+                                    <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
                                 </Form.Group>
                                 <Button type="submit" variant="primary" size="sm" className="mt-2">
                                     Upload Picture
@@ -135,6 +150,7 @@ const ProfilePage = () => {
                             )}
                         </Card>
                     </Col>
+
                     <Col md={8}>
                         <Card className="profile-card p-4 mb-4">
                             <h5 className="gradient-text mb-3">Update Profile</h5>
@@ -148,19 +164,27 @@ const ProfilePage = () => {
                                         required
                                     />
                                 </Form.Group>
+
                                 <Form.Group className="mb-3">
                                     <Form.Label>Email</Form.Label>
+                                    <Form.Control type="email" value={profile.email || ''} disabled />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Phone</Form.Label>
                                     <Form.Control
-                                        type="email"
-                                        value={profile.email || ''}
-                                        disabled
+                                        type="text"
+                                        value={profile.phone || ''}
+                                        onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                                     />
                                 </Form.Group>
+
                                 <Button type="submit" variant="primary" disabled={loading}>
                                     {loading ? 'Saving...' : 'Save Changes'}
                                 </Button>
                             </Form>
                         </Card>
+
                         <Card className="profile-card p-4">
                             <h5 className="gradient-text mb-3">Change Password</h5>
                             <Form onSubmit={handlePasswordChange}>
@@ -169,7 +193,9 @@ const ProfilePage = () => {
                                     <Form.Control
                                         type="password"
                                         value={passwords.currentPassword}
-                                        onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
+                                        onChange={(e) =>
+                                            setPasswords({ ...passwords, currentPassword: e.target.value })
+                                        }
                                         required
                                     />
                                 </Form.Group>
@@ -178,7 +204,9 @@ const ProfilePage = () => {
                                     <Form.Control
                                         type="password"
                                         value={passwords.newPassword}
-                                        onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
+                                        onChange={(e) =>
+                                            setPasswords({ ...passwords, newPassword: e.target.value })
+                                        }
                                         required
                                     />
                                 </Form.Group>

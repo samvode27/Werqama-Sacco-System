@@ -36,6 +36,8 @@ const AdminSavingsPage = () => {
     const [endDate, setEndDate] = useState('');
     const [minAmount, setMinAmount] = useState('');
     const [showForm, setShowForm] = useState(false);
+    const [approvedSavings, setApprovedSavings] = useState([]);
+    const [pendingSavings, setPendingSavings] = useState([]);
     const [manualForm, setManualForm] = useState({ member: '', amount: '', method: '', receipt: null, note: '' });
 
     useEffect(() => { fetchSavings(); }, []);
@@ -45,16 +47,34 @@ const AdminSavingsPage = () => {
         try {
             setLoading(true);
             const res = await api.get('/savings');
-            setSavings(res.data);
+            const data = Array.isArray(res.data) ? res.data : res.data.savings;
+
+            // ✅ Save full savings array
+            setSavings(data);
+
+            // ✅ Split by status
+            setApprovedSavings(data.filter(s => s.status === 'approved'));
+            setPendingSavings(data.filter(s => s.status === 'pending' || s.status === 'rejected'));
+
+            // ✅ Initialize filteredSavings
+            setFilteredSavings(data);
         } catch (err) {
             console.error('Error fetching savings:', err);
+            setSavings([]);
+            setApprovedSavings([]);
+            setPendingSavings([]);
+            setFilteredSavings([]);
         } finally {
             setLoading(false);
         }
     };
 
+    useEffect(() => {
+        filterSavings();
+    }, [filterStatus, startDate, endDate, minAmount, savings]);
+
     const filterSavings = () => {
-        let filtered = savings;
+        let filtered = [...savings];
 
         if (filterStatus !== 'all') {
             filtered = filtered.filter(s => s.status === filterStatus);
@@ -73,7 +93,12 @@ const AdminSavingsPage = () => {
         }
 
         setFilteredSavings(filtered);
+
+        // ✅ Update approved and pending based on filtered results
+        setApprovedSavings(filtered.filter(s => s.status === 'approved'));
+        setPendingSavings(filtered.filter(s => s.status === 'pending' || s.status === 'rejected'));
     };
+
 
     const handleAction = (saving, type) => {
         setSelectedSaving(saving);
@@ -130,33 +155,40 @@ const AdminSavingsPage = () => {
     };
 
     const getStatistics = () => {
-        const totalAmount = savings.reduce((sum, s) => sum + s.amount, 0);
+        if (!approvedSavings.length) return { totalAmount: 0, averagePerMember: 0, topSavers: [] };
+
+        const totalAmount = approvedSavings.reduce((sum, s) => sum + s.amount, 0);
         const memberMap = new Map();
-        savings.forEach(s => {
+
+        approvedSavings.forEach(s => {
             const memberId = s.member?._id || s.member;
             if (!memberMap.has(memberId)) {
                 memberMap.set(memberId, { name: s.member?.name || 'Unknown', total: 0 });
             }
             memberMap.get(memberId).total += s.amount;
         });
+
         const averagePerMember = memberMap.size ? (totalAmount / memberMap.size).toFixed(2) : 0;
         const topSavers = [...memberMap.values()].sort((a, b) => b.total - a.total).slice(0, 3);
+
         return { totalAmount, averagePerMember, topSavers };
     };
+
     const stats = getStatistics();
 
     const getMonthlyData = () => {
         const monthly = {};
-        savings.forEach(s => {
+        approvedSavings.forEach(s => {
             const month = moment(s.date).format('YYYY-MM');
             monthly[month] = (monthly[month] || 0) + s.amount;
         });
         const labels = Object.keys(monthly).sort();
         const data = labels.map(label => monthly[label]);
+
         return {
             labels,
             datasets: [{
-                label: 'Total Savings',
+                label: 'Total Approved Savings',
                 data,
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderRadius: 8
@@ -166,7 +198,12 @@ const AdminSavingsPage = () => {
 
     const getStatusData = () => {
         const counts = { approved: 0, pending: 0, rejected: 0 };
-        savings.forEach(s => counts[s.status]++);
+        approvedSavings.forEach(s => counts.approved++);
+        pendingSavings.forEach(s => {
+            if (s.status === 'pending') counts.pending++;
+            if (s.status === 'rejected') counts.rejected++;
+        });
+
         return {
             labels: ['Approved', 'Pending', 'Rejected'],
             datasets: [{
@@ -175,6 +212,7 @@ const AdminSavingsPage = () => {
             }]
         };
     };
+
     const monthlyTrend = getMonthlyData();
     const statusDistribution = getStatusData();
 
@@ -214,7 +252,7 @@ const AdminSavingsPage = () => {
                     <Card className="p-4 shadow rounded text-dark" style={{ backgroundColor: '#ffc107' }}>
                         <div className="d-flex align-items-start">
                             <FaCrown size={36} className="me-3 mt-1" />
-                            <div>
+                            <div className='p-2'>
                                 <h6 className="mb-2">Top Savers</h6>
                                 <ul className="mb-0 list-unstyled">
                                     {stats.topSavers.map((s, i) => (
@@ -234,62 +272,56 @@ const AdminSavingsPage = () => {
                             <FaChartBar className="me-2 text-primary" size={20} />
                             <h6 className="mb-0">Monthly Savings Trend</h6>
                         </div>
-                        <Bar data={monthlyTrend} options={{
-                            responsive: true,
-                            plugins: {
-                                legend: { display: false },
-                                tooltip: {
-                                    backgroundColor: '#fff',
-                                    titleColor: '#000',
-                                    bodyColor: '#000',
-                                    borderColor: '#ccc',
-                                    borderWidth: 1,
+                        <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                            <Bar data={monthlyTrend} options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        backgroundColor: '#fff',
+                                        titleColor: '#000',
+                                        bodyColor: '#000',
+                                        borderColor: '#ccc',
+                                        borderWidth: 1
+                                    },
                                 },
-                            },
-                            scales: {
-                                x: { grid: { display: false } },
-                                y: { ticks: { beginAtZero: true } },
-                            },
-                        }} />
+                                scales: {
+                                    x: { grid: { display: false } },
+                                    y: { ticks: { beginAtZero: true } },
+                                },
+                            }} />
+                        </div>
                     </Card>
                 </Col>
+
                 <Col md={6}>
                     <Card className="p-3 h-100 chart-card border-0 shadow-sm bg-light">
                         <div className="d-flex align-items-center justify-content-center mb-2">
                             <FaChartPie className="me-2 text-warning" size={20} />
                             <h6 className="mb-0">Savings Status Distribution</h6>
                         </div>
-                        <div className="d-flex justify-content-center">
-                            <div style={{ width: '220px', height: '320px' }}>
-                                <Pie
-                                    data={statusDistribution}
-                                    width={250}
-                                    height={250}
-                                    options={{
-                                        responsive: false,
-                                        maintainAspectRatio: true,
-                                        plugins: {
-                                            legend: {
-                                                position: 'bottom',
-                                                labels: { boxWidth: 12 }
-                                            }
-                                        }
-                                    }}
-                                />
-                            </div>
+                        <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                            <Pie
+                                data={statusDistribution}
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: { position: 'bottom', labels: { boxWidth: 12 } },
+                                    },
+                                }}
+                            />
                         </div>
                     </Card>
                 </Col>
             </Row>
 
-            <Row className="mb-4 mt-4 align-items-end g-3 filter-bar px-2 py-3 rounded shadow-sm bg-light">
-                <Col md={2} sm={6}>
+
+            <Row className="filter-bar g-2 mb-3 align-items-end px-2 py-3 rounded shadow-sm bg-light">
+                <Col xs={6} sm={4} md={2}>
                     <Form.Label className="fw-semibold text-muted">Status</Form.Label>
-                    <Form.Select
-                        value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
-                        className="rounded-2"
-                    >
+                    <Form.Select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="rounded-2">
                         <option value="all">All</option>
                         <option value="approved">Approved</option>
                         <option value="pending">Pending</option>
@@ -297,38 +329,28 @@ const AdminSavingsPage = () => {
                     </Form.Select>
                 </Col>
 
-                <Col md={3} sm={6}>
+                <Col xs={6} sm={4} md={2}>
                     <Form.Label className="fw-semibold text-muted">Date From</Form.Label>
-                    <Form.Control
-                        type="date"
-                        onChange={(e) => setStartDate(e.target.value)}
-                        className="rounded-2"
-                    />
+                    <Form.Control type="date" onChange={(e) => setStartDate(e.target.value)} className="rounded-2" />
                 </Col>
 
-                <Col md={3} sm={6}>
+                <Col xs={6} sm={4} md={2}>
                     <Form.Label className="fw-semibold text-muted">Date To</Form.Label>
-                    <Form.Control
-                        type="date"
-                        onChange={(e) => setEndDate(e.target.value)}
-                        className="rounded-2"
-                    />
+                    <Form.Control type="date" onChange={(e) => setEndDate(e.target.value)} className="rounded-2" />
                 </Col>
 
-                <Col md={2} sm={6}>
+                <Col xs={6} sm={4} md={2}>
                     <Form.Label className="fw-semibold text-muted">Min Amount</Form.Label>
-                    <Form.Control
-                        type="number"
-                        placeholder="e.g. 100"
-                        onChange={(e) => setMinAmount(e.target.value)}
-                        className="rounded-2"
-                    />
+                    <Form.Control type="number" placeholder="e.g. 100" onChange={(e) => setMinAmount(e.target.value)} className="rounded-2" />
                 </Col>
 
-                <Col md={2} className="d-flex align-items-end justify-content-start gap-2">
-                    <Button onClick={exportPDF} variant="danger" className="rounded-2 d-flex align-items-center gap-1 px-3">
+                <Col xs={6} sm={4} md={2}>
+                    <Button onClick={exportPDF} variant="danger" className="w-100 rounded-2 d-flex align-items-center justify-content-center gap-1">
                         <FaFilePdf /> PDF
                     </Button>
+                </Col>
+
+                <Col xs={6} sm={4} md={2}>
                     <CSVLink
                         data={filteredSavings.map(s => ({
                             Member: s.member?.name,
@@ -338,121 +360,71 @@ const AdminSavingsPage = () => {
                             Status: s.status
                         }))}
                         filename="savings.csv"
-                        className="btn btn-outline-primary rounded-2 d-flex align-items-center gap-1 px-3"
+                        className="btn w-100 rounded-2 d-flex align-items-center justify-content-center gap-1"
                     >
                         <FaFileCsv /> CSV
                     </CSVLink>
                 </Col>
             </Row>
 
-            <Card className="mb-4 px-4 py-3 border-0 shadow-sm bg-light">
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h5 className="mb-0 fw-semibold text-dark">Add Manual Saving Entry</h5>
-                    {!showForm && (
-                        <Button
-                            variant="success"
-                            className="px-4 py-2 fw-medium border-0"
-                            onClick={() => setShowForm(true)}
-                            style={{ boxShadow: 'none' }}
-                        >
-                            + Add
-                        </Button>
-                    )}
+            {loading ? (
+                <div className="text-center my-5">
+                    <Spinner animation="border" variant="primary" />
                 </div>
-
-                {showForm && (
-                    <Form onSubmit={handleManualSubmit}>
-                        <Row className="g-3">
-                            <Col md={2}>
-                                <Form.Control
-                                    placeholder="Member ID"
-                                    value={manualForm.member}
-                                    required
-                                    onChange={e => setManualForm({ ...manualForm, member: e.target.value })}
-                                    className="rounded-1 border"
-                                />
-                            </Col>
-                            <Col md={2}>
-                                <Form.Control
-                                    type="number"
-                                    placeholder="Amount"
-                                    value={manualForm.amount}
-                                    required
-                                    onChange={e => setManualForm({ ...manualForm, amount: e.target.value })}
-                                    className="rounded-1 border"
-                                />
-                            </Col>
-                            <Col md={2}>
-                                <Form.Control
-                                    placeholder="Method"
-                                    value={manualForm.method}
-                                    required
-                                    onChange={e => setManualForm({ ...manualForm, method: e.target.value })}
-                                    className="rounded-1 border"
-                                />
-                            </Col>
-                            <Col md={2}>
-                                <Form.Control
-                                    type="file"
-                                    onChange={e => setManualForm({ ...manualForm, receipt: e.target.files[0] })}
-                                    className="rounded-1 border"
-                                />
-                            </Col>
-                            <Col md={2}>
-                                <Form.Control
-                                    placeholder="Note"
-                                    value={manualForm.note}
-                                    onChange={e => setManualForm({ ...manualForm, note: e.target.value })}
-                                    className="rounded-1 border"
-                                />
-                            </Col>
-                            <Col md={2} className="d-flex gap-2">
-                                <Button
-                                    type="submit"
-                                    variant="success"
-                                    className="w-100 rounded-1 border-0"
-                                    style={{ boxShadow: 'none' }}
-                                >
-                                    Save
-                                </Button>
-                                <Button
-                                    variant="outline-secondary"
-                                    onClick={() => setShowForm(false)}
-                                    className="w-100 rounded-1"
-                                    style={{ boxShadow: 'none' }}
-                                >
-                                    Cancel
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                )}
-            </Card>
-
-
-            {loading ? (<div className="text-center my-5"><Spinner animation="border" variant="primary" /></div>) : (
-                <div className="table-responsive">
-                    <Table striped bordered hover className="shadow-sm">
+            ) : (
+                <div className="table-responsive shadow-sm rounded">
+                    <Table striped bordered hover className="admin-savings-table mb-5">
                         <thead className="table-light text-center">
-                            <tr><th>#</th><th>Member</th><th>Amount</th><th>Method</th><th>Date</th><th>Status</th><th>Receipt</th><th>Actions</th></tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Member</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Receipt</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="text-center align-middle">
                             {filteredSavings.map((saving, index) => (
-                                <tr key={saving._id}>
+                                <tr key={saving._id} className="align-middle">
                                     <td>{index + 1}</td>
                                     <td>{saving.member?.name}</td>
                                     <td>{saving.amount} ETB</td>
                                     <td>{saving.method}</td>
                                     <td>{moment(saving.date).format('LLL')}</td>
                                     <td>{statusBadge(saving.status)}</td>
-                                    <td>{saving.receipt && <a href={saving.receipt} target="_blank" rel="noreferrer">View</a>}</td>
-                                    <td>
-                                        {saving.status === 'pending' && (<><Button variant="success" size="sm" onClick={() => handleAction(saving, 'approve')}>Approve</Button>{' '}<Button variant="danger" size="sm" onClick={() => handleAction(saving, 'reject')}>Reject</Button></>)}
-                                        {saving.adminNotes?.length > 0 && (<Button variant="info" size="sm" onClick={() => handleAction(saving, '')}>Notes</Button>)}
+<td>
+  {saving.receipt && (
+    <a
+      href={`http://localhost:8080/uploads/receipts/${saving.receipt}`}
+      target="_blank"
+      rel="noreferrer"
+      className="text-decoration-none"
+    >
+      View
+    </a>
+  )}
+</td>
+
+                                    <td className="text-center">
+                                        <div className="d-flex justify-content-center flex-nowrap gap-1">
+                                            {saving.status === 'pending' && (
+                                                <>
+                                                    <Button variant="success" size="sm" className="py-2 px-2" onClick={() => handleAction(saving, 'approve')}>Approve</Button>
+                                                    <Button variant="danger" size="sm" className="py-0 px-2" onClick={() => handleAction(saving, 'reject')}>Reject</Button>
+                                                </>
+                                            )}
+                                            {saving.adminNotes?.length > 0 && (
+                                                <Button variant="info" size="sm" className="py-2 px-2" onClick={() => handleAction(saving, '')}>Notes</Button>
+                                            )}
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
+
                     </Table>
                 </div>
             )}

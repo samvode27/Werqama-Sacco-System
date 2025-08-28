@@ -8,7 +8,6 @@ import Membership from '../components/Membership';
 import NewsEvents from '../components/NewsEvents';
 import ContactUs from '../components/ContactUs';
 import Footer from '../components/Footer';
-import '../styles/Landing.css';
 
 function HomePage() {
   return (
@@ -28,7 +27,7 @@ function HomePage() {
           <WhyUs />
         </section>
 
-        <section id="services" className="section bg-light">
+        <section id="services" className="section">
           <Services />
         </section>
 

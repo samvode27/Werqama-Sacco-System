@@ -1,72 +1,109 @@
-.services-section {
+/* Services Section */
+.sacco-services {
+  background: #f9fbff;
+  padding: 100px 20px;
   position: relative;
+  margin-top: 70px;
 }
 
-.section-title {
-  font-size: 2.5rem;
+.services-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0b2347;
 }
 
-.section-subtitle {
+/* Decorative line under title */
+.services-line {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(#0757cf);
+  border-radius: 2px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.services-subtitle {
   max-width: 600px;
   margin: 0 auto;
+  font-size: 1rem;
   color: #555;
+  line-height: 1.6;
 }
 
-.service-card:hover {
-  transform: translateY(-6px);
+/* Service Box */
+.service-box {
+  border-radius: 18px;
+  background: #fff;
+  transition: all 0.35s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  min-height: 260px; /* consistent height */
 }
 
+.service-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon Style */
 .service-icon {
-  display: inline-flex;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0d6efd, #6f42c1);
+  font-size: 38px;
   color: #fff;
-  border-radius: 50%;
-  width: 64px;
-  height: 64px;
-  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
-  font-size: 1.5rem;
+  background: linear-gradient(135deg, #0d6efd, #00b4d8);
+  transition: transform 0.3s ease;
 }
 
-.service-card h5 {
-  font-weight: 700;
-  color: #0a1a2f;
-  margin-top: 1rem;
+.service-box:hover .service-icon {
+  transform: scale(1.15) rotate(5deg);
 }
 
-.service-card p {
-  color: #555;
+/* Description */
+.service-desc {
   font-size: 0.95rem;
-  margin-top: 0.5rem;
+  color: #666;
+  margin-top: 10px;
+  line-height: 1.5;
 }
 
-.gradient-button {
-  background: linear-gradient(135deg, #0d6efd, #6f42c1);
-  border: none;
-  color: #fff;
-  border-radius: 9999px;
-  padding: 0.5rem 1.5rem;
-  font-weight: 600;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.gradient-button:hover {
-  background: linear-gradient(135deg, #6f42c1, #0d6efd);
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.gradient-text {
-  background: linear-gradient(135deg, #0d6efd, #6f42c1);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+/* Responsive */
+@media (max-width: 992px) {
+  .services-title {
+    font-size: 1.9rem;
+  }
+  .service-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 30px;
+  }
 }
 
 @media (max-width: 768px) {
-  .section-title {
-    font-size: 2rem;
+  .services-title {
+    font-size: 1.7rem;
+  }
+  .services-subtitle {
+    font-size: 0.95rem;
+  }
+  .service-box {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .sacco-services {
+    padding: 70px 15px;
+  }
+  .services-title {
+    font-size: 1.5rem;
+  }
+  .services-subtitle {
+    font-size: 0.9rem;
   }
 }

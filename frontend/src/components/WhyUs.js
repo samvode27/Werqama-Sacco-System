@@ -44,7 +44,7 @@ function WhyUs() {
           viewBox="0 0 1440 150"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
-          style={{ display: 'block', width: '100%', height: 'auto' }}
+          style={{ display: 'block', width: '100%', height: 'auto', marginTop: '-40px' }}
         >
           <path
             d="M0,32L48,48C96,64,192,96,288,112C384,128,480,128,576,112C672,96,768,64,864,48C960,32,1056,32,1152,48C1248,64,1344,96,1392,112L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
@@ -65,7 +65,7 @@ function WhyUs() {
           <p>Discover the benefits of joining our trusted community-based SACCO and secure your financial future today.</p>
         </div>
 
-        <Row className="g-4 justify-content-center">
+        <Row className="g-4 justify-content-center mb-5">
           {benefits.map((item, index) => (
             <Col key={index} xs={12} sm={6} lg={3} data-aos="fade-up" data-aos-delay={index * 150}>
               <div className="benefit-card">

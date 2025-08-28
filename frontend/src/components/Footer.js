@@ -1,28 +1,52 @@
-// src/components/Footer.js
-
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import api from '../api/axios';
+import Logo from '../assets/logo.jpg';
 import '../styles/Footer.css';
 
 function Footer() {
   const [email, setEmail] = useState('');
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
+    fetchCount();
   }, []);
 
-  const handleSubscribe = (e) => {
+  const fetchCount = async () => {
+    try {
+      const { data } = await api.get('/newsletter/count');
+      setCount(data.count);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    alert(`Thank you for subscribing, ${email}!`);
-    setEmail('');
+    setLoading(true);
+    setSuccess('');
+    setError('');
+
+    try {
+      const { data } = await api.post('/newsletter', { email });
+      setSuccess(data.message);
+      setEmail('');
+      fetchCount(); // update subscriber count
+    } catch (err) {
+      setError(err.response?.data?.message || 'Something went wrong');
+    }
+    setLoading(false);
   };
 
   return (
-    <footer className="footer-section position-relative text-white">
-      {/* Wave Divider */}
+    <footer className="footer-section">
       <div className="footer-wave">
         <svg viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -40,17 +64,21 @@ function Footer() {
 
       <Container>
         <Row className="g-4">
-          {/* About */}
-          <Col md={3} sm={6} data-aos="fade-up">
-            <h5 className="fw-bold gradient-text">WERQAMA SACCO</h5>
+          <Col md={3} sm={6}>
+            <div className="footer-logo d-flex align-items-center mb-2">
+              <img src={Logo} alt="Werqama Sacco" className="logo-img me-2" />
+              <h5 className="fw-bold gradient-text mb-0">WERQAMA SACCO</h5>
+            </div>
             <p className="small">
               Empowering your financial future with secure savings, affordable loans, and community-focused services across Ethiopia.
             </p>
+            <p className="small">
+              <strong>Subscribers:</strong> <span className="subscriber-count">{count}</span>
+            </p>
           </Col>
 
-          {/* Quick Links */}
-          <Col md={3} sm={6} data-aos="fade-up" data-aos-delay="100">
-            <h6 className="fw-bold mb-3">Quick Links</h6>
+          <Col md={3} sm={6}>
+            <h6 style={{ color: '#0d6efd' }} className="fw-bold mb-3">Quick Links</h6>
             <ul className="footer-links">
               <li><a href="/">Home</a></li>
               <li><a href="/services">Services</a></li>
@@ -60,15 +88,10 @@ function Footer() {
             </ul>
           </Col>
 
-          {/* Contact */}
-          <Col md={3} sm={6} data-aos="fade-up" data-aos-delay="200">
-            <h6 className="fw-bold mb-3">Contact Us</h6>
-            <p className="small mb-1">
-              <FaPhoneAlt className="me-2 text-primary" /> +251 912 345 678
-            </p>
-            <p className="small mb-3">
-              <FaEnvelope className="me-2 text-primary" /> info@werqamasacco.et
-            </p>
+          <Col md={3} sm={6}>
+            <h6 style={{ marginTop: '50px', color: '#0d6efd' }} className="fw-bold mb-3">Contact Us</h6>
+            <p className="small mb-1"><FaPhoneAlt className="me-2 text-primary" /> +251 912 345 678</p>
+            <p className="small mb-3"><FaEnvelope className="me-2 text-primary" /> info@werqamasacco.et</p>
             <div className="footer-socials">
               <a href="#"><FaFacebookF /></a>
               <a href="#"><FaTwitter /></a>
@@ -77,11 +100,12 @@ function Footer() {
             </div>
           </Col>
 
-          {/* Newsletter */}
-          <Col md={3} sm={6} data-aos="fade-up" data-aos-delay="300">
-            <h6 className="fw-bold mb-3 gradient-text">Newsletter</h6>
+          <Col md={3} sm={6}>
+            <h6 style={{ marginTop: '50px', color: '#0d6efd' }} className="fw-bold gradient-text">Newsletter</h6>
             <p className="small">Subscribe for the latest updates and financial tips.</p>
-            <Form onSubmit={handleSubscribe} className="d-flex flex-column gap-2">
+            {success && <p className="success-msg">{success}</p>}
+            {error && <p className="error-msg">{error}</p>}
+            <Form onSubmit={handleSubscribe} className="d-flex flex-column">
               <Form.Control
                 type="email"
                 placeholder="Enter your email"
@@ -90,8 +114,8 @@ function Footer() {
                 required
                 className="newsletter-input"
               />
-              <Button type="submit" className="newsletter-button gradient-button w-100">
-                Subscribe
+              <Button type="submit" className="newsletter-button gradient-button w-100" disabled={loading}>
+                {loading ? "Subscribing..." : "Subscribe"}
               </Button>
             </Form>
           </Col>
@@ -103,6 +127,7 @@ function Footer() {
         </div>
       </Container>
     </footer>
+
   );
 }
 

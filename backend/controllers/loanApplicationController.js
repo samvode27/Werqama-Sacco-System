@@ -67,7 +67,7 @@ export const applyLoan = async (req, res) => {
 // Get my loans
 export const getMyLoans = async (req, res) => {
   try {
-    const loans = await LoanApplication.find({ email: req.user.email }).sort({ createdAt: -1 });
+    const loans = await LoanApplication.find({ member: req.user._id }).sort({ createdAt: -1 });
     res.json(loans);
   } catch (err) {
     res.status(500).json({ message: err.message });

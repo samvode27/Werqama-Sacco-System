@@ -1,50 +1,56 @@
 // src/components/Services.js
-
 import React, { useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { FaWallet, FaHandHoldingUsd } from 'react-icons/fa';
+import { Container, Row, Col } from 'react-bootstrap';
+import { FaPiggyBank, FaHandHoldingUsd } from 'react-icons/fa';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/Services.css';
 
 function Services() {
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 1200, once: true });
   }, []);
 
   const services = [
     {
-      icon: <FaWallet size={28} />,
+      icon: <FaPiggyBank />,
       title: 'Savings',
-      description: 'Flexible savings plans to help you build financial stability with attractive interest rates and digital tracking.',
-      link: '/savings',
+      description:
+        'Flexible savings plans that secure your future with competitive interest rates, transparency, and easy access through digital banking.',
     },
     {
-      icon: <FaHandHoldingUsd size={28} />,
+      icon: <FaHandHoldingUsd />,
       title: 'Loans',
-      description: 'Accessible, low-interest loans to support your business, education, and personal goals with flexible repayment.',
-      link: '/loans',
+      description:
+        'Affordable and accessible loans designed to support your business, education, and personal growth with fair repayment terms.',
     },
   ];
 
   return (
-    <section className="services-section py-4 position-relative overflow-hidden" id="services">
+    <section className="sacco-services" id="services">
       <Container>
         <div className="text-center mb-5" data-aos="fade-up">
-          <h2 className="section-title gradient-text fw-bold">Our Services</h2>
-          <p className="section-subtitle">Empowering your financial growth through tailored savings and loan services.</p>
+          <h2 className="services-title">Our Services</h2>
+          <div className="services-line mx-auto"></div>
+          <p className="services-subtitle">
+            Empowering our members with savings and loan services tailored to your needs.
+          </p>
         </div>
         <Row className="justify-content-center">
           {services.map((service, idx) => (
-            <Col key={idx} md={6} lg={5} data-aos="fade-up" data-aos-delay={idx * 150}>
-              <Card className="service-card h-100 text-center p-4 shadow-md">
-                <div className="service-icon mb-3">{service.icon}</div>
-                <h5 className="fw-bold mb-2">{service.title}</h5>
-                <p className="small">{service.description}</p>
-                <Button href={service.link} size="sm" className="gradient-button mt-3">
-                  Learn More
-                </Button>
-              </Card>
+            <Col
+              key={idx}
+              md={6}
+              lg={4}  // ✅ narrower card
+              className="mb-4 d-flex align-items-stretch"
+              data-aos="zoom-in"
+              data-aos-delay={idx * 200}
+            >
+              <div className="service-box w-100 text-center p-4">
+                <div className="service-icon">{service.icon}</div>
+                <h5 className="fw-bold mt-3">{service.title}</h5>
+                <p className="service-desc">{service.description}</p>
+              </div>
             </Col>
           ))}
         </Row>
