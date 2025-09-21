@@ -5,29 +5,11 @@ import sendLoanStatusEmail from '../utils/sendLoanStatusEmail.js';
 export const applyLoan = async (req, res) => {
   try {
     const {
-      fullName,
-      email,
-      age,
-      gender,
-      maritalStatus,
-      address,
-      phone,
-      loanAmount,
-      loanDurationMonths,
-      monthlyIncome,
-      spouseIncome,
-      loanPurpose,
-      associationWitness,
-      guarantees,
-      guarantorFullName,
-      guarantorInstitution,
-      guarantorJobRole,
-      agreementAccepted
+      fullName, email, age, gender, maritalStatus,
+      address, phone, loanAmount, loanDurationMonths,
+      monthlyIncome, spouseMonthlyIncome,
+      loanPurpose, witness, guaranteeType, guarantor, agreementAccepted
     } = req.body;
-
-    if (!loanAmount || !loanPurpose) {
-      return res.status(400).json({ message: 'Amount and purpose are required.' });
-    }
 
     const loan = await LoanApplication.create({
       member: req.user._id,
@@ -36,26 +18,23 @@ export const applyLoan = async (req, res) => {
       age,
       gender,
       maritalStatus,
-      address,
+      address: JSON.parse(address),
       phone,
       loanAmount,
-      loanDurationMonths, // ✅ matches schema
+      loanDurationMonths,
       monthlyIncome,
-      spouseMonthlyIncome: spouseIncome, // ✅ matches schema
+      spouseMonthlyIncome,
       loanPurpose,
-      witness: associationWitness, // ✅ matches schema
-      guaranteeType: guarantees, // ✅ matches schema
-      guarantor: {
-        fullName: guarantorFullName,
-        institution: guarantorInstitution,
-        jobRole: guarantorJobRole
-      },
-      agreementAccepted,
-      documents: req.files?.map(f => f.filename) || [],
+      witness: JSON.parse(witness),
+      guaranteeType,
+      guarantor: JSON.parse(guarantor),
+      agreementAccepted: agreementAccepted === 'true',
+      documents: req.file ? [req.file.filename] : [],
       statusTimeline: [{ status: 'pending', note: 'Submitted by user' }]
     });
 
-    await sendEmail(email, 'Loan Received', `<p>Dear ${fullName}, your application is received.</p>`);
+    await sendEmail(email, 'Loan Received', `<p>Dear ${fullName}, your application has been received.</p>`);
+
     res.status(201).json({ message: 'Loan submitted', loan });
 
   } catch (err) {
@@ -63,7 +42,6 @@ export const applyLoan = async (req, res) => {
     res.status(400).json({ message: 'Loan application failed', error: err.message });
   }
 };
-
 // Get my loans
 export const getMyLoans = async (req, res) => {
   try {

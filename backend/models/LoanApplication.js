@@ -49,7 +49,8 @@ const loanSchema = new mongoose.Schema({
 
   guaranteeType: {
     type: String,
-    enum: ['Financial Guarantee', 'Job Guarantee'],
+    enum: ['Salary Guarantee', 'Car Guarantee', 'Home Guarantee'],
+    required: true
   },
 
   guarantor: {
@@ -57,6 +58,8 @@ const loanSchema = new mongoose.Schema({
     institution: String,
     jobRole: String,
   },
+
+  documents: [String],
 
   agreementAccepted: { type: Boolean, required: true },
 

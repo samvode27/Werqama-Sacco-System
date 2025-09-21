@@ -66,3 +66,63 @@
   font-size: 0.85rem;
   color: #333;
 }
+
+.golden-btn {
+  background-color: #daa00e; /* golden */
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.golden-btn:hover {
+  background-color: #ffd700; /* lighter gold on hover */
+  color: #000;
+  transform: translateY(-2px);
+}
+
+.golden-btn-sm {
+  background-color: #b8860b; /* gold */
+  color: #fff;
+  border: none;
+  padding: 0.25rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.golden-btn-sm:hover {
+  background-color: #e0c005; /* lighter gold on hover */
+  color: #000;
+  transform: translateY(-1px);
+}
+
+.golden-list .golden-list-item {
+  background-color: #fff8dc; /* light golden background */
+  border: 1px solid #b8860b; /* golden border */
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.golden-list .golden-list-item a {
+  color: #b8860b; /* golden text */
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.golden-list .golden-list-item:hover {
+  background-color: #ffd700; /* hover gold */
+  color: #000;
+}
+
+.golden-list .golden-list-item:hover a {
+  color: #000;
+}
+

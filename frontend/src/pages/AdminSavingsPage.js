@@ -395,18 +395,18 @@ const AdminSavingsPage = () => {
                                     <td>{saving.method}</td>
                                     <td>{moment(saving.date).format('LLL')}</td>
                                     <td>{statusBadge(saving.status)}</td>
-<td>
-  {saving.receipt && (
-    <a
-      href={`http://localhost:8080/uploads/receipts/${saving.receipt}`}
-      target="_blank"
-      rel="noreferrer"
-      className="text-decoration-none"
-    >
-      View
-    </a>
-  )}
-</td>
+                                    <td>
+                                        {saving.receipt && (
+                                            <a
+                                                href={`http://localhost:8080/uploads/receipts/${saving.receipt}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-decoration-none"
+                                            >
+                                                View
+                                            </a>
+                                        )}
+                                    </td>
 
                                     <td className="text-center">
                                         <div className="d-flex justify-content-center flex-nowrap gap-1">

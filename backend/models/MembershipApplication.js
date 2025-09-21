@@ -36,16 +36,16 @@
 
     beneficiaries: {
       type: [personSchema],
-      validate: v => v.length === 3
+      validate: v => v.length >= 1 && v.length <= 3
     },
 
     witnesses: {
       type: [personSchema],
-      validate: v => v.length === 3
+      validate: v => v.length >= 1 && v.length <= 3
     },
 
-    agreementAccepted: { type: Boolean, required: true }, // checkbox for terms
-
+    agreementAccepted: { type: Boolean, required: true },
+    
     submittedAt: { type: Date, default: Date.now },
   });
 

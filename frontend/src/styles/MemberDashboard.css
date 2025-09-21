@@ -2,9 +2,12 @@
    Navbar
 ------------------------------ */
 .glass-navbar {
-  background: rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(242, 187, 59, 0.8) !important;
+  padding: 10px;
+}
+
+.brand{
+  font-size: 1.2rem;
 }
 
 .logout-btn {
@@ -26,16 +29,18 @@
 }
 
 .dashboard-title {
-  font-size: 2.2rem;
+  font-size: 2.1rem;
   font-weight: 700;
+  color: rgb(245, 155, 59);
 }
-.gradient-text {
-  background: linear-gradient(90deg, #007bff, #6610f2);
-  -webkit-text-fill-color: transparent;
-}
+
 .subtitle {
   color: #6c757d;
   font-size: 1rem;
+}
+
+.status, .text-capitalize{
+  color: rgb(3, 137, 23);
 }
 
 /* ------------------------------
@@ -76,12 +81,12 @@
 /* Main button styling */
 .quick-btn {
   width: 100%;
-  height: 180px; /* 👈 taller buttons */
+  height: 180px; 
   background: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 1.2rem;
   font-weight: 500;
-  color: #333;
+  color: #eb9707;
   transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   padding: 1rem;
@@ -89,7 +94,7 @@
 
 /* Hover effect */
 .quick-btn:hover {
-  background: #007bff;
+  background: rgb(245, 155, 59);
   color: #ffffff;
   transform: translateY(-4px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
@@ -97,7 +102,13 @@
 
 /* Icon styling */
 .quick-btn .quick-icon svg {
-  font-size: 2.5rem; /* 👈 bigger icon */
+  font-size: 2.5rem;
+  color: #875603;
+}
+
+.quick-btn .quick-icon svg:hover {
+  font-size: 2.5rem;
+  color: #be7a05;
 }
 
 /* Title text */

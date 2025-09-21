@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     <Container fluid className="admin-dashboard">
       <Navbar expand="lg" className="glass-navbar px-3 py-3 mb-4">
         <Navbar.Brand className="brand-text">
-          WERQAMA SACCO 
+          WERQAMA SACCO
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>

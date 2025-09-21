@@ -46,7 +46,7 @@
 .brand-title {
   font-weight: 700;
   font-size: 18px;
-  color: #e76f51;
+  color: #f6d365;
 }
 
 h2,
@@ -104,7 +104,7 @@ h3 {
 }
 
 .password-criteria .invalid {
-  color: #e53e3e;
+  color: #f77f00;
 }
 
 .btn {
@@ -140,13 +140,27 @@ h3 {
 }
 
 .link-text {
-  color: #e63946;
+  color: #f77f00;
   font-weight: 500;
   text-decoration: none;
 }
 
 .link-text:hover {
   text-decoration: underline;
+}
+.bbttnn{
+  padding: 8px;
+  background-color: #f1c32c;
+  border-radius: 8px;
+  color: rgb(42, 41, 41);
+  font-weight: 500;
+}
+.bbttnn:hover{
+  background-color: #cd9f07;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(#a19c09);
+  color: white;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 480px) {

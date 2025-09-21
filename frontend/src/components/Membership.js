@@ -1,14 +1,18 @@
 // src/components/Membership.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FaUserPlus, FaMoneyCheckAlt, FaUniversity, FaHandHoldingUsd, FaWallet, } from 'react-icons/fa';
+import { FaUserPlus, FaMoneyCheckAlt, FaUniversity, FaHandHoldingUsd, FaWallet } from 'react-icons/fa';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/Membership.css';
 import { Link } from 'react-router-dom';
-
+import { LanguageContext } from '../contexts/LanguageContext';
+import translations from '../translations';
 
 function Membership() {
+  const { language } = useContext(LanguageContext);
+  const t = translations[language];
+
   const [members, setMembers] = useState(0);
   const [loans, setLoans] = useState(0);
 
@@ -36,56 +40,60 @@ function Membership() {
   const items = [
     {
       icon: <FaUserPlus />,
-      title: `${members}+ Active Members`,
-      description: 'Be part of a growing family securing financial freedom.',
+      title: `${members}+ ${t.membersActive}`,
+      description: t.membersDesc,
     },
     {
       icon: <FaMoneyCheckAlt />,
-      title: `${loans}+ Loans Disbursed`,
-      description: 'Supporting businesses & personal goals affordably.',
+      title: `${loans}+ ${t.loansDisbursed}`,
+      description: t.loansDesc,
     },
     {
       icon: <FaUniversity />,
-      title: 'Bank Details',
-      description: (
-        <>
-          <strong>WERQAMA SACCO</strong>
-          <br /> CBE: 1000123456789
-          <br /> Awash: 0101010101
-        </>
-      ),
+      title: t.bankDetailsTitle,
+      description: t.bankDetails,
     },
   ];
 
-  const steps = [
-    { num: 1, text: 'Register Online or at Branch' },
-    { num: 2, text: 'Deposit via Bank or Chapa' },
-    { num: 3, text: 'Activate Your Membership' },
-    { num: 4, text: 'Enjoy Loans & Benefits' },
-  ];
+  const steps = t.membershipSteps.map((step, idx) => ({
+    icon: {
+      FaUserPlus, FaWallet, FaHandHoldingUsd, FaUniversity
+    }[step.icon],
+    title: step.title,
+    text: step.text
+  }));
 
   return (
     <section className="membership-section position-relative" id="membership">
       {/* Top Wave */}
-      <div className="top-wave">
-        <svg viewBox="0 0 1240 210">
+      <div
+        className="wave-divider wave-divider-top position-absolute w-100"
+        style={{ top: 0, zIndex: 0 }}
+      >
+        <svg
+          viewBox="0 0 1440 150"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          style={{ display: "block", width: "100%", height: "auto", marginTop: "-40px" }}
+        >
           <path
-            fill="#0d6efd"
-            fillOpacity="1"
-            d="M0,128L48,117.3C96,107,192,85,288,74.7C384,64,480,64,576,80C672,96,768,128,864,138.7C960,149,1056,139,1152,144C1248,149,1344,171,1392,181.3L1440,192L1440,0L0,0Z"
-          ></path>
+            d="M0,32L48,48C96,64,192,96,288,112C384,128,480,128,576,112C672,96,768,64,864,48C960,32,1056,32,1152,48C1248,64,1344,96,1392,112L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+            fill="url(#gradientTop)"
+          />
+          <defs>
+            <linearGradient id="gradientTop" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#e1da0aff" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#e1da0aff" stopOpacity="0" />
+            </linearGradient>
+          </defs>
         </svg>
       </div>
 
       <Container className="py-5">
         {/* Heading */}
-        <div className="text-center mb-5" data-aos="fade-down">
-          <h2 className="section-title fw-bold text-white">
-            Join WERQAMA SACCO Today
-          </h2>
-          <p className="section-subtitle text-light">
-            Unlock access to loans, savings, and a supportive community.
-          </p>
+        <div className="text-center mb-5 mt-5" data-aos="fade-down">
+          <h2 className="section-title fw-bold text-white">{t.membershipTitle}</h2>
+          <p className="sectionn-subtitle">{t.membershipSubtitle}</p>
         </div>
 
         {/* Stats Cards */}
@@ -101,30 +109,9 @@ function Membership() {
           ))}
         </Row>
 
-        {/* Steps Timeline */}
-        <div className="timeline mb-5" data-aos="fade-up">
-          {[
-            { icon: <FaUserPlus />, title: "Register", text: "Sign up easily to become a SACCO member." },
-            { icon: <FaWallet />, title: "Deposit", text: "Start saving with flexible contributions." },
-            { icon: <FaHandHoldingUsd />, title: "Apply Loan", text: "Request affordable loans for growth." },
-            { icon: <FaUniversity />, title: "Grow Together", text: "Enjoy financial support and benefits." },
-          ].map((step, idx) => (
-            <div className="timeline-step" key={idx} data-aos="zoom-in" data-aos-delay={idx * 200}>
-              <div className="circle">{step.icon}</div>
-              <div className="step-content">
-                <h6 className="step-title">{step.title}</h6>
-                <p className="step-text">{step.text}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-
         {/* CTA */}
         <div className="d-flex justify-content-center mt-1" data-aos="fade-up">
-          <Link to="/login" className="btn px-3 py-2">
-            Apply for Membership
-          </Link>
+          <Link to="/login" style={{height: "60px" }} className="btnn py-3">{t.membershipCTA}</Link>
         </div>
       </Container>
     </section>

@@ -105,7 +105,7 @@ const CreateNewsPage = () => {
     return (
         <Container className="news-container mt-4">
             <ToastContainer />
-            <h2 className="mb-4 text-center text-primary fw-bold">
+            <h2 className="mb-4 text-center fw-bold" style={{ color: '#e68e03ff' }}>
                 {editingNews ? '✏️ Edit News' : '📰 Create News'}
             </h2>
 
@@ -164,9 +164,13 @@ const CreateNewsPage = () => {
                     </Row>
 
                     <div className="mt-4 d-flex gap-2 flex-wrap">
-                        <Button type="submit" variant="primary" className="fw-semibold px-4 py-2 shadow-sm">
+                        <button
+                            type="submit"
+                            className="fw-semibold px-4 py-2 shadow-sm golden-btn"
+                        >
                             {editingNews ? 'Update News' : 'Create News'}
-                        </Button>
+                        </button>
+
                         {editingNews && (
                             <Button
                                 variant="secondary"

@@ -64,7 +64,7 @@ app.use("/uploads/idDocuments", express.static(path.join(__dirname, "uploads/idD
 
 app.use('/uploads/profilePictures', express.static(path.join(process.cwd(), 'uploads/profilePictures')));
 
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);

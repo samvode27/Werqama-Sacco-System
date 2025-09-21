@@ -3,7 +3,7 @@
 .why-us-section {
   position: relative;
   padding: 80px 0;
-  background: linear-gradient(135deg, #0d1b2a, #1b263b);
+  background: linear-gradient(135deg, #985b05, #a37604);
   color: #fff;
   overflow: hidden;
   margin-bottom: -100px;
@@ -47,7 +47,7 @@
 .section-header h2 {
   font-weight: 700;
   font-size: 2.5rem;
-  background: linear-gradient(45deg, #0d6efd, #6610f2);
+  background: linear-gradient(45deg, #c2bc0a);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent; /* ✅ Correct, required for gradient text */
@@ -68,7 +68,7 @@
 }
 
 .benefit-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: #ed71040d;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 30px 20px;
@@ -80,9 +80,9 @@
 
 .benefit-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(13, 110, 253, 0.3);
-  border: 1px solid #0d6efd;
-  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 15px 40px rgba(253, 129, 13, 0.3);
+  border: 1px solid #855405;
+  background: rgba(225, 107, 4, 0.07);
 }
 
 .benefit-card .icon {
@@ -97,6 +97,7 @@
 
 .benefit-card:hover .icon {
   transform: scale(1.15);
+  color: #c2bc0a;
 }
 
 .benefit-card h5 {
@@ -111,6 +112,8 @@
   font-size: 0.95rem;
   line-height: 1.5;
 }
+
+
 
 .wave-divider {
   position: absolute;

@@ -99,13 +99,17 @@ const LoanHistoryTable = () => {
                   </td>
                   <td>{new Date(loan.createdAt).toLocaleDateString()}</td>
                   <td>
-                    <Button
-                      variant="info"
-                      size="sm"
+                    <span
                       onClick={() => openTimelineModal(loan.statusTimeline)}
+                      style={{
+                        color: "goldenrod",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
                     >
                       View Notes
-                    </Button>
+                    </span>
                   </td>
                 </tr>
               ))}
@@ -116,7 +120,10 @@ const LoanHistoryTable = () => {
 
       {/* Modal for all notes */}
       <Modal show={showModal} onHide={closeModal} centered>
-        <Modal.Header closeButton>
+        <Modal.Header
+          closeButton
+          style={{ backgroundColor: "goldenrod", color: "white" }}
+        >
           <Modal.Title>Status Timeline Notes</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -127,29 +134,53 @@ const LoanHistoryTable = () => {
               {selectedTimeline.map((entry, idx) => (
                 <li
                   key={idx}
-                  className={`list-group-item d-flex justify-content-between align-items-center ${
-                    entry.status === 'rejected' ? 'list-group-item-danger' : ''
-                  }`}
+                  className={`list-group-item d-flex justify-content-between align-items-center ${entry.status === "rejected" ? "list-group-item-danger" : ""
+                    }`}
                 >
                   <div>
                     <strong>{entry.status.toUpperCase()}</strong>
                     <br />
                     <span className="text-muted small">
-                      {new Date(entry.date || entry.timestamp || Date.now()).toLocaleString()}
+                      {new Date(
+                        entry.date || entry.timestamp || Date.now()
+                      ).toLocaleString()}
                     </span>
                     <br />
                     <span>{entry.note}</span>
                   </div>
-                  <Badge bg={entry.status === 'rejected' ? 'danger' : 'secondary'}>
+                  <span
+                    style={{
+                      backgroundColor: "goldenrod",
+                      color: "white",
+                      padding: "4px 10px",
+                      borderRadius: "12px",
+                      fontSize: "0.8rem",
+                      fontWeight: "600",
+                    }}
+                  >
                     {entry.status}
-                  </Badge>
+                  </span>
                 </li>
               ))}
             </ul>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>Close</Button>
+          <button
+            type="button"
+            onClick={closeModal}
+            style={{
+              backgroundColor: "goldenrod",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              padding: "6px 12px",
+              fontWeight: "600",
+              cursor: "pointer",
+            }}
+          >
+            Close
+          </button>
         </Modal.Footer>
       </Modal>
     </div>

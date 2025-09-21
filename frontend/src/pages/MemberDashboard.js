@@ -95,8 +95,8 @@ const MemberDashboard = () => {
   return (
     <>
       {/* Navbar */}
-      <Navbar expand="lg" className="glass-navbar px-3 py-2 fixed-top shadow-sm">
-        <Navbar.Brand className="fw-bold">WERQAMA SACCO</Navbar.Brand>
+      <Navbar expand="lg" className="glass-navbar px-3 py-3 fixed-top shadow-sm">
+        <navbar className="fw-bold brand">WERQAMA SACCO</navbar>
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="ms-auto align-items-center gap-3">
@@ -112,14 +112,14 @@ const MemberDashboard = () => {
         <Container>
           {/* Welcome */}
           <div className="text-center mb-4" data-aos="fade-up">
-            <h1 className="dashboard-title gradient-text mt-5">
+            <h1 className="dashboard-title mt-5 pt-5">
               Welcome, {currentUser?.name}
             </h1>
             <p className="subtitle">Your financial hub at a glance 🚀</p>
           </div>
 
           {/* Membership Status */}
-           {loadingStatus ? (
+          {loadingStatus ? (
             <div className="text-center mb-4">
               <Spinner animation="border" />
             </div>
@@ -138,7 +138,7 @@ const MemberDashboard = () => {
                 className="text-center"
                 data-aos="fade-up"
               >
-                <strong>Membership Status:</strong>{' '}
+                <strong className="status">Membership Status:</strong>{' '}
                 <span className="text-capitalize fw-bold">
                   {membershipStatus || 'Not Submitted'}
                 </span>
@@ -171,10 +171,9 @@ const MemberDashboard = () => {
           )}
 
           {/* Quick Actions */}
-          <div className="quick-actions text-center mt-5" data-aos="fade-up">
-            <h5 className="mb-4">Quick Actions</h5>
+          <div className="quick-actions text-center mt-5 pb-5" data-aos="fade-up">
             <div className="container">
-              <div className="row g-4 justify-content-center">
+              <div className="mt-4 row g-4 justify-content-center">
                 {[
                   { title: "Savings", icon: <FaPiggyBank />, route: "/savings", restricted: true },
                   { title: "Loans", icon: <FaMoneyCheck />, route: "/loans", restricted: true },
@@ -185,9 +184,8 @@ const MemberDashboard = () => {
 
                   return (
                     <div className="col-12 col-sm-6 col-md-3" key={idx}>
-                      <Button
-                        className={`quick-btn d-flex flex-column align-items-center justify-content-center p-4 shadow-sm ${isRestricted ? "disabled-btn" : ""
-                          }`}
+                      <button
+                        className={`quick-btn d-flex flex-column align-items-center justify-content-center p-4 shadow-sm ${isRestricted ? "disabled-btn" : ""}`}
                         onClick={() =>
                           isRestricted ? handleRestrictedClick() : navigate(item.route)
                         }
@@ -195,6 +193,10 @@ const MemberDashboard = () => {
                           minHeight: "180px",
                           fontSize: "1.1rem",
                           borderRadius: "15px",
+                          backgroundColor: "goldenrod", 
+                          color: "white", 
+                          border: "none",
+                          width: "100%", 
                         }}
                       >
                         <div className="quick-icon mb-3" style={{ fontSize: "2.5rem" }}>
@@ -202,7 +204,7 @@ const MemberDashboard = () => {
                         </div>
                         <span className="quick-title fw-bold">{item.title}</span>
                         {isRestricted && <FaLock className="mt-2 text-muted small" />}
-                      </Button>
+                      </button>
                     </div>
                   );
                 })}

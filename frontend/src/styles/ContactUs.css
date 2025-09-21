@@ -1,7 +1,7 @@
 /* Contact Section */
 .contact-section {
   padding: 100px 20px;
-  background: linear-gradient(135deg, #0a1a2f 0%, #112b4a 100%);
+  background: linear-gradient(135deg, #b56c06, #a37604);
   position: relative;
   overflow: hidden;
   min-height: 100vh;
@@ -43,7 +43,7 @@
   font-size: 2rem;
   color: #00bcd4;
   margin-bottom: 20px;
-  text-shadow: 0 0 10px rgba(0,188,212,0.5);
+  text-shadow: 0 0 10px #b56c06;
 }
 
 /* Right Section */
@@ -59,7 +59,7 @@
 
 .contact-right h2 {
   font-size: 2rem;
-  color: #00bcd4;
+  color: #9c5d05;
   margin-bottom: 20px;
   text-shadow: 0 0 10px rgba(0,188,212,0.6);
 }
@@ -99,7 +99,7 @@
 /* Button */
 .contact-right button {
   padding: 14px;
-  background: linear-gradient(90deg, #00bcd4, #2196f3);
+  background: linear-gradient(90deg, #b46b04, #ca7702);
   color: #fff;
   font-weight: 600;
   border: none;
@@ -110,9 +110,9 @@
 }
 
 .contact-right button:hover {
-  background: linear-gradient(90deg, #2196f3, #00bcd4);
+  background: linear-gradient(90deg, #b46b04, #ad6501);
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,188,212,0.6);
+  box-shadow: 0 10px 25px rgba(163, 126, 24, 0.6);
 }
 
 /* Success/Error */

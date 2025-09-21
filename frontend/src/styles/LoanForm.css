@@ -26,3 +26,30 @@
   border-radius: 8px;
   font-weight: 600;
 }
+.progress-steps {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.step {
+  text-align: center;
+  flex: 1;
+}
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 auto 5px;
+  line-height: 30px;
+  color: #fff;
+}
+.step-label {
+  font-size: 0.75rem;
+}
+.step.completed .step-circle {
+  background-color: #28a745; /* green */
+}
+.step.pending .step-circle {
+  background-color: #6c757d; /* gray */
+}
+

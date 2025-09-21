@@ -1,13 +1,17 @@
 // src/components/NewsEvents.js
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Spinner } from 'react-bootstrap';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/NewsEvents.css';
-import api from '../api/axios'; // Make sure this points to your configured Axios instance
+import api from '../api/axios';
+import { LanguageContext } from '../contexts/LanguageContext';
+import translations from '../translations';
 
 function NewsEvents() {
+  const { language } = useContext(LanguageContext);
+  const t = translations[language];
+
   const [showModal, setShowModal] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
   const [newsItems, setNewsItems] = useState([]);
@@ -20,15 +24,14 @@ function NewsEvents() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await api.get('/news'); // Fetching real news from backend
-        setNewsItems(res.data.slice(0, 4)); // Limit to 4 latest items
+        const res = await api.get('/news');
+        setNewsItems(res.data.slice(0, 4));
       } catch (err) {
         console.error('Error fetching news:', err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchNews();
   }, []);
 
@@ -46,8 +49,8 @@ function NewsEvents() {
     <section className="news-events-section" id="news-events">
       <Container>
         <div className="text-center mb-5" data-aos="fade-down">
-          <h2 className="section-title gradient-text">News & Events</h2>
-          <p className="section-subtitle">Stay informed on the latest updates from WERQAMA SACCO</p>
+          <h2 className="section-titlee">{t.newsTitle}</h2>
+          <p className="section-subtitle">{t.newsSubtitle}</p>
         </div>
 
         {loading ? (
@@ -55,7 +58,7 @@ function NewsEvents() {
             <Spinner animation="border" variant="primary" />
           </div>
         ) : newsItems.length === 0 ? (
-          <p className="text-center text-muted">No news available currently.</p>
+          <p className="text-center text-muted">{t.newsNoItems}</p>
         ) : (
           <Row className="g-4">
             {newsItems.map((item, idx) => (
@@ -74,9 +77,7 @@ function NewsEvents() {
                   <Card.Body className="d-flex flex-column">
                     <h5 className="fw-bold">{item.title}</h5>
                     <p className="text-muted small">{item.content?.substring(0, 60)}...</p>
-                    <button variant="primary" size="sm" className="mt-auto button">
-                      Read More
-                    </button>
+                    <button className="mt-auto button">{t.newsReadMore}</button>
                   </Card.Body>
                 </Card>
               </Col>
@@ -102,8 +103,8 @@ function NewsEvents() {
                 <p>{selectedNews.content}</p>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="secondary" onClick={closeModal}>
-                  Close
+                <Button className='aaa' onClick={closeModal}>
+                  {t.newsClose}
                 </Button>
               </Modal.Footer>
             </>

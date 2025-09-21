@@ -140,8 +140,8 @@ const SavingsPage = () => {
         <>
             <ToastContainer />
             <section className="savings-hero text-center">
-                <h3 className="gradient-text">Monthly Savings Payment</h3>
-                <p className="subtitle">Pay your SACCO monthly savings easily and view history below.</p>
+                <h3 className="title mt-5 pt-3">Monthly Savings Payment</h3>
+                <p className="subtitlee pb-4">Pay your SACCO monthly savings easily and view history below.</p>
             </section>
 
             <Container>
@@ -159,9 +159,22 @@ const SavingsPage = () => {
                                         onChange={e => setAmount(e.target.value)}
                                     />
                                 </Form.Group>
-                                <Button className="w-100" onClick={handlePayWithChapa}>
+                                <button
+                                    type="button"
+                                    onClick={handlePayWithChapa}
+                                    style={{
+                                        width: "100%",
+                                        backgroundColor: "goldenrod",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        fontSize: "1rem",
+                                        fontWeight: "600",
+                                    }}
+                                >
                                     Pay with Chapa
-                                </Button>
+                                </button>
                             </Form>
                         </Card>
                     </Col>
@@ -194,9 +207,25 @@ const SavingsPage = () => {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <Button type="submit" className="mt-3 w-100" disabled={submitting}>
-                                    {submitting ? 'Submitting...' : 'Submit'}
-                                </Button>
+                                <button
+                                    type="submit"
+                                    disabled={submitting}
+                                    style={{
+                                        width: "100%",
+                                        backgroundColor: "goldenrod",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "8px",
+                                        padding: "10px",
+                                        fontSize: "1rem",
+                                        fontWeight: "600",
+                                        marginTop: "15px",
+                                        opacity: submitting ? 0.7 : 1,
+                                        cursor: submitting ? "not-allowed" : "pointer",
+                                    }}
+                                >
+                                    {submitting ? "Submitting..." : "Submit"}
+                                </button>
                             </Form>
                         </Card>
                     </Col>
@@ -228,9 +257,23 @@ const SavingsPage = () => {
                             <Form.Control type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
                         </Col>
                         <Col xs={12} md={2}>
-                            <Button className="w-100" onClick={handleExportCSV}>
+                            <button
+                                type="button"
+                                onClick={handleExportCSV}
+                                style={{
+                                    width: "100%",
+                                    backgroundColor: "goldenrod",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    padding: "7px",
+                                    fontSize: "1rem",
+                                    fontWeight: "600",
+                                    cursor: "pointer",
+                                }}
+                            >
                                 Export CSV
-                            </Button>
+                            </button>
                         </Col>
                     </Row>
 
@@ -264,15 +307,25 @@ const SavingsPage = () => {
                                         <td>
                                             {s.receipt ? (
                                                 <button
-                                                    variant="link"
+                                                    type="button"
                                                     onClick={() => {
                                                         setModalImage(`${process.env.REACT_APP_API_URL}/uploads/receipts/${s.receipt}`);
                                                         setShowModal(true);
                                                     }}
+                                                    style={{
+                                                        background: "none",
+                                                        border: "none",
+                                                        color: "goldenrod",
+                                                        textDecoration: "underline",
+                                                        cursor: "pointer",
+                                                        fontWeight: "600",
+                                                    }}
                                                 >
                                                     View
                                                 </button>
-                                            ) : 'No Receipt'}
+                                            ) : (
+                                                "No Receipt"
+                                            )}
                                         </td>
                                         <td>
                                             {s.adminNotes.length > 0

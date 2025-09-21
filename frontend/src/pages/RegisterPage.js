@@ -208,7 +208,7 @@ const RegisterPage = () => {
                   </li>
                 </ul>
 
-                <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+                <button type="submit" className="bbttnn w-100" disabled={loading}>
                   {loading ? "Registering..." : "Register"}
                 </button>
               </form>

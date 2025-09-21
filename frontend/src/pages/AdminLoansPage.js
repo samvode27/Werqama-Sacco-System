@@ -233,8 +233,8 @@ const AdminLoansPage = () => {
                     </Form.Select>
                 </Col>
                 <Col md={4}>
-                    <Button
-                        variant="secondary"
+                    <button
+                        className="w-100 golden-btn"
                         onClick={() => {
                             setSearchQuery('');
                             setStatusFilter('');
@@ -242,7 +242,7 @@ const AdminLoansPage = () => {
                         }}
                     >
                         Reset
-                    </Button>
+                    </button>
                 </Col>
             </Row>
 
@@ -275,9 +275,12 @@ const AdminLoansPage = () => {
                                     <td>{loan.loanPurpose || 'N/A'}</td>
                                     <td>{moment(loan.createdAt).fromNow()}</td>
                                     <td>
-                                        <Button size="sm" onClick={() => openLoanModal(loan)}>
+                                        <button
+                                            className="golden-btn-sm"
+                                            onClick={() => openLoanModal(loan)}
+                                        >
                                             View
-                                        </Button>
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -296,7 +299,7 @@ const AdminLoansPage = () => {
                         <>
                             <p><strong>Amount:</strong> {selectedLoan.loanAmount}</p>
                             {/* <td>ETB {loan.loanAmount?.toLocaleString() || 'N/A'}</td> */}
-                            <p><strong>Duration:</strong> {selectedLoan.duration} months</p>
+                            <p><strong>Duration:</strong> {selectedLoan.loanDurationMonths} months</p>
                             <p><strong>Status:</strong> <Badge bg={statusColor(selectedLoan.status)}>{selectedLoan.status}</Badge></p>
 
                             {/* Timeline / Status Updates */}
@@ -313,14 +316,23 @@ const AdminLoansPage = () => {
                             {/* Uploaded Documents */}
                             <h5>Documents</h5>
                             {selectedLoan.documents?.length > 0 ? (
-                                <ListGroup className="mb-3">
+                                <ListGroup className="mb-3 golden-list">
                                     {selectedLoan.documents.map((doc, index) => (
-                                        <ListGroup.Item key={index}>
-                                            <a href={`${process.env.REACT_APP_API_URL}/uploads/${doc}`} target="_blank" rel="noreferrer">{doc}</a>
+                                        <ListGroup.Item key={index} className="golden-list-item">
+                                            <a
+                                                href={`${process.env.REACT_APP_API_URL}/uploads/${doc}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                {doc}
+                                            </a>
                                         </ListGroup.Item>
                                     ))}
                                 </ListGroup>
-                            ) : <p>No documents uploaded.</p>}
+                            ) : (
+                                <p style={{ color: '#b8860b', fontWeight: '600' }}>No documents uploaded.</p>
+                            )}
+
 
                             {/* Admin Notes */}
                             <Form.Group className="mb-3">
@@ -339,27 +351,6 @@ const AdminLoansPage = () => {
                                 <Button variant="success" onClick={() => handleDecision('approved')}>Approve</Button>
                                 <Button variant="danger" onClick={() => handleDecision('rejected')}>Reject</Button>
                             </div>
-
-                            {/* Member Loan & Repayment History */}
-                            <h5 className="mt-4">Member History</h5>
-                            <Row>
-                                <Col>
-                                    <h6>Past Loans</h6>
-                                    <ul>
-                                        {memberHistory?.loans?.map((loan, idx) => (
-                                            <li key={idx}>{loan.amount} - {loan.status} - {moment(loan.createdAt).format('L')}</li>
-                                        ))}
-                                    </ul>
-                                </Col>
-                                <Col>
-                                    <h6>Repayments</h6>
-                                    <ul>
-                                        {memberHistory?.repayments?.map((rep, idx) => (
-                                            <li key={idx}>{rep.amountPaid} on {moment(rep.date).format('L')}</li>
-                                        ))}
-                                    </ul>
-                                </Col>
-                            </Row>
                         </>
                     ) : (
                         <p>Loading loan data...</p>

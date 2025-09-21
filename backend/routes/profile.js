@@ -7,7 +7,7 @@ import {
   removeProfilePicture,
   changePassword,
 } from '../controllers/profileController.js';
-import { protect } from '../middleware/auth.js'; // your JWT auth middleware
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 

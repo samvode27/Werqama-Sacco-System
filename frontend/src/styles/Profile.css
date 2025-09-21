@@ -1,40 +1,74 @@
 .profile-container {
     padding: 2rem 0;
     min-height: 100vh;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: linear-gradient(135deg, #fff8e1, #fff3cd); /* soft gold gradient */
 }
 
 .profile-card {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 248, 220, 0.85); /* light golden translucent */
     border-radius: 1rem;
     border: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .profile-picture {
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     object-fit: cover;
-    border: 4px solid #0d6efd;
-    transition: transform 0.3s ease;
+    border: 4px solid goldenrod;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-picture:hover {
-    transform: scale(1.05);
+    transform: scale(1.08);
+    box-shadow: 0 8px 20px rgba(218, 165, 32, 0.5);
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    background: linear-gradient(135deg, goldenrod, #b8860b);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
+
+/* Golden Buttons */
+.golden-btn {
+    background-color: goldenrod;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.golden-btn:hover {
+    background-color: #b8860b;
+    transform: translateY(-2px);
+}
+
+/* Inputs Styling */
+.profile-card label {
+    font-weight: 600;
+    color: #8b6914;
+}
+
+.profile-card input,
+.profile-card select,
+.profile-card textarea {
+    border: 1px solid #d4af37;
+    border-radius: 6px;
+    padding: 6px 10px;
 }

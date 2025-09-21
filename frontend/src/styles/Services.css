@@ -9,14 +9,14 @@
 .services-title {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #0b2347;
+  color: #c6c905;
 }
 
 /* Decorative line under title */
 .services-line {
   width: 60px;
   height: 3px;
-  background: linear-gradient(#0757cf);
+  background: linear-gradient(#939505);
   border-radius: 2px;
   margin-top: 10px;
   margin-bottom: 15px;
@@ -56,7 +56,7 @@
   justify-content: center;
   font-size: 38px;
   color: #fff;
-  background: linear-gradient(135deg, #0d6efd, #00b4d8);
+  background: linear-gradient(135deg, #a5a803, #d8bb00);
   transition: transform 0.3s ease;
 }
 

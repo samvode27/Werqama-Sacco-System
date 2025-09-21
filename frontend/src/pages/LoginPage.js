@@ -90,19 +90,19 @@ const handleLogin = async (e) => {
               </div>
             </Form.Group>
 
-            <p className="text-end mb-1">
+            <p className="text-end mb-3">
               <Link to="/forgot-password" className="link-text">
                 Forgot Password?
               </Link>
             </p>
 
-            <Button
+            <button
               type="submit"
-              className="btn btn-primary w-100"
+              className="bbttnn w-100"
               disabled={isFetching}
             >
               {isFetching ? "Logging in..." : "Login"}
-            </Button>
+            </button>
 
             <p className="mt-3 text-center">
               Don’t have an account?{" "}

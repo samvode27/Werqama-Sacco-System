@@ -9,7 +9,7 @@
 .about-line {
   width: 60px;
   height: 3px;
-  background: linear-gradient(#0757cf);
+  background: linear-gradient(#9fa205);
   border-radius: 2px;
   margin-bottom: 15px;
 }
@@ -26,7 +26,7 @@
   display: block;
   width: 60px;
   height: 3px;
-  background: #353be5;
+  background: #9fa205;
   margin: 10px auto 0;
   border-radius: 2px;
 }
@@ -61,12 +61,12 @@
 
 .about-card:hover {
   transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 35px rgba(244, 202, 36, 0.15);
 }
 
 /* Icons */
 .about-icon {
-  color: #353be5;
+  color: #8c8f04;
   margin-bottom: 20px;
   transition: transform 0.5s ease, color 0.3s ease;
   z-index: 1;
@@ -74,7 +74,7 @@
 
 .about-card:hover .about-icon {
   transform: rotate(15deg) scale(1.2);
-  color: #2196f3;
+  color: #e4a106;
 }
 
 /* Titles & Text */
@@ -82,13 +82,13 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 15px;
-  color: #0a3f8f;
+  color: #cacd08;
   z-index: 1;
   transition: color 0.3s ease;
 }
 
 .about-card:hover .about-title {
-  color: #353be5;
+  color: #f6ea0c;
 }
 
 .about-text {

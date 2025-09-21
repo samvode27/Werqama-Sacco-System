@@ -85,19 +85,29 @@ const LoanPage = () => {
 
           {/* Loan Form (collapsible) */}
           <div className="mb-5 text-center" data-aos="fade-up">
-            <Button
-              variant="primary"
+            <button
+              type="button"
               onClick={() => setOpenForm(!openForm)}
               aria-controls="loan-form-collapse"
               aria-expanded={openForm}
-              className="mb-3"
+              className="mb-3 mt-4"
+              style={{
+                backgroundColor: "goldenrod",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                padding: "10px 15px",
+                fontSize: "1rem",
+                fontWeight: "600",
+                cursor: "pointer",
+              }}
             >
-              {openForm ? 'Hide Loan Application Form' : 'Apply for a Loan'}
-            </Button>
+              {openForm ? "Hide Loan Application Form" : "Apply for a Loan"}
+            </button>
             <Collapse in={openForm}>
               <div id="loan-form-collapse">
                 <Card className="shadow-sm border-0 p-4">
-                  <h4 className="mb-3 text-primary text-center">Loan Application Form</h4>
+                  <h4 className="mb-3 text-center" style={{color: "#eeb509ff"}}>Loan Application Form</h4>
                   <LoanApplicationForm />
                 </Card>
               </div>
@@ -106,7 +116,7 @@ const LoanPage = () => {
 
           {/* Loan History Table */}
           <div data-aos="fade-up">
-            <h3 className="mb-3 text-success text-center">Loan Status & History</h3>
+            <h3 className="mb-3 text-center" style={{color: "#eeb509ff"}}>Loan Status & History</h3>
             <LoanHistoryTable />
           </div>
         </>

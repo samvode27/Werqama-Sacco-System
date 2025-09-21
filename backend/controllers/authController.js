@@ -1,9 +1,10 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/User.js';
 import { sendEmail } from '../utils/emailSender.js';
-import crypto from 'crypto';
 import { isStrongPassword } from '../utils/passwordValidator.js';
 import MembershipApplication from '../models/MembershipApplication.js';
+import { sendOtpToFayda, verifyFaydaOtp } from '../utils/faydaService.js';
+import FaydaSession from '../models/FaydaSession.js';
 
 export const register = asyncHandler(async (req, res) => {
   try {
@@ -239,4 +240,79 @@ export const getMe = asyncHandler(async (req, res) => {
     isMember: !!membership, // true if approved membership exists
   });
 });
+
+// POST /auth/fayda/initiate
+export const initiateFaydaAuth = asyncHandler(async (req, res) => {
+  const { faydaNumber } = req.body;
+  if (!faydaNumber) {
+    return res.status(400).json({ message: 'faydaNumber is required' });
+  }
+
+  // ask Fayda to send OTP (response contains a transactionID or we create one)
+  const sendResp = await sendOtpToFayda(faydaNumber);
+  const transactionId = sendResp.transactionID || sendResp.raw?.response?.transactionID || sendResp.raw?.transactionID || sendResp.raw?.request?.transactionID || (require('uuid').v4());
+
+  // create server-side session so we can track expiry / used
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+  await FaydaSession.create({
+    transactionId,
+    faydaNumber,
+    expiresAt,
+  });
+
+  res.json({ message: 'OTP sent (if the Fayda number is valid).', transactionId });
+});
+
+// POST /auth/fayda/verify
+export const verifyFaydaAuth = asyncHandler(async (req, res) => {
+  const { faydaNumber, otp, transactionId } = req.body;
+  if (!faydaNumber || !otp || !transactionId) {
+    return res.status(400).json({ message: 'faydaNumber, otp and transactionId are required' });
+  }
+
+  // validate session
+  const session = await FaydaSession.findOne({ transactionId, faydaNumber });
+  if (!session) return res.status(400).json({ message: 'Invalid or expired transaction' });
+  if (session.used || session.expiresAt < new Date()) {
+    return res.status(400).json({ message: 'Transaction expired or already used' });
+  }
+
+  // call Fayda verify
+  const verifyResp = await verifyFaydaOtp({ faydaNumber, otp, transactionID: transactionId });
+  if (!verifyResp.success) {
+    return res.status(401).json({ message: 'Fayda verification failed', details: verifyResp.raw });
+  }
+
+  // success -> find or create user
+  let user = await User.findOne({ faydaNumber });
+  if (!user) {
+    user = await User.create({
+      name: verifyResp.identity?.name || undefined,
+      faydaNumber,
+      isFaydaVerified: true,
+      role: 'user',
+    });
+  } else {
+    user.isFaydaVerified = true;
+    await user.save();
+  }
+
+  // mark session used
+  session.used = true;
+  await session.save();
+
+  // issue JWT (same method you already use)
+  const token = user.getSignedJwtToken();
+  res.json({
+    token,
+    user: {
+      _id: user._id,
+      name: user.name,
+      faydaNumber: user.faydaNumber,
+      role: user.role,
+      isFaydaVerified: user.isFaydaVerified,
+    },
+  });
+});
+
 

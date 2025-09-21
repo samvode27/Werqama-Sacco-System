@@ -3,14 +3,14 @@
   margin: 2rem 0;
 }
 
-.gradient-text {
-  background: linear-gradient(90deg, #007bff, #00c6ff);
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
+.title{
+  color: #ec9006;
+  font-weight: bold;
+  font-size: 1.95rem;
 }
 
-.subtitle {
-  color: #6c757d;
+.subtitlee {
+  color: #848585;
   font-size: 0.95rem;
 }
 
@@ -23,7 +23,7 @@
   font-size: 0.95rem;
   font-weight: 500;
   color: #fff;
-  background: linear-gradient(#5f4efe);
+  background: linear-gradient(#e68004);
   box-shadow: 0 3px 10px rgba(13, 202, 240, 0.25);
   transition: all 0.3s ease-in-out;
   cursor: pointer;

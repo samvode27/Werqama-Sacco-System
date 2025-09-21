@@ -23,7 +23,7 @@
   height: 250px;
   top: -60px;
   left: -80px;
-  background: #0d6efd;
+  /* background: #0d6efd; */
 }
 
 .news-events-section::after {
@@ -35,22 +35,22 @@
 }
 
 /* Section title */
-.section-title {
+.section-titlee {
   font-size: 2.rem;
-  color: #0d6efd;
+  color: #e2c105;
   font-weight: 700;
   margin-bottom: 10px;
   position: relative;
   z-index: 2;
 }
 
-.section-title::after {
+.section-titlee::after {
   content: "";
   display: block;
   width: 80px;
   height: 4px;
   margin: 10px auto 0;
-  background: linear-gradient(90deg, #0d6efd, #6610f2);
+  background: linear-gradient(90deg, #b48b03, #b48b03);
   border-radius: 2px;
 }
 
@@ -121,7 +121,7 @@
 }
 
 .button {
-  background: linear-gradient(135deg, #0d6efd, #6610f2); /* Modern gradient */
+  background: linear-gradient(135deg, #b48b03, #b48b03); /* Modern gradient */
   border: none;
   color: #fff;
   border-radius: 30px; /* Rounded pill shape */
@@ -135,7 +135,7 @@
 }
 
 .button:hover {
-  background: linear-gradient(135deg, #6610f2, #0d6efd); /* Reverse gradient on hover */
+  background: linear-gradient(135deg, #b48b03, #b48b03); /* Reverse gradient on hover */
   transform: translateY(-3px) scale(1.05); /* lift & scale effect */
   box-shadow: 0 10px 25px rgba(102, 16, 242, 0.4); /* stronger shadow */
 }
@@ -143,15 +143,6 @@
 .button:active {
   transform: translateY(0) scale(0.98); /* press effect */
   box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
-}
-
-/* Gradient Text */
-.gradient-text {
-  background: linear-gradient(135deg, #0d6efd, #6610f2);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
 }
 
 /* Modal Styling */
@@ -163,7 +154,7 @@
 
 .news-modal .modal-header {
   border-bottom: none;
-  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  background: linear-gradient(135deg, #b48b03, #b48b03);
   color: #fff;
   border-radius: 1rem 1rem 0 0;
 }

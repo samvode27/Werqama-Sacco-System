@@ -46,7 +46,7 @@ export const createMembership = async (req, res) => {
       beneficiaries: JSON.parse(beneficiaries),
       witnesses: JSON.parse(witnesses),
       agreementAccepted: agreementAccepted === 'true',
-      idDocument: req.file ? req.file.filename : null, // multer saves file correctly
+      idDocument: req.file ? req.file.filename : null,
       status: 'pending',
     });
 

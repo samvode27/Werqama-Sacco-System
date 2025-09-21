@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import "../styles/Navbar.css";
-import Logo from "../assets/logo.jpg"; // your logo
+import Logo from "../assets/logo.jpg";
+import { LanguageContext } from "../contexts/LanguageContext";
+import translations from "../translations";
 
 function Navbar() {
   const [activeSection, setActiveSection] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const currentUser = useSelector((state) => state.user?.currentUser);
+  const { language, setLanguage } = useContext(LanguageContext);
+
+  const t = translations[language];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,13 +28,14 @@ function Navbar() {
       });
       setActiveSection(current);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
+
+  const toggleLangDropdown = () => setLangOpen(!langOpen);
 
   return (
     <nav className="navbar">
@@ -39,9 +46,7 @@ function Navbar() {
             <img src={Logo} alt="Logo" className="nav-logo" />
             <span className="logo-ring"></span>
           </div>
-          <span className="brand-text">
-            WERQAMA <span>SACCO</span>
-          </span>
+          <span className="brandd-text">{t.brand}</span>
         </Link>
 
         {/* Hamburger */}
@@ -52,20 +57,18 @@ function Navbar() {
         {/* Nav Links */}
         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
           {[
-            { name: "Home", href: "#hero" },
-            { name: "About", href: "#about" },
-            { name: "Why Us", href: "#whyus" },
-            { name: "Services", href: "#services" },
-            { name: "Membership", href: "#membership" },
-            { name: "News", href: "#news" },
-            { name: "Contact", href: "#contact" },
+            { name: t.home, href: "#hero", id: "hero" },
+            { name: t.about, href: "#about", id: "about" },
+            { name: t.whyus, href: "#whyus", id: "whyus" },
+            { name: t.servicesTitle, href: "#services", id: "services" },
+            { name: t.membership, href: "#membership", id: "membership" },
+            { name: t.news, href: "#news", id: "news" },
+            { name: t.contact, href: "#contact", id: "contact" },
           ].map((link) => (
-            <li key={link.name}>
+            <li key={link.id}>
               <a
                 href={link.href}
-                className={
-                  activeSection === link.href.substring(1) ? "active" : ""
-                }
+                className={activeSection === link.id ? "active" : ""}
                 onClick={closeMenu}
               >
                 {link.name}
@@ -75,8 +78,39 @@ function Navbar() {
 
           <li>
             <Link to="/login" className="login-btn">
-              login
+              {t.login}
             </Link>
+          </li>
+
+          <li>
+            {/* Language Dropdown */}
+            <div className="lang-switcher">
+              <button onClick={toggleLangDropdown} className="lang-btn">
+                {language === "en" ? "EN" : "AM"} <FaChevronDown className="chevron" />
+              </button>
+              {langOpen && (
+                <ul className="lang-menu">
+                  <li
+                    className={language === "en" ? "active" : ""}
+                    onClick={() => {
+                      setLanguage("en");
+                      setLangOpen(false);
+                    }}
+                  >
+                    English
+                  </li>
+                  <li
+                    className={language === "am" ? "active" : ""}
+                    onClick={() => {
+                      setLanguage("am");
+                      setLangOpen(false);
+                    }}
+                  >
+                    Amharic
+                  </li>
+                </ul>
+              )}
+            </div>
           </li>
         </ul>
       </div>

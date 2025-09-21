@@ -23,7 +23,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Routes
-router.post('/apply', protect, memberOnly, upload.array('documents'), applyLoan);
+// router.post('/apply', protect, memberOnly, upload.array('documents'), applyLoan);
+router.post('/apply', protect, memberOnly, upload.single('guaranteeDocument'), applyLoan);
 router.get('/my-loans', protect, memberOnly, getMyLoans);
 router.get('/all', protect, authorizeRoles('admin'), getAllLoans);
 router.put('/:id/approve', protect, authorizeRoles('admin'), approveLoan);

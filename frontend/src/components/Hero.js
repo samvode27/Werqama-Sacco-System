@@ -1,12 +1,17 @@
 // src/components/Hero.js
+import React, { useEffect, useContext } from "react";
+import { Container, Row, Col, Carousel } from "react-bootstrap";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { Link } from "react-router-dom";
+import "../styles/Hero.css";
+import { LanguageContext } from "../contexts/LanguageContext";
+import translations from "../translations";
 
-import React, { useEffect } from 'react';
-import { Container, Row, Col, Carousel } from 'react-bootstrap';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-import { Link } from 'react-router-dom';
-import '../styles/Hero.css'
 function Hero() {
+  const { language } = useContext(LanguageContext);
+  const t = translations[language];
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -19,42 +24,57 @@ function Hero() {
       <Container className="text-center text-white position-relative pb-5">
         <Row className="align-items-center">
           <Col md={6} className="mb-4 mb-md-0" data-aos="fade-right">
-            <h1 className="display-4 fw-bold gradient-text text-start">
-              Empowering Your Financial Future
+            <h1 className="display-4 fw-bold heroTitle text-start">
+              {t.heroTitle}
             </h1>
-            <p className="lead mt-3 text-start">
-              Join WERQAMA SACCO to save, grow, and secure your financial future with trusted services,
-              flexible loans, and community support.
-            </p>
+            <p className="lead mt-3 text-start">{t.heroSubtitle}</p>
 
             <div className="mt-4 text-start">
               <Link to="/register" className="cta-btn">
-                Get Started
+                {t.heroCTA}
               </Link>
             </div>
           </Col>
+
           <Col md={6} data-aos="fade-left">
-            <div className=" p-0 rounded-4">
+            <div className="p-0 rounded-4">
               <Carousel fade controls={false} indicators={false} interval={3500}>
                 <Carousel.Item>
-                  <img src={require('../assets/news1.jpg')} alt="Saving" style={{ height: '100%', width: '400px' }} />
+                  <img
+                    src={require("../assets/news1.jpg")}
+                    alt="Saving"
+                    style={{ height: "100%", width: "400px" }}
+                  />
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img src={require('../assets/finance.webp')} alt="Finance" style={{ height: '500px', width: '400px' }} />
+                  <img
+                    src={require("../assets/finance.webp")}
+                    alt="Finance"
+                    style={{ height: "500px", width: "400px" }}
+                  />
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img src={require('../assets/teamworking.jpeg')} alt="Teamwork" style={{ height: '500px', width: '400px' }} />
+                  <img
+                    src={require("../assets/teamworking.jpeg")}
+                    alt="Teamwork"
+                    style={{ height: "500px", width: "400px" }}
+                  />
                 </Carousel.Item>
               </Carousel>
-
             </div>
           </Col>
         </Row>
       </Container>
 
-      {/* Blob Divider moved outside Container and to back */}
-      <div className="blob-divider position-absolute w-100" style={{ bottom: -75, zIndex: 1 }}>
-        <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+      {/* Blob Divider */}
+      <div
+        className="blob-divider position-absolute w-100"
+        style={{ bottom: -75, zIndex: 1 }}
+      >
+        <svg
+          viewBox="0 0 1440 320"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             fill="#ffffffff"
             fillOpacity="1"

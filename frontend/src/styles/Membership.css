@@ -1,5 +1,5 @@
 .membership-section {
-  background: linear-gradient(#041a3e);
+  background: linear-gradient(135deg, #985b05, #a37604);
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -8,12 +8,19 @@
 
 /* Gradient heading */
 .section-title {
-  background: linear-gradient(90deg, #ffffff, #d1e8ff);
+  background: linear-gradient(90deg, #c2bc0a);
+  font-size: 2rem;
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
+
+.sectionn-subtitle{
+  color: rgb(226, 222, 222);
+  font-size: 1.1rem;
+}
+
 .top-wave{
   margin-bottom: -180px;
 }
@@ -45,22 +52,21 @@
   animation-delay: 4s;
 }
 
-.btn {
+.btnn {
   display: inline-block;
-  background: linear-gradient(90deg, #353be5, #3f51b5);
+  background: linear-gradient(90deg, #ca8205);
   color: #fff;
   font-weight: 600;
   padding: 0.8rem 2rem;
   border-radius: 30px;
   text-decoration: none;
   font-size: 1rem;
-  box-shadow: 0 5px 15px rgba(53, 59, 229, 0.4);
+  box-shadow: 0 2px 6px rgba(#a19c09);
   transition: all 0.3s ease;
 }
 
-.btn:hover {
-  background: linear-gradient(90deg, #2c32c7, #2a3ca5);
-  box-shadow: 0 8px 20px rgba(53, 59, 229, 0.6);
+.btnn:hover {
+  background: #da8b03;
   transform: translateY(-2px);
 }
 
@@ -89,7 +95,7 @@
 
 .glass-card:hover {
   transform: translateY(-12px) scale(1.03);
-  background: #0b40e0;
+  background: #cb7607;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
@@ -115,7 +121,7 @@
 .glass-icon {
   font-size: 30px;
   background: linear-gradient(135deg, #ffffff, #e8f4ff);
-  color: #0d6efd;
+  color: #c2bc0a;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -129,171 +135,13 @@
 
 .glass-card:hover .glass-icon {
   transform: scale(1.1);
-  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.5);
-}
-
-/* Timeline */
-.timeline {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 30px;
-  margin-top: 50px;
-}
-
-.timeline-step {
-  text-align: center;
-  color: #fff;
-  max-width: 160px;
-  position: relative;
-}
-
-.timeline-step .circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #fff, #d1e8ff);
-  color: #0d6efd;
-  font-weight: bold;
-  font-size: 1.3rem;
-  margin: 0 auto 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  transition: transform 0.3s ease;
-}
-
-.timeline-step .circle:hover {
-  transform: scale(1.1) rotate(10deg);
-}
-
-/* Button */
-.btn-light {
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  font-size: 1.1rem;
-}
-
-.btn-light:hover {
-  transform: scale(1.08);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.5);
-}
-
-/* Timeline container */
-.timeline {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* center everything on small screens */
-  position: relative;
-  padding-left: 0;
-}
-
-/* Vertical line (mobile view) */
-.timeline::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, #007bff, #00d4ff);
-  border-radius: 2px;
-}
-
-/* Each step */
-.timeline-step {
-  display: flex;
-  flex-direction: column; /* stack icon + text */
-  align-items: center;
-  margin-bottom: 2rem;
-  position: relative;
-  text-align: center;
-  z-index: 1;
-}
-
-/* Circle with icons */
-.timeline-step .circle {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #007bff, #00d4ff);
-  color: white;
-  font-size: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Hover effect */
-.timeline-step:hover .circle {
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7);
-}
-
-/* Step content */
-.step-content {
-  max-width: 250px;
-  text-align: center; /* center text under icon */
-}
-
-.step-title {
-  font-weight: 600;
-  color: #007bff;
-  margin-bottom: 5px;
-}
-
-.step-text {
-  font-size: 0.9rem;
-  color: #bcbbbb;
-}
-
-/* Responsive - horizontal on tablets/desktops */
-@media (min-width: 768px) {
-  .timeline {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .timeline::before {
-    top: 30px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    width: 100%;
-    transform: none;
-    background: linear-gradient(90deg, #007bff, #00d4ff);
-  }
-
-  .timeline-step {
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 0;
-    text-align: center;
-    flex: 1;
-  }
-
-  .timeline-step .circle {
-    margin-bottom: 15px;
-  }
-
-  .step-content {
-    max-width: 220px;
-  }
+  box-shadow: 0 12px 30px rgba(225, 167, 116, 0.5);
+  color: #c88004;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .glass-card {
     padding: 1.5rem;
-  }
-  .timeline {
-    flex-direction: column;
-    align-items: center;
   }
 }
