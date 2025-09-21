@@ -14,7 +14,5 @@ router.post('/reset-password', resetPassword);
 
 router.get('/me', protect, getMe);
 
-router.post('/fayda/initiate', initiateFaydaAuth);
-router.post('/fayda/verify', verifyFaydaAuth);
 
 export default router;
