@@ -144,8 +144,8 @@ const LoanApplicationForm = () => {
       <Form onSubmit={handleSubmit} className='mb-4'>
         <Row className="g-3">
           {/* Personal Info */}
-          <Col md={6}><Form.Control name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} required /></Col>
-          <Col md={6}><Form.Control name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} required /></Col>
+          <Col md={4}><Form.Control name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} required /></Col>
+          <Col md={4}><Form.Control name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} required /></Col>
           <Col md={4}><Form.Control name="age" type="number" placeholder="Age" value={formData.age} onChange={handleChange} required /></Col>
           <Col md={4}>
             <Form.Select name="gender" value={formData.gender} onChange={handleChange} required>
@@ -163,10 +163,10 @@ const LoanApplicationForm = () => {
               <option>Other</option>
             </Form.Select>
           </Col>
-          <Col md={6}><Form.Control name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required /></Col>
-          <Col md={6}><Form.Control name="address.city" placeholder="City" value={formData.address.city} onChange={handleChange} required /></Col>
+          <Col md={4}><Form.Control name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required /></Col>
+          <Col md={4}><Form.Control name="address.city" placeholder="City" value={formData.address.city} onChange={handleChange} required /></Col>
           <Col md={4}><Form.Control name="address.subCity" placeholder="Sub-city" value={formData.address.subCity} onChange={handleChange} required /></Col>
-          <Col md={2}><Form.Control name="address.district" placeholder="District" value={formData.address.district} onChange={handleChange} required /></Col>
+          <Col md={4}><Form.Control name="address.district" placeholder="District" value={formData.address.district} onChange={handleChange} required /></Col>
 
           {/* Loan Info */}
           <Col md={6}><Form.Control name="loanAmount" type="number" placeholder="Loan Amount" value={formData.loanAmount} onChange={handleChange} required /></Col>

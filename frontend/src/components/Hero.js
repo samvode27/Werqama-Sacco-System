@@ -41,23 +41,20 @@ function Hero() {
               <Carousel fade controls={false} indicators={false} interval={3500}>
                 <Carousel.Item>
                   <img
-                    src={require("../assets/news1.jpg")}
+                    src={require("../assets/c.jpg")}
                     alt="Saving"
-                    style={{ height: "100%", width: "400px" }}
                   />
                 </Carousel.Item>
                 <Carousel.Item>
                   <img
-                    src={require("../assets/finance.webp")}
+                    src={require("../assets/d.jpg")}
                     alt="Finance"
-                    style={{ height: "500px", width: "400px" }}
                   />
                 </Carousel.Item>
                 <Carousel.Item>
                   <img
-                    src={require("../assets/teamworking.jpeg")}
+                    src={require("../assets/e.jpg")}
                     alt="Teamwork"
-                    style={{ height: "500px", width: "400px" }}
                   />
                 </Carousel.Item>
               </Carousel>

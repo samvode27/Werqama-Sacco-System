@@ -51,6 +51,43 @@
   height: auto;
 }
 
+/* === Responsive Carousel Image Styles === */
+.hero .carousel-item img {
+  width: 100%;
+  max-width: 420px;       /* controls how large the image can grow */
+  height: auto;           /* keeps proportions */
+  object-fit: cover;      /* no stretching or squishing */
+  border-radius: 20px;    /* smooth rounded corners */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.4s ease;
+}
+
+.hero .carousel-item img:hover {
+  transform: scale(1.03); /* subtle zoom on hover */
+}
+
+/* Center the carousel horizontally */
+.hero .carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Adjust for tablets */
+@media (max-width: 992px) {
+  .hero .carousel-item img {
+    max-width: 350px;
+  }
+}
+
+/* Adjust for small devices (phones) */
+@media (max-width: 576px) {
+  .hero .carousel-item img {
+    max-width: 280px;
+  }
+}
+
+
 /* Responsive */
 @media (max-width: 992px) {
   .hero {
@@ -86,3 +123,5 @@
 html {
   scroll-behavior: smooth;
 }
+
+

@@ -61,7 +61,7 @@ const translations = {
     membershipSubtitle: "Unlock access to loans, savings, and a supportive community.",
     membersActive: "Active Members",
     membersDesc: "Be part of a growing family securing financial freedom.",
-    loansDisbursed: "Loans Disbursed",
+    loansDisbursed: "Loans Granted",
     loansDesc: "Supporting businesses & personal goals affordably.",
     bankDetailsTitle: "Bank Details",
     bankDetails: (

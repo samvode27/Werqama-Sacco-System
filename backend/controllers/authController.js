@@ -1,10 +1,9 @@
 import asyncHandler from 'express-async-handler';
+import axios from 'axios';
 import User from '../models/User.js';
 import { sendEmail } from '../utils/emailSender.js';
 import { isStrongPassword } from '../utils/passwordValidator.js';
 import MembershipApplication from '../models/MembershipApplication.js';
-import { sendOtpToFayda, verifyFaydaOtp } from '../utils/faydaService.js';
-import FaydaSession from '../models/FaydaSession.js';
 
 export const register = asyncHandler(async (req, res) => {
   try {
@@ -242,5 +241,18 @@ export const getMe = asyncHandler(async (req, res) => {
 });
 
 
+export const initiateFaydaAuth = asyncHandler(async (req, res) => {
+  const { fcn } = req.body; // Fayda Card Number
 
+  try {
+    const response = await axios.post('https://fayda-auth.vercel.app/api/fayda/otp/initiate', { fcn });
 
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error('Fayda initiation error:', error.response?.data || error.message);
+    res.status(error.response?.status || 500).json({
+      success: false,
+      message: error.response?.data?.message || 'Fayda initiation failed',
+    });
+  }
+});

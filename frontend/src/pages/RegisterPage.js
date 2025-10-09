@@ -6,11 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import "../styles/Auth.css";
-import Logo from "../assets/logo.jpg"; // <-- use your logo
+import Logo from "../assets/logo.jpg"; // Your logo
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1); // 1 = Registration, 2 = OTP Verification
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -18,15 +18,13 @@ const RegisterPage = () => {
     email: "",
     password: "",
     otp: "",
+    fcn: "", // Optional Fayda Card Number
   });
 
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
+  const [errors, setErrors] = useState({});
   const [passwordVisible, setPasswordVisible] = useState(false);
+
+  // Password criteria for display
   const [passwordCriteria, setPasswordCriteria] = useState({
     uppercase: false,
     lowercase: false,
@@ -35,9 +33,11 @@ const RegisterPage = () => {
     specialChar: false,
   });
 
+  // ---------------- Validation Functions ----------------
   const validateName = (value) => {
     if (!value.trim()) return "Full name is required";
-    if (!/^[A-Za-z\s]+$/.test(value)) return "Name can only contain letters and spaces";
+    if (!/^[A-Za-zÀ-ÿ\s'-]+$/.test(value))
+      return "Name can only contain letters, spaces, hyphens or apostrophes";
     if (value.trim().length < 3) return "Name must be at least 3 characters";
     return "";
   };
@@ -54,16 +54,13 @@ const RegisterPage = () => {
     return "";
   };
 
+  // ---------------- Input Change Handler ----------------
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    if (name === "name") {
-      setErrors((prev) => ({ ...prev, name: validateName(value) }));
-    }
-    if (name === "email") {
-      setErrors((prev) => ({ ...prev, email: validateEmail(value) }));
-    }
+    if (name === "name") setErrors((prev) => ({ ...prev, name: validateName(value) }));
+    if (name === "email") setErrors((prev) => ({ ...prev, email: validateEmail(value) }));
     if (name === "password") {
       setErrors((prev) => ({ ...prev, password: validatePassword(value) }));
       setPasswordCriteria({
@@ -76,10 +73,10 @@ const RegisterPage = () => {
     }
   };
 
+  // ---------------- Handle Registration ----------------
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Final validation check
     const nameError = validateName(formData.name);
     const emailError = validateEmail(formData.email);
     const passwordError = validatePassword(formData.password);
@@ -92,7 +89,13 @@ const RegisterPage = () => {
 
     setLoading(true);
     try {
-      const { data } = await api.post("/auth/register", formData);
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        fcn: formData.fcn || undefined, // Optional Fayda FCN
+      };
+      const { data } = await api.post("/auth/register", payload);
       toast.success(data.message || "Registered! OTP sent to your email.");
       setStep(2);
     } catch (err) {
@@ -102,9 +105,11 @@ const RegisterPage = () => {
     }
   };
 
+  // ---------------- Handle OTP Verification ----------------
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     if (!formData.otp) return toast.error("Enter OTP");
+
     setLoading(true);
     try {
       const { data } = await api.post("/auth/verify-otp", {
@@ -120,11 +125,10 @@ const RegisterPage = () => {
     }
   };
 
-  // ✅ NEW: Resend OTP
+  // ---------------- Resend OTP ----------------
   const handleResendOTP = async () => {
-    if (!formData.email) {
-      return toast.error("Email missing. Please register again.");
-    }
+    if (!formData.email) return toast.error("Email missing. Please register again.");
+
     setLoading(true);
     try {
       const { data } = await api.post("/auth/resend-otp", { email: formData.email });
@@ -141,12 +145,13 @@ const RegisterPage = () => {
       <ToastContainer position="top-center" autoClose={3000} theme="colored" />
       <div className="auth-wrapper">
         <div className="auth-container">
-          {/* Logo Section */}
+          {/* Logo */}
           <div className="logo-container">
             <img src={Logo} alt="Werqama Sacco Logo" className="auth-logo" />
             <h4 className="brand-title">WERQAMA SACCOS Ltd.</h4>
           </div>
 
+          {/* ---------------- Step 1: Registration ---------------- */}
           {step === 1 && (
             <>
               <h2 className="mb-4">Create Account</h2>
@@ -192,10 +197,10 @@ const RegisterPage = () => {
                 {/* Password Criteria */}
                 <ul className="password-criteria">
                   <li className={passwordCriteria.uppercase ? "valid" : "invalid"}>
-                    {passwordCriteria.uppercase ? <FaCheckCircle /> : <FaTimesCircle />} Uppercase Letter
+                    {passwordCriteria.uppercase ? <FaCheckCircle /> : <FaTimesCircle />} Uppercase
                   </li>
                   <li className={passwordCriteria.lowercase ? "valid" : "invalid"}>
-                    {passwordCriteria.lowercase ? <FaCheckCircle /> : <FaTimesCircle />} Lowercase Letter
+                    {passwordCriteria.lowercase ? <FaCheckCircle /> : <FaTimesCircle />} Lowercase
                   </li>
                   <li className={passwordCriteria.number ? "valid" : "invalid"}>
                     {passwordCriteria.number ? <FaCheckCircle /> : <FaTimesCircle />} Number
@@ -208,19 +213,17 @@ const RegisterPage = () => {
                   </li>
                 </ul>
 
-                <button type="submit" className="bbttnn w-100" disabled={loading}>
+                <button type="submit" className="bbttnn w-100 mt-3" disabled={loading}>
                   {loading ? "Registering..." : "Register"}
                 </button>
               </form>
               <p className="mt-3 text-center">
-                Already have an account?{" "}
-                <Link to="/login" className="link-text">
-                  Login
-                </Link>
+                Already have an account? <Link to="/login" className="link-text">Login</Link>
               </p>
             </>
           )}
 
+          {/* ---------------- Step 2: OTP Verification ---------------- */}
           {step === 2 && (
             <>
               <h2 className="mb-4">Verify OTP</h2>

@@ -384,7 +384,7 @@ const BecomeMembershipFormPage = () => {
             {renderPersonFields('witnesses', formData.witnesses)}
 
             {formData.witnesses.length < 3 && (
-              <Button variant="outline-primary" size="sm" className="mt-2" onClick={() => setFormData(prev => ({ ...prev, witnesses: [...prev.witnesses, { ...emptyPerson }] }))}>
+              <Button variant="outline-primary" size="sm" className="mt-2" style={{color: "black", fontWeight: "bold", fontSize: "15px"}} onClick={() => setFormData(prev => ({ ...prev, witnesses: [...prev.witnesses, { ...emptyPerson }] }))}>
                 + Add Witness
               </Button>
             )}
