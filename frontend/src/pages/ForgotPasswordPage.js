@@ -93,7 +93,7 @@ const ForgotPasswordPage = () => {
       {/* ✅ Toast container */}
       <ToastContainer position="top-center" autoClose={3000} theme="colored" />
       
-      <div className="p-4 border rounded shadow-sm" style={{ width: '360px', maxWidth: '100%' }}>
+      <div className="formmmm p-4 border rounded shadow-sm" style={{ width: '360px', maxWidth: '100%' }}>
         <h4 className="mb-4 text-center">{codeSent ? 'Reset Password' : 'Forgot Password'}</h4>
 
         {!codeSent ? (
@@ -115,7 +115,7 @@ const ForgotPasswordPage = () => {
           </form>
         ) : (
           <form onSubmit={handleVerifyCode}>
-            <div className="mb-3 text-center">
+            <div className="formmmm mb-3 text-center">
               <label className="form-label">Enter 6-digit code</label>
               <div className="d-flex justify-content-between otp-inputs">
                 {otp.map((digit, idx) => (

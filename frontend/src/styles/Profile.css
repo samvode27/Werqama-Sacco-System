@@ -72,3 +72,13 @@
     border-radius: 6px;
     padding: 6px 10px;
 }
+
+.fade-toggle {
+  transition: all 0.3s ease;
+  opacity: 1;
+}
+.fade-toggle.hidden {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+}

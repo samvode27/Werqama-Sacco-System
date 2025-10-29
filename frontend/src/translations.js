@@ -183,7 +183,7 @@ const translations = {
     membershipSubtitle: "ብድር፣ ቁጠባ እና የድጋፍ ማህበረሰብ መድረስን ክፈት።",
     membersActive: "ንዑስ አባሎች",
     membersDesc: "የፋይናንስ ነፃነትን በማስቀመጥ በትልቅ ቤተሰብ ይካተቱ።",
-    loansDisbursed: "ብድሮች ተከፍለዋል",
+    loansDisbursed: "ብድሮች ተሰጥተዋል",
     loansDesc: "ንግድ እና የግል አሳማኝ እቅዶችን ይደግፋሉ።",
     bankDetailsTitle: "የባንክ ዝርዝሮች",
     bankDetails: (

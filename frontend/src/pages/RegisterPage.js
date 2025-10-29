@@ -99,6 +99,7 @@ const RegisterPage = () => {
       toast.success(data.message || "Registered! OTP sent to your email.");
       setStep(2);
     } catch (err) {
+      console.error("🔥 Register error:", err.response || err.message);
       toast.error(err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);

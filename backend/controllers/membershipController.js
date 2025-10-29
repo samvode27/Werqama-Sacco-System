@@ -194,17 +194,27 @@ export const updateMember = asyncHandler(async (req, res) => {
   res.json({ message: 'Member updated successfully', membership });
 });
 
-
 export const deleteMember = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  // Delete membership applications
-  await MembershipApplication.deleteMany({ member: id });
-  // Delete user
-  await User.findByIdAndDelete(id);
+  // Find membership
+  const membership = await MembershipApplication.findById(id);
+  if (!membership) {
+    res.status(404);
+    throw new Error('Membership not found');
+  }
 
-  res.json({ message: 'Member deleted successfully' });
+  // Delete linked user if needed
+  if (membership.member) {
+    await User.findByIdAndDelete(membership.member);
+  }
+
+  // Delete membership record
+  await MembershipApplication.findByIdAndDelete(id);
+
+  res.json({ message: 'Membership and user deleted successfully' });
 });
+
 
 
 

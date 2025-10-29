@@ -12,6 +12,7 @@ const ProfilePage = () => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [passwords, setPasswords] = useState({ currentPassword: '', newPassword: '' });
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
 
   // Safe fetch profile
   useEffect(() => {
@@ -184,30 +185,63 @@ const ProfilePage = () => {
 
             <Card className="profile-card p-4">
               <h5 className="gradient-text mb-3">Change Password</h5>
-              <Form onSubmit={handlePasswordChange}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Current Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={passwords.currentPassword}
-                    onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
-                    required
-                  />
-                </Form.Group>
 
-                <Form.Group className="mb-3">
-                  <Form.Label>New Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={passwords.newPassword}
-                    onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-                    required
-                  />
-                </Form.Group>
+              {!showPasswordSection ? (
+                <button
+                  type="button"
+                  className="golden-btn"
+                  onClick={() => setShowPasswordSection(true)}
+                >
+                  Change Password
+                </button>
+              ) : (
+                <>
+                  <Form onSubmit={handlePasswordChange}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Current Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={passwords.currentPassword}
+                        onChange={(e) =>
+                          setPasswords({ ...passwords, currentPassword: e.target.value })
+                        }
+                        required
+                      />
+                    </Form.Group>
 
-                <button type="submit" className="golden-btn">Change Password</button>
-              </Form>
+                    <Form.Group className="mb-3">
+                      <Form.Label>New Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        value={passwords.newPassword}
+                        onChange={(e) =>
+                          setPasswords({ ...passwords, newPassword: e.target.value })
+                        }
+                        required
+                      />
+                    </Form.Group>
+
+                    <Row>
+                      <Col md={6}>
+                        <button type="submit" className="golden-btn w-100">
+                          Save Password
+                        </button>
+                      </Col>
+                      <Col md={6}>
+                        <button
+                          type="button"
+                          className="btn btn-secondary w-100"
+                          onClick={() => setShowPasswordSection(false)}
+                        >
+                          Cancel
+                        </button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </>
+              )}
             </Card>
+
           </Col>
         </Row>
       </Container>

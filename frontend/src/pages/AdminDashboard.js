@@ -27,12 +27,12 @@ const AdminDashboard = () => {
   };
 
   const dashboardFeatures = [
+    { title: 'Membership Applications', subtitle: 'Approve/Reject', icon: <FaUserPlus />, action: () => navigate('/admin-membership-approvals') },
     { title: 'Manage Loans', subtitle: 'Approve / Reject', icon: <FaUserShield />, action: () => navigate('/admin-loans') },
     { title: 'View Savings', subtitle: 'Track Member Payments', icon: <FaPiggyBank />, action: () => navigate('/admin-savings') },
-    { title: 'Post News', subtitle: 'Inform All Members', icon: <FaBullhorn />, action: () => navigate('/create-news') },
     { title: 'Manage Members', subtitle: 'View / Update / Remove', icon: <FaUsers />, action: () => navigate('/admin/manage-members') },
+    { title: 'Post News', subtitle: 'Inform All Members', icon: <FaBullhorn />, action: () => navigate('/create-news') },
     { title: 'My Profile', subtitle: 'Update Admin Info', icon: <FaUserCog />, action: () => navigate('/profile') },
-    { title: 'Membership Applications', subtitle: 'Approve/Reject', icon: <FaUserPlus />, action: () => navigate('/admin-membership-approvals') },
   ];
 
   return (

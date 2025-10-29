@@ -20,7 +20,7 @@ import paymentRoutes from './routes/payment.js';
 import membershipRoutes from './routes/membershipRoutes.js';
 import loanApplicationRoutes from './routes/loanApplicationRoutes.js';
 import newsletterRoutes from "./routes/newsletterRoutes.js";
-import statsRoutes from './routes/stats.js';
+import statsRoutes from './routes/statsRoutes.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -35,14 +35,21 @@ const __dirname = path.dirname(__filename);
 // ✅ CORS configuration for dev & production
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:3000",
-  "http://localhost:3000"
+  "http://localhost:3000",
+  "https://werqama-sacco-frontend.vercel.app"  // ✅ Add your Vercel domain
 ];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
 app.options('*', cors());
@@ -68,7 +75,7 @@ app.use('/api/savings', savingRoutes);
 app.use('/api/loans', loanRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/profile', profileRoutes);
-app.use('/api/payment', paymentRoutes); 
+app.use('/api/payment', paymentRoutes);
 app.use('/api/memberships', membershipRoutes);
 app.use('/api/loan-applications', loanApplicationRoutes);
 app.use("/api/newsletter", newsletterRoutes);

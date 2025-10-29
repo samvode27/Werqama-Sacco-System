@@ -213,7 +213,7 @@ const AdminManageMembersPage = () => {
                     <Form.Label>ID Document</Form.Label>
                     {selectedMember.idDocument && !editMode && (
                       <Image
-                        src={`http://localhost:8080/uploads/idDocuments/${selectedMember.idDocument}`}
+                        src={`${process.env.REACT_APP_API_URL}/uploads/idDocuments/${selectedMember.idDocument}`}
                         alt="ID Document"
                         fluid
                         rounded

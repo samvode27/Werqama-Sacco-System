@@ -141,7 +141,7 @@ const AdminMembershipApprovalPage = () => {
                   <h5>🆔 ID Document:</h5>
                   {selectedApp.idDocument ? (
                     <Image
-                      src={`http://localhost:8080/uploads/${selectedApp.idDocument}`}
+                      src={`${process.env.REACT_APP_API_URL}/uploads/idDocuments/${selectedApp.idDocument}`}
                       alt="ID Document"
                       fluid
                       rounded
