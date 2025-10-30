@@ -82,3 +82,7 @@ This project is licensed under the MIT License – feel free to use and modify i
 Developed by Samuel Setarge – MERN Stack Developer
 GitHub: https://github.com/samvode27
 Email: setarigesamuel@gmail.com
+
+# Admin Login
+email - setarigesamuel@gmail.com
+password - 123456
