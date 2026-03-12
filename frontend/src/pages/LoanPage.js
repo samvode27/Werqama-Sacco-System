@@ -4,7 +4,7 @@ import LoanApplicationForm from '../components/LoanApplicationForm';
 import LoanHistoryTable from '../components/LoanHistoryTable';
 import api from '../api/axios';
 import { useSelector } from 'react-redux';
-import { Card, Row, Col, Spinner, Alert, Button, Collapse } from 'react-bootstrap';
+import { Card, Row, Col, Spinner, Alert, Collapse } from 'react-bootstrap';
 import { CheckCircleFill, XCircleFill, FileEarmarkTextFill } from 'react-bootstrap-icons';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -12,7 +12,6 @@ import 'aos/dist/aos.css';
 const LoanPage = () => {
   const { currentUser } = useSelector((state) => state.user);
 
-  const [membershipStatus, setMembershipStatus] = useState(null);
   const [loanStats, setLoanStats] = useState({ total: 0, approved: 0, rejected: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -27,11 +26,8 @@ const LoanPage = () => {
 
     const fetchData = async () => {
       try {
-        const resStatus = await api.get('/memberships/check');
-        setMembershipStatus(resStatus.data.status);
-
         const resLoans = await api.get('/loans/my-loans', {
-          headers: { Authorization: `Bearer ${currentUser}` },
+          headers: { Authorization: `Bearer ${currentUser.token}` },
         });
 
         const loans = resLoans.data;

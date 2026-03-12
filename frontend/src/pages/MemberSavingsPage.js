@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Card, Row, Col, Table } from 'react-bootstrap';
+import { Container, Card, Row, Col } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Legend } from 'recharts';
 import api from '../api/axios';
 

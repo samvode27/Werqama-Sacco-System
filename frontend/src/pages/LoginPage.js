@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { saccoLogin } from "../redux/apiCalls";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash, FaEnvelope, FaCreditCard } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaEnvelope } from "react-icons/fa";
 import FaydaLogo from "../../src/assets/f.jpg";
 import Logo from "../assets/logo.jpg";
 import FaydaLogin from "../components/FaydaLogin"; // Fayda login component
@@ -29,7 +29,7 @@ const LoginPage = () => {
     }
 
     try {
-      const { token, user } = await saccoLogin(dispatch, { email, password });
+      const { user } = await saccoLogin(dispatch, { email, password });
       if (!user) return;
 
       if (!user.isVerified) {

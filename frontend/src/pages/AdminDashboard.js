@@ -4,16 +4,15 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useNavigate } from 'react-router-dom';
 import { Container, Navbar, Nav } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { logout } from '../redux/adminRedux';
 import {
-  FaUserCog, FaChartBar, FaUsers, FaPiggyBank,
+  FaUserCog, FaUsers, FaPiggyBank,
   FaBullhorn, FaUserShield, FaUserPlus, FaSignOutAlt
 } from 'react-icons/fa';
 import '../styles/AdminDashboard.css';
 
 const AdminDashboard = () => {
-  const { currentUser } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

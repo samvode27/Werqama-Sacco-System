@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../api/axios';
 import {
-    Container, Form, Button, Card, Spinner, Row, Col, Alert, Table, Modal
+    Container, Form, Card, Spinner, Row, Col, Alert, Table, Modal
 } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,7 +33,7 @@ const SavingsPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalImage, setModalImage] = useState(null);
 
-    const fetchSavingsHistory = async () => {
+    const fetchSavingsHistory = useCallback(async () => {
         if (!currentUser || !token) return;
         setLoading(true);
         try {
@@ -49,18 +49,19 @@ const SavingsPage = () => {
                 headers: { Authorization: `Bearer ${token}` },
                 params,
             });
-            setSavings(data);
+
+            setSavings(data.savings);
             setTotalPages(Math.ceil(data.total / limit));
         } catch (err) {
             setError('Failed to load savings history.');
         } finally {
             setLoading(false);
         }
-    };
+    }, [currentUser, token, page, statusFilter, methodFilter, startDate, endDate]);
 
     useEffect(() => {
-        if (currentUser && token) fetchSavingsHistory();
-    }, [currentUser, token, page, statusFilter, methodFilter, startDate, endDate]);
+        fetchSavingsHistory();
+    }, [fetchSavingsHistory]);
 
     const handlePayWithChapa = async () => {
         if (!amount || Number(amount) <= 0) return toast.error('Enter valid amount.');
@@ -234,6 +235,7 @@ const SavingsPage = () => {
                 {/* Savings History */}
                 <div className="container-fluid">
                     <h5 className="mb-3">Savings History</h5>
+                    {error && <Alert variant="danger">{error}</Alert>}
                     <Row className="g-2 mb-3">
                         <Col xs={6} md={2}>
                             <Form.Select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
@@ -301,7 +303,7 @@ const SavingsPage = () => {
                                             <span className={`badge bg-${s.status === 'approved' ? 'success' : s.status === 'pending' ? 'warning' : 'danger'}`}>
                                                 {s.status}
                                             </span>
-                                        </td>   
+                                        </td>
                                         <td>
                                             {s.receipt ? (
                                                 <button

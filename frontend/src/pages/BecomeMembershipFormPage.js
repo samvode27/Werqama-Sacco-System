@@ -21,7 +21,7 @@ const educationLevels = [
 
 const BecomeMembershipFormPage = () => {
   const navigate = useNavigate();
-  const { currentUser } = useSelector((state) => state.user);
+  useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -384,7 +384,7 @@ const BecomeMembershipFormPage = () => {
             {renderPersonFields('witnesses', formData.witnesses)}
 
             {formData.witnesses.length < 3 && (
-              <Button variant="outline-primary" size="sm" className="mt-2" style={{color: "black", fontWeight: "bold", fontSize: "15px"}} onClick={() => setFormData(prev => ({ ...prev, witnesses: [...prev.witnesses, { ...emptyPerson }] }))}>
+              <Button variant="outline-primary" size="sm" className="mt-2" style={{ color: "black", fontWeight: "bold", fontSize: "15px" }} onClick={() => setFormData(prev => ({ ...prev, witnesses: [...prev.witnesses, { ...emptyPerson }] }))}>
                 + Add Witness
               </Button>
             )}
@@ -404,8 +404,15 @@ const BecomeMembershipFormPage = () => {
           </div>
 
           <div className="text-center mt-4">
-            <Button type="submit" disabled={!allStepsCompleted}>
-              Submit Application
+            <Button type="submit" disabled={!allStepsCompleted || submitting}>
+              {submitting ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2"></span>
+                  Submitting...
+                </>
+              ) : (
+                "Submit Application"
+              )}
             </Button>
           </div>
 

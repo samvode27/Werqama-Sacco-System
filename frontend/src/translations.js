@@ -41,7 +41,7 @@ const translations = {
     ],
 
     // Service Section
-    Title: "Our Services",
+    servicesTitle: "Our Services",
     servicesSubtitle: "Empowering our members with savings and loan services tailored to your needs.",
     services: [
       {

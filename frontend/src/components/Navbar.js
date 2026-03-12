@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import "../styles/Navbar.css";
 import Logo from "../assets/logo.jpg";
@@ -11,7 +10,6 @@ function Navbar() {
   const [activeSection, setActiveSection] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const currentUser = useSelector((state) => state.user?.currentUser);
   const { language, setLanguage } = useContext(LanguageContext);
 
   const t = translations[language];

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import { Table, Button, Modal, Form, Badge, Row, Col, Container, Spinner, Card } from 'react-bootstrap';
-import { FaMoneyBillWave, FaUserFriends, FaCrown, FaChartBar, FaChartPie, FaFilePdf, FaFileCsv, FaFilter } from 'react-icons/fa';
+import { FaMoneyBillWave, FaUserFriends, FaCrown, FaChartBar, FaChartPie, FaFilePdf, FaFileCsv } from 'react-icons/fa';
 import moment from 'moment';
-import { saveAs } from 'file-saver';
 import { CSVLink } from 'react-csv';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -35,7 +34,6 @@ const AdminSavingsPage = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [minAmount, setMinAmount] = useState('');
-    const [showForm, setShowForm] = useState(false);
     const [approvedSavings, setApprovedSavings] = useState([]);
     const [pendingSavings, setPendingSavings] = useState([]);
     const [manualForm, setManualForm] = useState({ member: '', amount: '', method: '', receipt: null, note: '' });
@@ -47,8 +45,6 @@ const AdminSavingsPage = () => {
     useEffect(() => {
         fetchSavings(page);
     }, [page]);
-
-    useEffect(() => { filterSavings(); }, [filterStatus, savings]);
 
     const fetchSavings = async (currentPage = page) => {
         try {
@@ -106,7 +102,6 @@ const AdminSavingsPage = () => {
         setPendingSavings(filtered.filter(s => s.status === 'pending' || s.status === 'rejected'));
     };
 
-
     const handleAction = (saving, type) => {
         setSelectedSaving(saving);
         setActionType(type);
@@ -129,21 +124,6 @@ const AdminSavingsPage = () => {
     const statusBadge = (status) => {
         const colors = { approved: 'success', pending: 'warning', rejected: 'danger' };
         return <Badge bg={colors[status] || 'secondary'}>{status.charAt(0).toUpperCase() + status.slice(1)}</Badge>;
-    };
-
-    const handleManualSubmit = async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        Object.entries(manualForm).forEach(([key, value]) => {
-            if (value) formData.append(key, value);
-        });
-        try {
-            await api.post('/savings/manual', formData);
-            fetchSavings();
-            setManualForm({ member: '', amount: '', method: '', receipt: null, note: '' });
-        } catch (err) {
-            console.error('Error adding manual saving:', err.response?.data || err.message);
-        }
     };
 
     const exportPDF = () => {

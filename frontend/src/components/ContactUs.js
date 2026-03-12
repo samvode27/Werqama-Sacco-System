@@ -29,7 +29,7 @@ function ContactUs() {
     setError("");
 
     try {
-      const { data } = await api.post("/contacts", formData);
+      await api.post("/contacts", formData);
       setSuccess(t.contactSuccess);
       setFormData({ name: "", email: "", reason: "", message: "" });
     } catch (err) {

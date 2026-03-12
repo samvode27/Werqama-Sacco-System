@@ -12,12 +12,9 @@ const AdminLoansPage = () => {
     const [statusFilter, setStatusFilter] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedLoan, setSelectedLoan] = useState(null);
-    const [memberHistory, setMemberHistory] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [loanTypeFilter, setLoanTypeFilter] = useState('');
     const [adminNote, setAdminNote] = useState('');
-    const [memberLoanHistory, setMemberLoanHistory] = useState([]);
-    const [loadingHistory, setLoadingHistory] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const loansPerPage = 10;
 
@@ -27,7 +24,7 @@ const AdminLoansPage = () => {
 
     useEffect(() => {
         filterLoans();
-    }, [loans, statusFilter, searchQuery, loanTypeFilter]);
+    }, [loans, statusFilter, searchQuery, loanTypeFilter, filterLoans]);
 
     const fetchLoans = async () => {
         try {
@@ -38,25 +35,9 @@ const AdminLoansPage = () => {
         }
     };
 
-    const fetchMemberHistory = async (memberId) => {
-        try {
-            setLoadingHistory(true);
-            const res = await axios.get(`/api/member-history/${memberId}`);
-            setMemberLoanHistory(res.data);
-        } catch (err) {
-            console.error('Error fetching member loan history:', err);
-            setMemberLoanHistory([]);
-        } finally {
-            setLoadingHistory(false);
-        }
-    };
-
     const openLoanModal = (loan) => {
         setSelectedLoan(loan);
         setShowModal(true);
-        if (loan.memberId) {
-            fetchMemberHistory(loan.memberId);
-        }
     };
 
     const filterLoans = () => {

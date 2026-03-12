@@ -8,9 +8,6 @@ import {
   Navbar,
   Nav,
   Spinner,
-  Alert,
-  Badge,
-  Button,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
@@ -37,7 +34,6 @@ const MemberDashboard = () => {
   const [membershipStatus, setMembershipStatus] = useState(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [analytics, setAnalytics] = useState(null);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     AOS.init({ duration: 800, once: true });
@@ -58,10 +54,7 @@ const MemberDashboard = () => {
       }
     };
 
-    // run immediately
     fetchStatus();
-
-    // auto refresh every 30 seconds
     const interval = setInterval(fetchStatus, 30000);
 
     return () => clearInterval(interval);
@@ -69,6 +62,7 @@ const MemberDashboard = () => {
 
   useEffect(() => {
     if (!currentUser) return;
+
     const fetchAnalytics = async () => {
       try {
         const res = await api.get("/savings/analytics/member");
@@ -77,6 +71,7 @@ const MemberDashboard = () => {
         console.error("Analytics error:", err);
       }
     };
+
     fetchAnalytics();
   }, [currentUser]);
 
@@ -132,27 +127,23 @@ const MemberDashboard = () => {
             <div className="text-center mb-4">
               <Spinner animation="border" />
             </div>
-          ) : error ? (
-            <Alert variant="danger">{error}</Alert>
           ) : (
-            <>
-              <Alert
-                variant={
-                  membershipStatus === 'approved'
-                    ? 'success'
-                    : membershipStatus === 'pending'
-                      ? 'warning'
-                      : 'danger'
-                }
-                className="text-center"
-                data-aos="fade-up"
-              >
-                <strong className="status">Membership Status:</strong>{' '}
-                <span className="text-capitalize fw-bold">
-                  {membershipStatus || 'Not Submitted'}
-                </span>
-              </Alert>
-            </>
+            <Alert
+              variant={
+                membershipStatus === "approved"
+                  ? "success"
+                  : membershipStatus === "pending"
+                  ? "warning"
+                  : "danger"
+              }
+              className="text-center"
+              data-aos="fade-up"
+            >
+              <strong className="status">Membership Status:</strong>{" "}
+              <span className="text-capitalize fw-bold">
+                {membershipStatus || "Not Submitted"}
+              </span>
+            </Alert>
           )}
 
           {/* Highlights */}
@@ -220,7 +211,6 @@ const MemberDashboard = () => {
               </div>
             </div>
           </div>
-
         </Container>
       </div>
     </>

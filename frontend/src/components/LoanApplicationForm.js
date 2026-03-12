@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, Row, Col, Alert, ProgressBar } from 'react-bootstrap';
+import { Form, Card, Row, Col, Alert, ProgressBar } from 'react-bootstrap';
 import axios from '../api/axios';
 import '../styles/LoanForm.css';
 
@@ -105,7 +105,7 @@ const LoanApplicationForm = () => {
         }
       });
 
-      const response = await axios.post('/loans/apply', data, {
+      await axios.post('/loans/apply', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 

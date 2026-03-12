@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
-import { Table, Spinner, Alert, Button, Modal, Badge } from 'react-bootstrap';
+import { Table, Spinner, Alert, Modal } from 'react-bootstrap';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import '../styles/LoanHistoryTable.css';
@@ -14,8 +14,6 @@ const LoanHistoryTable = () => {
   const [error, setError] = useState('');
   const [selectedTimeline, setSelectedTimeline] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [membershipStatus, setMembershipStatus] = useState(null);
-  const [loadingStatus, setLoadingStatus] = useState(true);
 
   useEffect(() => {
     AOS.init({ duration: 800 });
@@ -36,23 +34,6 @@ const LoanHistoryTable = () => {
     };
 
     fetchLoans();
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (!currentUser) return;
-
-    const fetchStatus = async () => {
-      try {
-        const res = await api.get('/memberships/check');
-        setMembershipStatus(res.data.status);
-      } catch (err) {
-        setError('Could not fetch membership status.');
-      } finally {
-        setLoadingStatus(false);
-      }
-    };
-
-    fetchStatus();
   }, [currentUser]);
 
   const openTimelineModal = (timeline) => {

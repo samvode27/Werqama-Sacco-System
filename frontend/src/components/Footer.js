@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -104,10 +104,10 @@ function Footer() {
             <p className="small mb-1"><FaPhoneAlt className="me-2 text" /> {t.phone}</p>
             <p className="small mb-3"><FaEnvelope className="me-2 text" /> {t.email}</p>
             <div className="footer-socials">
-              <a href="#"><FaFacebookF /></a>
-              <a href="#"><FaTwitter /></a>
-              <a href="#"><FaInstagram /></a>
-              <a href="#"><FaLinkedin /></a>
+              <a href="javascript:void(0)"><FaFacebookF /></a>
+              <a href="javascript:void(0)"><FaTwitter /></a>
+              <a href="javascript:void(0)"><FaInstagram /></a>
+              <a href="javascript:void(0)"><FaLinkedin /></a>
             </div>
           </Col>
 
