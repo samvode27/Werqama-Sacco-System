@@ -1,25 +1,35 @@
+// src/utils/faydaService.js
 import axios from "axios";
 
-const FYDA_BASE_URL = process.env.FAYDA_BASE_URL; // WITHOUT /api/fayda
-const FYDA_API_KEY = process.env.FAYDA_API_KEY;
+const FAYDA_BASE_URL = process.env.FAYDA_BASE_URL;
+const FAYDA_API_KEY = process.env.FAYDA_API_KEY;
 
 // 1️⃣ Initiate OTP
 export const initiateFaydaOTP = async (fcn) => {
+  if (!fcn) throw new Error("Fayda card number (fcn) is required");
+
   try {
     const response = await axios.post(
-      `${FYDA_BASE_URL}/api/fayda/otp/initiate`,
+      `${FAYDA_BASE_URL}/api/fayda/otp/initiate`,
       { fcn },
       {
         headers: {
-          "X-API-Key": FYDA_API_KEY,
           "Content-Type": "application/json",
+          "X-API-Key": FAYDA_API_KEY,
         },
+        timeout: 10000
       }
     );
+
+    if (!response.data) throw new Error("Empty response from Fayda");
+
     return response.data;
   } catch (err) {
-    console.error("Fayda initiate error full:", err.response?.data || err.message);
-    throw new Error(err.response?.data?.message || "Fayda OTP initiation failed");
+    if (err.response?.data) {
+      console.error("Fayda API Error:", err.response.data);
+      throw new Error(err.response.data.message || "Fayda API Error");
+    }
+    throw new Error(err.message);
   }
 };
 
@@ -27,33 +37,36 @@ export const initiateFaydaOTP = async (fcn) => {
 export const verifyFaydaOTP = async ({ transactionId, otp, fcn }) => {
   try {
     const response = await axios.post(
-      `${FYDA_BASE_URL}/api/fayda/otp/verify`,
+      `${FAYDA_BASE_URL}/api/fayda/otp/verify`,
       { transactionId, otp, fcn },
       {
         headers: {
-          "X-API-Key": FYDA_API_KEY,
           "Content-Type": "application/json",
-        },
+          "X-API-Key": FAYDA_API_KEY,
+        }
       }
     );
+
     return response.data;
   } catch (err) {
-    console.error("Fayda verify error full:", err.response?.data || err.message);
-    throw new Error(err.response?.data?.message || "Fayda OTP verification failed");
+    if (err.response?.data) {
+      console.error("Fayda Verify Error:", err.response.data);
+      return { success: false, message: err.response.data.message };
+    }
+    return { success: false, message: err.message };
   }
 };
 
-// 3️⃣ Get Fayda user info (optional)
+// Optional: fetch Fayda user data
 export const getFaydaUser = async (fcn) => {
   try {
-    const response = await axios.get(`${FYDA_BASE_URL}/api/fayda/user/${fcn}`, {
-      headers: {
-        "X-API-Key": FYDA_API_KEY,
-      },
+    const response = await axios.get(`${FAYDA_BASE_URL}/api/users/${fcn}`, {
+      headers: { "x-api-key": FAYDA_API_KEY },
+      responseType: "json",
     });
     return response.data;
   } catch (err) {
-    console.error("Fayda get user error:", err.response?.data || err.message);
+    console.error("Fayda Get User Error:", err.message);
     return null;
   }
 };

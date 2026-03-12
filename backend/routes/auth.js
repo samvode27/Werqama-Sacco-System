@@ -21,6 +21,4 @@ router.post("/fayda/verify", verifyFaydaAuth);
 
 
 
-
-
-export default router;
+export default router;                                                                              

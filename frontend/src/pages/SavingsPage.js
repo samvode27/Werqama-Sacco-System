@@ -288,7 +288,6 @@ const SavingsPage = () => {
                                     <th>Date</th>
                                     <th>Amount</th>
                                     <th>Status</th>
-                                    <th>Method</th>
                                     <th>Receipt</th>
                                     <th>Note</th>
                                 </tr>
@@ -302,8 +301,7 @@ const SavingsPage = () => {
                                             <span className={`badge bg-${s.status === 'approved' ? 'success' : s.status === 'pending' ? 'warning' : 'danger'}`}>
                                                 {s.status}
                                             </span>
-                                        </td>
-                                        <td>{s.method}</td>
+                                        </td>   
                                         <td>
                                             {s.receipt ? (
                                                 <button

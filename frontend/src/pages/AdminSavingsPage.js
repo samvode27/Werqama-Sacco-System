@@ -39,30 +39,37 @@ const AdminSavingsPage = () => {
     const [approvedSavings, setApprovedSavings] = useState([]);
     const [pendingSavings, setPendingSavings] = useState([]);
     const [manualForm, setManualForm] = useState({ member: '', amount: '', method: '', receipt: null, note: '' });
+    const [page, setPage] = useState(1);
+    const [limit] = useState(20);
+    const [total, setTotal] = useState(0);
+    const totalPages = Math.ceil(total / limit);
 
-    useEffect(() => { fetchSavings(); }, []);
+    useEffect(() => {
+        fetchSavings(page);
+    }, [page]);
+
     useEffect(() => { filterSavings(); }, [filterStatus, savings]);
 
-    const fetchSavings = async () => {
+    const fetchSavings = async (currentPage = page) => {
         try {
             setLoading(true);
-            const res = await api.get('/savings');
-            const data = Array.isArray(res.data) ? res.data : res.data.savings;
 
-            // ✅ Save full savings array
+            const res = await api.get(`/savings?page=${currentPage}&limit=${limit}`);
+
+            const data = res.data.savings || [];
+
             setSavings(data);
+            setFilteredSavings(data);
 
-            // ✅ Split by status
             setApprovedSavings(data.filter(s => s.status === 'approved'));
             setPendingSavings(data.filter(s => s.status === 'pending' || s.status === 'rejected'));
 
-            // ✅ Initialize filteredSavings
-            setFilteredSavings(data);
+            setTotal(res.data.total || 0);
+            setPage(res.data.page || 1);
+
         } catch (err) {
             console.error('Error fetching savings:', err);
             setSavings([]);
-            setApprovedSavings([]);
-            setPendingSavings([]);
             setFilteredSavings([]);
         } finally {
             setLoading(false);
@@ -379,7 +386,6 @@ const AdminSavingsPage = () => {
                                 <th>#</th>
                                 <th>Member</th>
                                 <th>Amount</th>
-                                <th>Method</th>
                                 <th>Date</th>
                                 <th>Status</th>
                                 <th>Receipt</th>
@@ -392,7 +398,6 @@ const AdminSavingsPage = () => {
                                     <td>{index + 1}</td>
                                     <td>{saving.member?.name}</td>
                                     <td>{saving.amount} ETB</td>
-                                    <td>{saving.method}</td>
                                     <td>{moment(saving.date).format('LLL')}</td>
                                     <td>{statusBadge(saving.status)}</td>
                                     <td>
@@ -428,6 +433,32 @@ const AdminSavingsPage = () => {
                     </Table>
                 </div>
             )}
+
+            <Row className="mb-5 mt-3">
+                <Col className="d-flex justify-content-right align-items-center gap-3">
+
+                    <button
+                        variant="secondary"
+                        disabled={page === 1}
+                        onClick={() => setPage(page - 1)}
+                    >
+                        Previous
+                    </button>
+
+                    <span className="fw-bold">
+                        Page {page} of {totalPages}
+                    </span>
+
+                    <button
+                        variant="secondary"
+                        disabled={page === totalPages}
+                        onClick={() => setPage(page + 1)}
+                    >
+                        Next
+                    </button>
+
+                </Col>
+            </Row>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>

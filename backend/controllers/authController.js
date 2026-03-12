@@ -240,19 +240,3 @@ export const getMe = asyncHandler(async (req, res) => {
   });
 });
 
-
-export const initiateFaydaAuth = asyncHandler(async (req, res) => {
-  const { fcn } = req.body; // Fayda Card Number
-
-  try {
-    const response = await axios.post('https://fayda-auth.vercel.app/api/fayda/otp/initiate', { fcn });
-
-    res.status(200).json(response.data);
-  } catch (error) {
-    console.error('Fayda initiation error:', error.response?.data || error.message);
-    res.status(error.response?.status || 500).json({
-      success: false,
-      message: error.response?.data?.message || 'Fayda initiation failed',
-    });
-  }
-});

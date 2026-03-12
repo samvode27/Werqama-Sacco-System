@@ -18,7 +18,8 @@ const AdminLoansPage = () => {
     const [adminNote, setAdminNote] = useState('');
     const [memberLoanHistory, setMemberLoanHistory] = useState([]);
     const [loadingHistory, setLoadingHistory] = useState(false);
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const loansPerPage = 10;
 
     useEffect(() => {
         fetchLoans();
@@ -77,6 +78,13 @@ const AdminLoansPage = () => {
 
         setFilteredLoans(filtered);
     };
+
+    // Pagination calculations
+    const indexOfLastLoan = currentPage * loansPerPage;
+    const indexOfFirstLoan = indexOfLastLoan - loansPerPage;
+    const currentLoans = filteredLoans.slice(indexOfFirstLoan, indexOfLastLoan);
+
+    const totalPages = Math.ceil(filteredLoans.length / loansPerPage);
 
     const getStatusVariant = (status) => {
         switch (status) {
@@ -264,9 +272,9 @@ const AdminLoansPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredLoans.map((loan, index) => (
+                            {currentLoans.map((loan, index) => (
                                 <tr key={loan._id}>
-                                    <td>{index + 1}</td>
+                                    <td>{indexOfFirstLoan + index + 1}</td>
                                     <td>{loan.member?.name || 'N/A'}</td>
                                     <td>{loan.member?.email || 'N/A'}</td>
                                     <td>ETB {loan.loanAmount?.toLocaleString() || 'N/A'}</td>
@@ -286,6 +294,26 @@ const AdminLoansPage = () => {
                             ))}
                         </tbody>
                     </Table>
+
+                    <div className="d-flex justify-content-left align-items-center gap-3 mt-3">
+                        <button
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                        >
+                            Previous
+                        </button>
+
+                        <span>
+                            Page {currentPage} of {totalPages || 1}
+                        </span>
+
+                        <button
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                        >
+                            Next
+                        </button>
+                    </div>
                 </Card.Body>
             </Card>
 

@@ -45,17 +45,26 @@ const MemberDashboard = () => {
 
   useEffect(() => {
     if (!currentUser) return;
+
     const fetchStatus = async () => {
       try {
         const res = await api.get("/memberships/check");
         setMembershipStatus(res.data.status);
-      } catch {
+      } catch (err) {
+        console.error("Membership status error:", err);
         setMembershipStatus("unknown");
       } finally {
         setLoadingStatus(false);
       }
     };
+
+    // run immediately
     fetchStatus();
+
+    // auto refresh every 30 seconds
+    const interval = setInterval(fetchStatus, 30000);
+
+    return () => clearInterval(interval);
   }, [currentUser]);
 
   useEffect(() => {
@@ -193,10 +202,10 @@ const MemberDashboard = () => {
                           minHeight: "180px",
                           fontSize: "1.1rem",
                           borderRadius: "15px",
-                          backgroundColor: "goldenrod", 
-                          color: "white", 
+                          backgroundColor: "goldenrod",
+                          color: "white",
                           border: "none",
-                          width: "100%", 
+                          width: "100%",
                         }}
                       >
                         <div className="quick-icon mb-3" style={{ fontSize: "2.5rem" }}>
