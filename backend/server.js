@@ -34,9 +34,8 @@ const __dirname = path.dirname(__filename);
 
 // ✅ CORS configuration for dev & production
 const allowedOrigins = [
-  process.env.FRONTEND_URL || "http://localhost:3000",
   "http://localhost:3000",
-  "https://werqama-sacco-frontend.vercel.app"  // ✅ Add your Vercel domain
+  "https://werqama-sacco-system.vercel.app" // ✅ Add your Vercel domain
 ];
 
 app.use(cors({
