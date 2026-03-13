@@ -36,7 +36,6 @@ const AdminSavingsPage = () => {
     const [minAmount, setMinAmount] = useState('');
     const [approvedSavings, setApprovedSavings] = useState([]);
     const [pendingSavings, setPendingSavings] = useState([]);
-    const [manualForm, setManualForm] = useState({ member: '', amount: '', method: '', receipt: null, note: '' });
     const [page, setPage] = useState(1);
     const [limit] = useState(20);
     const [total, setTotal] = useState(0);
@@ -44,6 +43,7 @@ const AdminSavingsPage = () => {
 
     useEffect(() => {
         fetchSavings(page);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
 
     const fetchSavings = async (currentPage = page) => {
@@ -74,6 +74,7 @@ const AdminSavingsPage = () => {
 
     useEffect(() => {
         filterSavings();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterStatus, startDate, endDate, minAmount, savings]);
 
     const filterSavings = () => {

@@ -104,10 +104,18 @@ function Footer() {
             <p className="small mb-1"><FaPhoneAlt className="me-2 text" /> {t.phone}</p>
             <p className="small mb-3"><FaEnvelope className="me-2 text" /> {t.email}</p>
             <div className="footer-socials">
-              <a href="javascript:void(0)"><FaFacebookF /></a>
-              <a href="javascript:void(0)"><FaTwitter /></a>
-              <a href="javascript:void(0)"><FaInstagram /></a>
-              <a href="javascript:void(0)"><FaLinkedin /></a>
+              <a href="https://facebook.com/werqamasacco" target="_blank" rel="noopener noreferrer">
+                <FaFacebookF />
+              </a>
+              <a href="https://twitter.com/werqamasacco" target="_blank" rel="noopener noreferrer">
+                <FaTwitter />
+              </a>
+              <a href="https://instagram.com/werqamasacco" target="_blank" rel="noopener noreferrer">
+                <FaInstagram />
+              </a>
+              <a href="https://linkedin.com/company/werqamasacco" target="_blank" rel="noopener noreferrer">
+                <FaLinkedin />
+              </a>
             </div>
           </Col>
 

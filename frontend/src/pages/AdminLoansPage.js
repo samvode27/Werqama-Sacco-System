@@ -23,24 +23,6 @@ const AdminLoansPage = () => {
     }, []);
 
     useEffect(() => {
-        filterLoans();
-    }, [loans, statusFilter, searchQuery, loanTypeFilter, filterLoans]);
-
-    const fetchLoans = async () => {
-        try {
-            const res = await axios.get('/loans/all');
-            setLoans(res.data);
-        } catch (err) {
-            console.error('Failed to fetch loans:', err);
-        }
-    };
-
-    const openLoanModal = (loan) => {
-        setSelectedLoan(loan);
-        setShowModal(true);
-    };
-
-    const filterLoans = () => {
         let filtered = [...loans];
 
         if (statusFilter) {
@@ -58,6 +40,20 @@ const AdminLoansPage = () => {
         }
 
         setFilteredLoans(filtered);
+    }, [loans, statusFilter, searchQuery, loanTypeFilter]);
+
+    const fetchLoans = async () => {
+        try {
+            const res = await axios.get('/loans/all');
+            setLoans(res.data);
+        } catch (err) {
+            console.error('Failed to fetch loans:', err);
+        }
+    };
+
+    const openLoanModal = (loan) => {
+        setSelectedLoan(loan);
+        setShowModal(true);
     };
 
     // Pagination calculations
