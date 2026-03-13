@@ -1,14 +1,6 @@
 // src/pages/MemberDashboard.js
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Navbar,
-  Nav,
-  Spinner,
-} from "react-bootstrap";
+import { Container, Row, Col, Card, Navbar, Nav, Spinner, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
   FaPiggyBank,
@@ -100,7 +92,7 @@ const MemberDashboard = () => {
     <>
       {/* Navbar */}
       <Navbar expand="lg" className="glass-navbar px-3 py-3 fixed-top shadow-sm">
-        <navbar className="fw-bold brand">WERQAMA SACCO</navbar>
+        <Navbar.Brand className="fw-bold brand">WERQAMA SACCO</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="ms-auto align-items-center gap-3">
