@@ -26,7 +26,7 @@ const SavingsPage = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [page] = useState(1);
-    const [setTotalPages] = useState(1);
+    const [, setTotalPages] = useState(1);
     const limit = 10;
 
     // Receipt modal
