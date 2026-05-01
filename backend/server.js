@@ -26,6 +26,28 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
+const startServer = async () => {
+  try {
+    await connectDB(); // ✅ wait for DB
+
+    const app = express();
+
+    // your middleware + routes here...
+
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      startPaymentReminders();
+    });
+
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
+
 connectDB();
 
 const app = express();
