@@ -6,7 +6,6 @@ import { errorHandler } from './middleware/errorHandler.js';
 import multer from 'multer';
 import { startPaymentReminders } from './cron/paymentReminder.js';
 
-// Routes
 import authRoutes from './routes/auth.js';
 import uploadRoutes from './routes/upload.js';
 import newsRoutes from './routes/news.js';
@@ -26,104 +25,65 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
+
 const startServer = async () => {
   try {
-    await connectDB(); // ✅ wait for DB
+
+    await connectDB();
 
     const app = express();
 
-    // your middleware + routes here...
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
+    const allowedOrigins = [
+      "http://localhost:3000",
+      "https://werqama-sacco-system.vercel.app"
+    ];
+
+    app.use(cors({
+      origin: allowedOrigins,
+      credentials: true
+    }));
+
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+
+    app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+    // Routes
+    app.use('/api/auth', authRoutes);
+    app.use('/api/upload', uploadRoutes);
+    app.use('/api/news', newsRoutes);
+    app.use('/api/services', serviceRoutes);
+    app.use('/api/contacts', contactRoutes);
+    app.use('/api/savings', savingRoutes);
+    app.use('/api/loans', loanRoutes);
+    app.use('/api/dashboard', dashboardRoutes);
+    app.use('/api/profile', profileRoutes);
+    app.use('/api/payment', paymentRoutes);
+    app.use('/api/memberships', membershipRoutes);
+    app.use('/api/loan-applications', loanApplicationRoutes);
+    app.use('/api/newsletter', newsletterRoutes);
+    app.use('/api/stats', statsRoutes);
+
+    app.get('/', (req, res) => {
+      res.send('WERQAMA SACCO Backend API is running...');
+    });
+
+    app.use(errorHandler);
 
     const PORT = process.env.PORT || 8080;
+
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
       startPaymentReminders();
     });
 
   } catch (error) {
-    console.error("Failed to start server:", error.message);
+    console.error("Server failed:", error.message);
     process.exit(1);
   }
 };
 
 startServer();
-
-connectDB();
-
-const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// ✅ CORS configuration for dev & production
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://werqama-sacco-system.vercel.app" // ✅ Add your Vercel domain
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
-
-app.options('*', cors());
-
-// Body parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Static uploads
-app.use("/uploads/receipts", express.static(path.join(__dirname, "uploads/receipts")));
-app.use("/uploads/news", express.static(path.join(__dirname, "uploads/news")));
-app.use("/uploads/idDocuments", express.static(path.join(__dirname, "uploads/idDocuments")));
-app.use('/uploads/profilePictures', express.static(path.join(process.cwd(), 'uploads/profilePictures')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// ✅ Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/news', newsRoutes);
-app.use('/api/services', serviceRoutes);
-app.use('/api/contacts', contactRoutes);
-app.use('/api/savings', savingRoutes);
-app.use('/api/loans', loanRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/profile', profileRoutes);
-app.use('/api/payment', paymentRoutes);
-app.use('/api/memberships', membershipRoutes);
-app.use('/api/loan-applications', loanApplicationRoutes);
-app.use("/api/newsletter", newsletterRoutes);
-app.use('/api/stats', statsRoutes);
-
-
-// Multer / general errors
-app.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    return res.status(400).json({ message: err.message });
-  } else if (err) {
-    return res.status(500).json({ message: err.message });
-  }
-  next();
-});
-
-// Root
-app.get('/', (req, res) => {
-  res.send('WERQAMA SACCO Backend API is running...');
-});
-
-// Express error handler
-app.use(errorHandler);
-
-// Start server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  startPaymentReminders();
-});
